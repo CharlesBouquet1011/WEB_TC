@@ -1,27 +1,40 @@
 services:
   backend-node:
+    container_name: backend-node #pour accéder au conteneur par lien depuis un autre conteneur sans problème
     build:
       context: .
       target: backend_node
-    ports:
-      - "80:80"
+    expose:
+    - "80"
     restart: on-failure
     env_file:
       - .env
+    user: backend_node
     volumes:
       - ./:/app
       - /app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
     depends_on:
       - bd_mongo
   bd_mongo:
+    container_name: bd_mongo
     image: mongo:latest
     ports:
       - "2025:2025"
     env_file:
       - .env
+    user: mongodb
     restart: on-failure
     volumes:
       - mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
 
+  nginx:
+    build:
+      context: .
+      target: web_nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - backend-node
+    
 volumes:
   mongo: #lire explication dans volume bd_mongo, ici c'est pour que docker gère tout seul le volume
