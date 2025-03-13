@@ -35,8 +35,8 @@ services:
   bd_mongo:
     container_name: bd_mongo
     image: mongo:latest
-    ports:
-      - "2025:2025"
+    expose: 
+      - "2025"
     env_file:
       - .env
     user: mongodb
