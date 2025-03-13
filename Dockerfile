@@ -22,3 +22,21 @@ RUN chown -R nginx:nginx /app/nginx && \
     chmod 777 /var/run
 
 CMD ["nginx", "-g", "daemon off;"]
+
+FROM node:23-alpine3.20 AS react
+WORKDIR /app
+COPY /frontend ./
+EXPOSE 3000
+RUN npm install
+#prod
+RUN npm run build
+#en dev y a pas build
+RUN adduser -S react
+RUN chown -R react /app
+
+
+USER react
+#prod
+CMD ["npx", "serve", "build", "-p", "3000"] 
+#dev
+#CMD ["npm", "start"]

@@ -15,6 +15,23 @@ services:
       - /app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
     depends_on:
       - bd_mongo
+  frontend:
+    container_name: react
+    build:
+      context: .
+      target: react
+    expose:
+      - "3000"
+    depends_on:
+      - backend-node
+    env_file:
+      - .env
+    restart: on-failure
+    user: react
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/build
   bd_mongo:
     container_name: bd_mongo
     image: mongo:latest
