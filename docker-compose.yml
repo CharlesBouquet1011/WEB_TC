@@ -36,7 +36,7 @@ services:
     container_name: bd_mongo
     image: mongo:latest
     expose: 
-      - "2025"
+      - "27017"
     env_file:
       - .env
     user: mongodb
@@ -50,6 +50,7 @@ services:
       target: web_nginx
     ports:
       - "80:80"
+      - "3000:80" #pour le hot reloading de react qui est sur le port 3000
     depends_on:
       - backend-node
     

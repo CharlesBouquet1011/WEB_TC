@@ -29,7 +29,7 @@ COPY /frontend ./
 EXPOSE 3000
 RUN npm install
 #prod
-RUN npm run build
+#RUN npm run build
 #en dev y a pas build
 RUN adduser -S react
 RUN chown -R react /app
@@ -37,6 +37,6 @@ RUN chown -R react /app
 
 USER react
 #prod
-CMD ["npx", "serve", "build", "-p", "3000"] 
+#CMD ["npx", "serve", "build", "-p", "3000"] 
 #dev
-#CMD ["npm", "start"]
+CMD ["npm", "start"]
