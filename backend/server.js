@@ -3,8 +3,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const csrf = require('csurf');
 const cookieParser = require('cookie-parser');
+const cors = require("cors")
 const app = express();
 app.use(cookieParser());
+app.use(express.json())
+
+
 const PORT = 80;
 const MONGO_URI = process.env.BD_URL;
 // Connexion à MongoDB
@@ -45,12 +49,12 @@ app.get("/csrf-token",csrfProtection, async (req,res) => {
     }
 })
 
-app.get("/registration", csrfProtection, async (req,res)=>{
+app.post("/registration", csrfProtection, async (req,res)=>{
     try {
-
+        const { name, firstName, email, phone, password } = req.body;
     }
     catch (err){
-        
+
     }
 })
 

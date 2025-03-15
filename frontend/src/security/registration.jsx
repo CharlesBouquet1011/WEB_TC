@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-
+import { useCSRF } from "../Contexts/CsrfContext";
 function Registration() {
-  
+  //récupérer les jetons csrf etc
+  const {csrfToken, setcrsfToken}= useCSRF();
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
-
+    console.log("jeton csrf elem registration: " + csrfToken )
   return (
     <div className="Registration-form">
       <h2>Créez un compte dès maintenant !</h2>
@@ -23,13 +24,18 @@ function Registration() {
       </form>
       
 
-      <button id="submit" onClick={submit}> s'inscrire </button>
+      <button id="submit" onClick={() => submit(csrfToken)}> s'inscrire </button>
     </div>
   );
 }
 
-async function submit(){
+async function submit(csrfToken){
+    console.log("jeton csrf " + csrfToken)
     try {
+        
+        
+
+        //récupérer les données du forms
         var name, fname, mail, phone, password, cpassword
         [name,fname,mail,phone,password,cpassword]= [
             document.getElementById("Name").value,
@@ -49,14 +55,16 @@ async function submit(){
             alert("Votre mot de passe ne correspond pas à la confirmation du mot de passe"+  password + cpassword)
             return ;
         }
+        
+        const data={"Name": name, "FirstName": fname , "email": mail, "PhoneNumber":phone,"Password":password }
 
-        const data={"Name": name, "FirstName": fname , "email": mail, "PhoneNumber":phone,"Password":password,"ConfirmPassword":cpassword }
-
-        const response = await fetch("https://localhost:3000/api/registration", {
+        const response = await fetch("http://localhost:3000/api/registration", {
           method: "POST",
           headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
             "Content-Type": "application/json",
+            'X-CSRF-Token': csrfToken,
           },
+          credentials: 'include',
           body: JSON.stringify(data),
         });
         console.log(response)
