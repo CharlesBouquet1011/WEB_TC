@@ -14,7 +14,7 @@ mongoose.connect(MONGO_URI, {
 }).then(() => console.log('MongoDB connecté'))
   .catch(err => console.error('Erreur de connexion à MongoDB:', err));
 
-//Protection CSRF, enregistrée 
+//Protection CSRF, enregistrée dans les cookies
 const csrfProtection = csrf({ 
     cookie: true,
     
@@ -42,6 +42,15 @@ app.get("/csrf-token",csrfProtection, async (req,res) => {
         res.json({csrfToken: req.csrfToken()});
     } catch (err) {
         res.status(500).json({error: err})
+    }
+})
+
+app.get("/registration", csrfProtection, async (req,res)=>{
+    try {
+
+    }
+    catch (err){
+        
     }
 })
 

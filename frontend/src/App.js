@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import ItemsList from './ItemList.jsx';
 import React, { useState, useEffect } from 'react';
+import Registration from './security/registration.jsx';
 function App() {
   const [csrfToken, setCsrfToken] = useState('');
   useEffect(()=> {async function fetchCSRFToken(){ //syntaxe nulle comme on peut pas utiliser async/await avec react
@@ -40,6 +41,7 @@ function App() {
       </header>
 
       <ItemsList />
+      <Registration />
     </div>
   );
 }
