@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 function Registration() {
   //récupérer les jetons csrf etc
-  const {csrfToken, setcrsfToken}= useCSRF();
+  const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
+  useEffect(() => {
+    if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
+      fetchCSRFToken();
+    }
+  }, [isLoaded, fetchCSRFToken]);
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
     console.log("jeton csrf elem registration: " + csrfToken )
   return (

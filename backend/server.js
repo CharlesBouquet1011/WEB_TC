@@ -52,6 +52,7 @@ app.get("/csrf-token",csrfProtection, async (req,res) => {
 app.post("/registration", csrfProtection, async (req,res)=>{
     try {
         const { name, firstName, email, phone, password } = req.body;
+        res.status(200).json({ok: "requête reçue"})
     }
     catch (err){
 
