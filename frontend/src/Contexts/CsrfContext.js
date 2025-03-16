@@ -13,7 +13,7 @@ export function CSRFProvider({children}) {
     
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/csrf-token", { //comme avant
+      const response = await fetch("http://localhost:3000/api/security/csrf-token", { //comme avant
         credentials: 'include' //pour le cookie
       });
       const data = await response.json();

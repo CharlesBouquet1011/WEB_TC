@@ -9,7 +9,6 @@ function Registration() {
     }
   }, [isLoaded, fetchCSRFToken]);
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
-    console.log("jeton csrf elem registration: " + csrfToken )
   return (
     <div className="Registration-form">
       <h2>Créez un compte dès maintenant !</h2>
@@ -35,7 +34,6 @@ function Registration() {
 }
 
 async function submit(csrfToken){
-    console.log("jeton csrf " + csrfToken)
     try {
         
         
@@ -51,19 +49,52 @@ async function submit(csrfToken){
             document.getElementById("cpassword").value
 
         ]
+        try{
+            var checkmail = fetch("http://localhost:3000/api/security/mail-check", {
+              method: "POST",
+              headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
+                "Content-Type": "application/json",
+                'X-CSRF-Token': csrfToken,
+              },
+              credentials: 'include',
+              body: JSON.stringify({"email": mail}),
+            });
+            
+        } catch (err){
+            console.error("erreur",err)
+        }   
         //vérifications
         if (!name || !fname || !mail || !phone || !password || !cpassword){
             alert("Veuillez remplir tous les champs")
             return;
         }
         if (cpassword != password){
-            alert("Votre mot de passe ne correspond pas à la confirmation du mot de passe"+  password + cpassword)
+            alert("Votre mot de passe ne correspond pas à la confirmation du mot de passe")
             return ;
         }
-        
+
+
+        if (!(mail.includes("@")) || !(mail.includes("."))){
+          alert("Votre email est incorrect")
+          return ;
+        }
+
+        if (phone.length != 10 || phone[0]!="0"){
+          alert("numéro de téléphone incorrect")
+          return ;
+        }
+        checkmail = await checkmail
+        checkmail= await checkmail.json();
+        console.log(checkmail.dispo)
+        if (checkmail.dispo != "dispo"){
+          alert("Votre email est incorrect")
+          return ;
+        }
+
+
         const data={"Name": name, "FirstName": fname , "email": mail, "PhoneNumber":phone,"Password":password }
 
-        const response = await fetch("http://localhost:3000/api/registration", {
+        const response = await fetch("http://localhost:3000/api/security/registration", {
           method: "POST",
           headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
             "Content-Type": "application/json",
