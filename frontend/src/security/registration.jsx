@@ -72,7 +72,14 @@ async function submit(csrfToken){
             alert("Votre mot de passe ne correspond pas à la confirmation du mot de passe")
             return ;
         }
-
+        if (password.length <10){
+          alert("Votre mot de passe doit contenir au moins 10 caractères");
+          return ;
+        }
+        if (!verifMotDePasse(password)){
+          alert("Veuillez mettre des symboles spéciaux (#,_,$,..) et des chiffres dans votre mot de passe")
+          return ;
+        }
 
         if (!(mail.includes("@")) || !(mail.includes("."))){
           alert("Votre email est incorrect")
@@ -109,7 +116,22 @@ async function submit(csrfToken){
     }   
 
 }
-
+//renvoie True si le mot de passe est suffisamment sécurisé, false sinon
+function verifMotDePasse(motdePasse){
+  const nombres=["0","1","2","3","4","5","6","7","8","9"]
+  const symboles_speciaux=["#","_","|","@","€","$","?",".",";",",","/","!","%","$","*","+","-","£"]
+  var retour1=false
+  var retour2=false
+  for (let i=0;i<nombres.length;i++){
+    retour1=retour1 || motdePasse.includes(nombres[i])
+    
+  }
+  for (let i=0;i<nombres.length;i++){
+    retour2=retour2 || motdePasse.includes(symboles_speciaux[i])
+    
+  }
+  return retour1 & retour2
+}
 
 export default Registration;
 

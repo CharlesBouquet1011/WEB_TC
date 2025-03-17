@@ -16,7 +16,8 @@ const PORT = 80;
 //importations routes
 const securityRoute= require("./routes/security.js");
 
-
+//autoriser les proxies pour pouvoir bien suivre et appliquer le rate-limiter:
+app.set('trust proxy',1)
 //utilisation des routes
 app.use("/security",securityRoute);
 

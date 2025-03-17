@@ -3,7 +3,9 @@ const router = express.Router();
 const csrfProtection=require("../config/csrf");
 const mongoose = require("../config/mongo.js");
 const User = require("../models/UserModel.js");
-// Exemple de route
+const limiter = require("../config/rateLimiter.js");
+
+// génération jetons csrf
 router.get("/csrf-token",csrfProtection, async (req,res) => {
     try{
         res.json({csrfToken: req.csrfToken()});
@@ -11,8 +13,8 @@ router.get("/csrf-token",csrfProtection, async (req,res) => {
         res.status(500).json({error: err})
     }
 })
-
-router.post("/registration", csrfProtection, async (req,res)=>{
+//inscription des utilisateurs
+router.post("/registration", csrfProtection, limiter, async (req,res)=>{
     try {
         const { name, firstName, email, phone, password } = req.body;
         res.status(200).json({ok: "requête reçue"})
@@ -21,12 +23,13 @@ router.post("/registration", csrfProtection, async (req,res)=>{
 
     }
 })
-
-router.post("/mail-check",csrfProtection,async (req,res)=> {
+//vérifie que le mail de l'utilisateur qui s'inscrit n'est pas déjà utilisé
+router.post("/mail-check",csrfProtection, limiter, async (req,res)=> {
     const {email} = req.body;
 
     try{
-        const existe= await User.exists({email})
+        
+        const existe= await User.exists().where("email").equals(email)
         res.setHeader("Content-Type", "application/json");
         if (existe){
             
