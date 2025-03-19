@@ -101,7 +101,7 @@ router.post("/login",csrfProtection,limiter, async (req,res) =>{
                 { expiresIn: "2h" } // Expiration du token
             );
 
-            res.cookie("token", token, {
+            res.cookie("authToken", token, {
                 httpOnly: true,  // cookie HttpOnly, empêche certaines attaques info
                 secure: process.env.PROD, // Active secure uniquement en prod pour l'https
                 sameSite: "strict", // protection csrf 
@@ -127,5 +127,14 @@ router.post("/login",csrfProtection,limiter, async (req,res) =>{
 
 })
 
+router.post("/logout",csrfProtection,limiter, (req,res) => {
+    res.clearCookie("authToken",{
+        httpOnly:true,
+        secure:process.env.PROD,
+        sameSite:"strict"
+    })
+    res.status(200).json({message: "déconnexion réussie"})
+
+})
 
 module.exports = router;
