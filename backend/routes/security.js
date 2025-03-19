@@ -87,7 +87,6 @@ router.post("/mail-check",csrfProtection, limiter, async (req,res)=> {
 router.post("/login",csrfProtection,limiter, async (req,res) =>{
     //rajouter quelque part un truc pour un mot de passe oublié
         const {Email, Password} = req.body  
-        if (typeof (Email)
         const user =await  User.findOne({email: { $eq: Email } })//pour la sécurité
         if (user){
             
