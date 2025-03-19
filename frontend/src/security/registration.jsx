@@ -92,7 +92,7 @@ async function submit(csrfToken){
         }
         checkmail = await checkmail
         checkmail= await checkmail.json();
-        console.log(checkmail.dispo)
+        
         if (checkmail.dispo != "dispo"){
           alert("Votre email est incorrect")
           return ;

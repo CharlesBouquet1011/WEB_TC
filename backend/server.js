@@ -20,7 +20,7 @@ const securityRoute= require("./routes/security.js");
 app.set('trust proxy',1)
 //utilisation des routes
 app.use("/security",securityRoute);
-
+const rate_limiter= require("./config/rateLimiter.js")
 
 // Définition d'un modèle simple
 const Test = mongoose.model('Test', new mongoose.Schema({
@@ -28,7 +28,7 @@ const Test = mongoose.model('Test', new mongoose.Schema({
 }));
 //attention les routes sont toutes sans le /api parce que le serveur nginx le supprime (pour économiser un /api par definition de fonction)
 // Route pour récupérer les items
-app.get('/test', async (req, res) => {
+app.get('/test', rate_limiter, async (req, res) => {
     try {
         const items = await Test.find();
         res.json(items);
