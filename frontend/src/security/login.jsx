@@ -33,8 +33,7 @@ async function submit(csrfToken){
     var email,password
     email=document.getElementById("login-email").value
     password=document.getElementById("login-password").value
-    console.log(email)
-    console.log(password)
+    
     try{
         var authentification=await fetch("http://localhost:3000/api/security/login", {
             method:"POST",
