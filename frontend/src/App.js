@@ -3,7 +3,7 @@ import './App.css';
 import ItemsList from './ItemList.jsx';
 import React, { useState, useEffect } from 'react';
 import Registration from './security/registration.jsx';
-
+import Login from './security/login.jsx';
 import { CSRFProvider } from './Contexts/CsrfContext.js';
 
 
@@ -31,6 +31,7 @@ function App() {
 
         <ItemsList />
         <Registration />
+        <Login />
       </div>
     </CSRFProvider>
   );

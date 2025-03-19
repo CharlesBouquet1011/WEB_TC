@@ -21,17 +21,16 @@ router.get("/csrf-token",csrfProtection, async (req,res) => {
 router.post("/registration", csrfProtection, limiter, async (req,res)=>{
     try {
         const { Name, FirstName, email, PhoneNumber, Password } = req.body;
-        console.log("body", req.body)
-        console.log("nom ", Name)
-        console.log("mot de passe", Password)
+        
         const existe= await User.exists().where("email").equals(email) //on vérifie qu'il n'y a pas de doublon de mail
         if (existe){
             res.status(500).json({error: "adresse mail déjà utilisée"}) //au cas où quelqu'un arrive à donner un mail non autorisé
             return ;
-        }
+        } 
+
 
         const hashedPassword=await hashString(Password)
-        console.log(hashedPassword)
+        
         const newUser = new User({
             name: Name + FirstName,
             phoneNumber: PhoneNumber,
@@ -86,10 +85,13 @@ router.post("/mail-check",csrfProtection, limiter, async (req,res)=> {
 
 //login
 router.post("/login",csrfProtection,limiter, async (req,res) =>{
+    //rajouter quelque part un truc pour un mot de passe oublié
         const {Email, Password} = req.body  
-        const user = User.findOne({email: Email })
+        const user =await  User.findOne({email: Email })
         if (user){
+            
             hashedPassword=user.password
+            
         match= await bcrypt.compare(Password,hashedPassword)
         if (match){
 

@@ -14,11 +14,11 @@ function Login() {
     <div className="Registration-form">
       <h2>Connexion à votre compte</h2>
       <form>
-        <label htmlFor="email">Mail</label> <br />
-        <input type="text" id="email" name="email" /> <br />
+        <label htmlFor="login-email">Mail</label> <br />
+        <input type="text" id="login-email" name="login-email" /> <br />
         
-        <label htmlFor="password">Mot de passe</label> <br /> 
-        <input type="password" id="password" name="password" /> <br />
+        <label htmlFor="login-password">Mot de passe</label> <br /> 
+        <input type="password" id="login-password" name="login-password" /> <br />
         
       </form>
       
@@ -31,8 +31,10 @@ function Login() {
 
 async function submit(csrfToken){
     var email,password
-    email=document.getElementById("email").value
-    password=document.getElementById("password").value
+    email=document.getElementById("login-email").value
+    password=document.getElementById("login-password").value
+    console.log(email)
+    console.log(password)
     try{
         var authentification=await fetch("http://localhost:3000/api/security/login", {
             method:"POST",
@@ -61,3 +63,4 @@ async function submit(csrfToken){
     }
     
 }
+export default Login
