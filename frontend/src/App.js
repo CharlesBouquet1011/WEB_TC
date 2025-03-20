@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import Registration from './security/registration.jsx';
 import Login from './security/login.jsx';
 import { CSRFProvider } from './Contexts/CsrfContext.js';
-
+import SeeBookings from "./Locations/seeBookings.jsx"
 
 function App() {
   

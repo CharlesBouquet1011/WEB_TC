@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const carSchema = new mongoose.Schema({
   marque: String,
-  modèle: String,
+  modele: String,
   prix: Number, //il faudra probablement d'autres propriétés
   ImageURL: String,
   carburant: String,
