@@ -23,13 +23,13 @@ function Login() {
       </form>
       
 
-      <button id="submit" onClick={() => submit(csrfToken)}> se connecter </button>
+      <button id="submit" onClick={() => submitr(csrfToken)}> se connecter </button>
     </div>
   );
 }
 
 
-async function submit(csrfToken){
+async function submitr(csrfToken){
     var email,password
     email=document.getElementById("login-email").value
     password=document.getElementById("login-password").value
