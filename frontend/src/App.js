@@ -1,38 +1,25 @@
-import logo from './logo.svg';
+
 import './App.css';
 import ItemsList from './ItemList.jsx';
 import React, { useState, useEffect } from 'react';
-import Registration from './security/registration.jsx';
-import Login from './security/login.jsx';
+
 import { CSRFProvider } from './Contexts/CsrfContext.js';
 import SeeBookings from "./Locations/seeBookings.jsx"
-
+import { BrowserRouter as Router, Routes, Route } from "react-router";
+import UserLogged from './pages/userLogged.jsx';
+import Home from "./pages/Home.jsx"
 function App() {
   
   
   return (
     <CSRFProvider>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p> 
-            Edit <code>src/App.js</code> and save to reload. 
-            
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-
-        <ItemsList />
-        <Registration />
-        <Login />
-      </div>
+      <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/user" element={<UserLogged />} />
+      </Routes>
+    </Router>
+      
     </CSRFProvider>
   );
 }
