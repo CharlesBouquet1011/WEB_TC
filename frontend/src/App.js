@@ -8,6 +8,7 @@ import SeeBookings from "./Locations/seeBookings.jsx"
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import UserLogged from './pages/userLogged.jsx';
 import Home from "./pages/Home.jsx"
+import Login from './security/login.jsx';
 function App() {
   
   
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/user" element={<UserLogged />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
       

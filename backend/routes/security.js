@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 
 require('dotenv').config();
 const jwt = require("jsonwebtoken"); //pour l'authentification (javascript web token)
+const auth = require("../config/authenticator.js");
 // génération jetons csrf
 router.get("/csrf-token",csrfProtection, async (req,res) => {
     try{
@@ -125,6 +126,9 @@ router.post("/login",csrfProtection,limiter, async (req,res) =>{
         
 
 
+})
+router.get("/logged",csrfProtection,limiter,auth,(req,res)=>{
+    res.status(200).json({logged:"oui"})
 })
 
 router.post("/logout",csrfProtection,limiter, (req,res) => {
