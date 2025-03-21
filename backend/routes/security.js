@@ -5,10 +5,11 @@ const csrfProtection=require("../config/csrf");
 const User = require("../models/UserModel.js");
 const limiter = require("../config/rateLimiter.js");
 const bcrypt = require("bcrypt");
-
+const mongoose=require("../config/mongo.js")
 require('dotenv').config();
 const jwt = require("jsonwebtoken"); //pour l'authentification (javascript web token)
 const auth = require("../config/authenticator.js");
+const Booking = require("../models/BookingModel.js");
 // génération jetons csrf
 router.get("/csrf-token",csrfProtection, async (req,res) => {
     try{
@@ -52,10 +53,16 @@ router.post("/registration", csrfProtection, limiter, async (req,res)=>{
 })
 //renvoie un hash du string en sortie
 async function hashString(string){
-    const salt = await bcrypt.genSalt(10) //on génère un sel aléatoire pour hash le password, l'algo de hashage est déterministe
-    //donc ça permet de le rentre moins prévisible
-    console.log("sel ", salt)
-    return await bcrypt.hash(string,salt) //on hash le string avec l'algo bcrpyt avec le sel salt
+    try{
+        const salt = await bcrypt.genSalt(10) //on génère un sel aléatoire pour hash le password, l'algo de hashage est déterministe
+        //donc ça permet de le rentre moins prévisible
+        console.log("sel ", salt)
+        return await bcrypt.hash(string,salt) //on hash le string avec l'algo bcrpyt avec le sel salt
+    } catch (err){
+        console.log("Erreur lors de la création du hash", err)
+        
+    }
+    
 
 }
 
@@ -87,6 +94,7 @@ router.post("/mail-check",csrfProtection, limiter, async (req,res)=> {
 //login
 router.post("/login",csrfProtection,limiter, async (req,res) =>{
     //rajouter quelque part un truc pour un mot de passe oublié
+    try{
         const {Email, Password} = req.body  
         const user =await  User.findOne({email: { $eq: Email } })//pour la sécurité
         if (user){
@@ -123,6 +131,11 @@ router.post("/login",csrfProtection,limiter, async (req,res) =>{
             console.log("email invalide")
             res.status(401).json({error: "Mot de passe ou email incorrect" })
         }
+    }catch (err){
+        console.log("Erreur lors du login :",err)
+        res.status(500).json({erreur: "Erreur serveur"})
+    }
+        
         
 
 
@@ -132,12 +145,46 @@ router.get("/logged",csrfProtection,limiter,auth,(req,res)=>{
 })
 
 router.post("/logout",csrfProtection,limiter, (req,res) => {
+    try{
+        res.clearCookie("authToken",{
+            httpOnly:true,
+            secure:process.env.PROD,
+            sameSite:"strict"
+        })
+        res.status(200).json({message: "déconnexion réussie"})
+    } catch (err){
+        console.log("Erreur lors de la déconnexion :", err)
+        res.status(500).json({erreur: "Erreur Serveur"})
+    }
+    
+
+})
+
+router.post("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
+    //il faut supprimer toutes leurs réservations également
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try{
+        const {user}=req.user
+    await Booking.deleteMany({user:user}) //suppression des réservations
+    await User.findByIdAndDelete(user) //suppression de l'utilisateur
+    // Commit the transaction if all operations succeed
+    await session.commitTransaction();
+        
+    // End the session
+    session.endSession();
     res.clearCookie("authToken",{
         httpOnly:true,
         secure:process.env.PROD,
         sameSite:"strict"
     })
-    res.status(200).json({message: "déconnexion réussie"})
+    res.status(200).json({message: "suppression réussie"})
+    } catch (err){
+        await session.abortTransaction();
+        session.endSession();
+        console.log("Erreur lors de la suppression :", err)
+        res.status(500).json({erreur: "Erreur serveur"})
+    }
 
 })
 
