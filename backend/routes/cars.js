@@ -9,7 +9,7 @@ require('dotenv').config();
 const Cars=require("../models/CarModel.js")
 
 
-router.get("/",csrfProtection, async (req,res)=>{
+router.get("/",csrfProtection, limiter, async (req,res)=>{
     try {
         const voitures= await Cars.find({})
         res.status(200).json({voitures: voitures})
