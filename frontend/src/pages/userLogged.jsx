@@ -2,10 +2,13 @@ import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import SeeBookings from "../Locations/seeBookings";
+import Logout from "../security/logout";
 
 export default function UserLogged(){
     const {csrfToken}= useCSRF();
-    const navigate=useNavigate()
+    const navigate=useNavigate() 
+
+
     useEffect(()=>{ //on récupère les bookings
         const isLogged= async () =>{
             try {
@@ -28,7 +31,7 @@ export default function UserLogged(){
                 
     
             } catch (err){
-                console.error("Erreur lors du chargement des locations :",err)
+                console.error("Erreur lors de la vérification du login :",err)
     
     
             }
@@ -36,10 +39,14 @@ export default function UserLogged(){
         isLogged();},
         [] 
     )
+
+    //conditionner le rendu au fait d'être connecté, sinon ça crash, afficher sur la page de se connecter s'il n'est pas connecté 
+    //+ un bouton pour se reco
     return(//il faudra rajouter des composants ici
         <div>
             <h1> Vous êtes connectés</h1>
             <SeeBookings />
+            <Logout />
         </div>
     )
 }

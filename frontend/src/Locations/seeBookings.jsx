@@ -27,7 +27,7 @@ function SeeBookings() { //à tester, je n'ai pas pu débugguer, on a pas encore
             setbookings(temp.bookings)
 
         } catch (err){
-            console.error("Erreur lors du chargement des locations :",err)
+            console.log("Erreur lors du chargement des locations :",err)
 
 
         }
