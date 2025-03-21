@@ -6,7 +6,7 @@ export default function Logout(){
 
 
     return(
-    <button onClick={logout(csrfToken,navigate)}>Se déconnecter</button>
+    <button onClick={() =>logout(csrfToken,navigate)}>Se déconnecter</button>
     )
 }
 
