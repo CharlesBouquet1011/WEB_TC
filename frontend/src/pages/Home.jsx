@@ -1,6 +1,7 @@
 import logo from '../logo.svg';
 import Registration from '../security/registration.jsx';
 import Login from '../security/login.jsx';
+import Cars from '../Cars/Cars.jsx';
 export default function Home(){
     return(
         <div className="App">
@@ -23,6 +24,7 @@ export default function Home(){
         
         <Registration />
         <Login />
+        <Cars />
       </div>
 
     )

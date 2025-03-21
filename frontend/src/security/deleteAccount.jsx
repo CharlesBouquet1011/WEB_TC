@@ -6,16 +6,16 @@ export default function DeleteAccount(){
 
 
     return(
-    <button onClick={() =>logout(csrfToken,navigate)}>Se déconnecter</button>// demander une confirmation
+    <button onClick={() =>accountDeletion(csrfToken,navigate)}>Supprimer mon compte</button>// demander une confirmation
     )
 }
 
 
 function accountDeletion(csrfToken,navigate){
     //on se déconnecte
-    const deconnexion= async () =>{
+    const deletion= async () =>{
             try {
-                const response = await fetch("http://localhost:3000/api/security/accountDeletion", {
+                const response = await fetch("http://localhost:3000/api/security/deleteAccount", {
                     method: "POST",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",
@@ -39,5 +39,5 @@ function accountDeletion(csrfToken,navigate){
     
             }
         }
-        accountDeletion();
+        deletion();
     }

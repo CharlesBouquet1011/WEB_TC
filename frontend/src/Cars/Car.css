@@ -1,0 +1,52 @@
+/* Conteneur principal de la carte */
+/* à voir si ça fait un truc joli à la fin*/
+.Carte_Voiture {
+    max-width: 300px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .Carte_Voiture:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Image en haut de la carte */
+  .Carte_Voiture img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  /* Conteneur pour le texte */
+  .Carte_voiture_contenu {
+    padding: 16px;
+  }
+  
+  /* Titre du produit */
+  .Titre_Carte_voiture {
+    font-size: 1.25rem;
+    margin: 0 0 8px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Description du produit */
+  .Carte_voiture_description {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  
+  /* Prix du produit */
+  .Prix_Carte_Voiure {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #28a745;
+  }
+  

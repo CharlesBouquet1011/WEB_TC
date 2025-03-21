@@ -6,7 +6,8 @@ const carSchema = new mongoose.Schema({
   prix: Number, //il faudra probablement d'autres propriétés
   ImageURL: String,
   carburant: String,
-  transmission: String
+  transmission: String,
+  description: String
 });
 
 const Car = mongoose.model("Car", carSchema);

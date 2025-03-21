@@ -4,6 +4,7 @@ import { useCSRF } from "../Contexts/CsrfContext";
 import SeeBookings from "../Locations/seeBookings";
 import Logout from "../security/logout";
 import Logged from "../Contexts/Authenticated";
+import DeleteAccount from "../security/deleteAccount";
 
 export default function User(){
     const {csrfToken}= useCSRF();
@@ -18,6 +19,7 @@ export default function User(){
                 <h1> Vous êtes connectés</h1>
                 <SeeBookings />
                 <Logout />
+                <DeleteAccount />
             </div>
         </Logged>
         

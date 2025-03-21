@@ -165,12 +165,13 @@ router.post("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
     const session = await mongoose.startSession();
     session.startTransaction();
     try{
+    console.log("Essai de supprimer le compte")
         const {user}=req.user
     await Booking.deleteMany({user:user}) //suppression des réservations
     await User.findByIdAndDelete(user) //suppression de l'utilisateur
     // Commit the transaction if all operations succeed
     await session.commitTransaction();
-        
+    console.log("Compte supprimé")
     // End the session
     session.endSession();
     res.clearCookie("authToken",{
