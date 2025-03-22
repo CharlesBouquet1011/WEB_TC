@@ -32,6 +32,7 @@ RUN npm install
 #RUN npm run build
 #en dev y a pas build
 RUN adduser -S react
+RUN chmod 700 /app/node_modules
 RUN chown -R react /app
 
 
