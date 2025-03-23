@@ -163,7 +163,7 @@ router.post("/logout",csrfProtection,limiter, (req,res) => {
 
 })
 
-router.post("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
+router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
     //il faut supprimer toutes leurs réservations également
     const session = await mongoose.startSession();
     session.startTransaction();

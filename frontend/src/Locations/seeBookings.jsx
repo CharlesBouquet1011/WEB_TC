@@ -68,7 +68,7 @@ function SeeBookings() { //à tester, je n'ai pas pu débugguer, on a pas encore
       </table>
 
     </div>
-  );
-}
+  );//rajouter booking._id pour récupérer l'ID et ajouter le bouton pour supprimer ?
+}//mettre la requête dans un autre composant pour pouvoir avoir un seebooking by user et pour tout le monde ?
 
 export default SeeBookings

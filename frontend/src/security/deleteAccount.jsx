@@ -53,7 +53,7 @@ function accountDeletion(csrfToken,navigate){
     const deletion= async () =>{
             try {
                 const response = await fetch("http://localhost:3000/api/security/deleteAccount", {
-                    method: "POST",
+                    method: "DELETE",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",
                       'X-CSRF-Token': csrfToken,
