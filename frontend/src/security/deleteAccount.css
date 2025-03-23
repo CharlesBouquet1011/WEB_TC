@@ -1,0 +1,101 @@
+/* Style pour le bouton principal */
+.account-delete-button {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .account-delete-button:hover {
+    background-color: #e63939;
+  }
+  
+  /* Fond de la modal */
+  .modal-Account-Deletion-overlay {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+  
+  /* Contenu de la modal */
+  .modal-Account-Deletion {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 12px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  /* Animation de la modal */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -45%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  
+  /* Titre de la modal */
+  .account-delete-modal-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  /* Message de la modal */
+  .account-delete-modal-message {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Boutons de la modal */
+  .account-delete-modal-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .account-delete-cancel-button,
+  .account-delete-confirm-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Bouton Annuler */
+  .account-delete-cancel-button {
+    background-color: #ccc;
+    color: #333;
+  }
+  
+  .account-delete-cancel-button:hover {
+    background-color: #b3b3b3;
+  }
+  
+  /* Bouton Confirmer */
+  .account-delete-confirm-button {
+    background-color: #d33;
+    color: white;
+  }
+  
+  .account-delete-confirm-button:hover {
+    background-color: #b22;
+  }
+  
