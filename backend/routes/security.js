@@ -98,38 +98,41 @@ router.post("/login",csrfProtection,limiter, async (req,res) =>{
         const {Email, Password} = req.body  
         const user =await  User.findOne({email: { $eq: Email } })//pour la sécurité
         if (user){
+            console.log(user)
             
-            hashedPassword=user.password
+           const hashedPassword=user.password
             
-        match= await bcrypt.compare(Password,hashedPassword)
-        if (match){
+            match= await bcrypt.compare(Password,hashedPassword)
+            if (match){
 
-            const token = jwt.sign(
-                { userId: user._id, email: user.email }, // Payload
-                process.env.JWT_SECRET, // Clé secrète
-                { expiresIn: "2h" } // Expiration du token
-            );
+                const token = jwt.sign(
+                    { userId: user._id, email: user.email }, // Payload
+                    process.env.JWT_SECRET, // Clé secrète
+                    { expiresIn: "2h" } // Expiration du token
+                );
 
-            res.cookie("authToken", token, {
-                httpOnly: true,  // cookie HttpOnly, empêche certaines attaques info
-                secure: process.env.PROD, // Active secure uniquement en prod pour l'https
-                sameSite: "strict", // protection csrf 
-                maxAge: 2 * 60 * 60 * 1000, // le cookie expire dans 2h
-            });
-            res.json({message: "Connexion réussie"})
-            console.log("login réussi")
+                res.cookie("authToken", token, {
+                    httpOnly: true,  // cookie HttpOnly, empêche certaines attaques info
+                    secure: process.env.PROD, // Active secure uniquement en prod pour l'https
+                    sameSite: "strict", // protection csrf 
+                    maxAge: 2 * 60 * 60 * 1000, // le cookie expire dans 2h
+                });
+                res.json({message: "Connexion réussie"})
+                console.log("login réussi")
 
 
 
-        }
-        else {
-            console.log("mot de passe invalide")
-            res.status(401).json({error: "Mot de passe ou email incorrect" })
-        }
+            }
+            else {
+                console.log("mot de passe invalide")
+                res.status(401).json({error: "Mot de passe ou email incorrect" })
+                return ;
+            }
         }
         else{
             console.log("email invalide")
             res.status(401).json({error: "Mot de passe ou email incorrect" })
+            return ;
         }
     }catch (err){
         console.log("Erreur lors du login :",err)
@@ -166,9 +169,12 @@ router.post("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
     session.startTransaction();
     try{
     console.log("Essai de supprimer le compte")
-        const {user}=req.user
-    await Booking.deleteMany({user:user}) //suppression des réservations
-    await User.findByIdAndDelete(user) //suppression de l'utilisateur
+    const {userId}=req.user
+    console.log("ID: ",userId)
+    await Booking.deleteMany({user:userId}) //suppression des réservations
+    
+    const deletedUser=await User.findByIdAndDelete(userId) //suppression de l'utilisateur
+    console.log("Utilisateur trouvé: ", deletedUser)
     // Commit the transaction if all operations succeed
     await session.commitTransaction();
     console.log("Compte supprimé")

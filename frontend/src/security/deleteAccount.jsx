@@ -1,15 +1,52 @@
 import { useNavigate } from "react-router";
+import Modal from "react-modal";
+import { useState, useEffect } from "react";
+import "./deleteAccount.css"; 
+
 import { useCSRF } from "../Contexts/CsrfContext";
-export default function DeleteAccount(){
-    const {csrfToken}= useCSRF();
-    const navigate=useNavigate()
+Modal.setAppElement("#root"); // Obligatoire pour l'accessibilité
 
-
-    return(
-    <button onClick={() =>accountDeletion(csrfToken,navigate)}>Supprimer mon compte</button>// demander une confirmation
-    )
-}
-
+export default function DeleteAccount() {
+    const { csrfToken } = useCSRF();
+    const navigate = useNavigate();
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+  
+    const openModal = () => setModalIsOpen(true);
+    const closeModal = () => setModalIsOpen(false);
+  
+    const confirmDeletion = () => {
+      accountDeletion(csrfToken, navigate);
+      closeModal();
+    };
+  
+    return (
+      <div>
+        <button className="account-delete-button" onClick={openModal}>
+          Supprimer mon compte
+        </button>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          contentLabel="Confirmation de suppression"
+          className="modal-Account-Deletion" // Classe pour la modal
+          overlayClassName="modal-Account-Deletion-overlay" // Classe pour le fond
+        >
+          <h2 className="account-delete-modal-title">Confirmation</h2>
+          <p className="account-delete-modal-message">
+            Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.
+          </p>
+          <div className="account-delete-modal-actions">
+            <button className="account-delete-cancel-button" onClick={closeModal}>
+              Annuler
+            </button>
+            <button className="account-delete-confirm-button" onClick={confirmDeletion}>
+              Supprimer
+            </button>
+          </div>
+        </Modal>
+      </div>
+    );
+  }
 
 function accountDeletion(csrfToken,navigate){
     //on se déconnecte
