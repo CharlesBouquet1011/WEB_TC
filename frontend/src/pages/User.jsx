@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
-import SeeBookings from "../Locations/seeBookings";
+import {SeeUserBookings} from "../Locations/seeBookings";
 import Logout from "../security/logout";
 import Logged from "../Contexts/Authenticated";
 import DeleteAccount from "../security/deleteAccount";
@@ -17,7 +17,7 @@ export default function User(){
         <Logged>
             <div>
                 <h1> Vous êtes connectés</h1>
-                <SeeBookings />
+                <SeeUserBookings />
                 <Logout />
                 <DeleteAccount />
             </div>
