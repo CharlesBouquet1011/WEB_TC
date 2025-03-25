@@ -10,6 +10,7 @@ import Home from "./pages/Home.jsx"
 import Login from './security/login.jsx';
 import { AuthProvider } from './Contexts/Authenticated.js';
 import User from './pages/User.jsx';
+import Registration from './security/registration.jsx';
 function App() {
   
   
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/user" element={<User />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registration />} />
           </Routes>
         </Router>
       </AuthProvider>

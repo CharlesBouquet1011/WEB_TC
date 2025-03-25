@@ -31,12 +31,7 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
           </thead>
           <tbody>
               {bookings.map((booking)=>(
-                  <tr>
-                      <td>{booking.dateDebut} </td>
-                      <td>{booking.dateFin}</td>
-                      
-                      <td>{booking.voitureReservee.marque + booking.voitureReservee.modele} </td>
-                  </tr>
+                  <Booking booking={booking} />
   
   
               ))}
@@ -139,4 +134,15 @@ export function SeeUserBookings(){
   return (<SeeBookings bookings={bookings} a_moi={true}/>)
 }
 
+//présentejuste les bookings 
+function Booking(booking){
+  return (
+    <tr>
+                      <td>{booking.dateDebut} </td>
+                      <td>{booking.dateFin}</td>
+                      
+                      <td>{booking.voitureReservee.marque + booking.voitureReservee.modele} </td>
+                  </tr>
+  )
+}
 

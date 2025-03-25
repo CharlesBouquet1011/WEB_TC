@@ -28,7 +28,14 @@ function Login() {
       </form>
       
 
-      <button id="submit" onClick={() => submitr(csrfToken,navigate,triedLogging,setTriedLogging)}> se connecter </button>
+      <button id="submit" onClick={() => submitr(csrfToken,navigate,triedLogging,setTriedLogging)}> se connecter </button> <br />
+      <div className="plainText">Vous n'avez pas de compte ?
+        <a href="/register">
+          Connectez-vous ici !
+        </a>
+        
+
+      </div>
     </div>
   );
 }

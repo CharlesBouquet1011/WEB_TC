@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 function Registration() {
+  
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
   useEffect(() => {
