@@ -1,6 +1,8 @@
 import logo from '../logo.svg';
 import Registration from '../security/registration.jsx';
 import Login from '../security/login.jsx';
+import Switch from '../boutons/bouton_login.jsx';
+
 import Cars from '../Cars/Cars.jsx';
 export default function Home(){
     return(
@@ -22,8 +24,7 @@ export default function Home(){
         </header>
 
         
-        <Registration />
-        <Login />
+        <Switch page={"/login"} texte={"connexion"} />
         <Cars />
       </div>
 
