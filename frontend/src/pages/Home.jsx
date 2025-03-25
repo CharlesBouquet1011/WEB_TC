@@ -25,7 +25,7 @@ export default function Home(){
 
         
         <Switch page={"/login"} texte={"connexion"} />
-        <Cars />
+        <Switch page={"/cars"} texte={"nos voitures"} />
       </div>
 
     )

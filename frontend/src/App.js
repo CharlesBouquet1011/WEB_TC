@@ -8,6 +8,7 @@ import SeeBookings from "./Locations/seeBookings.jsx"
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Home from "./pages/Home.jsx"
 import Login from './security/login.jsx';
+import Cars from './Cars/Cars.jsx';
 import { AuthProvider } from './Contexts/Authenticated.js';
 import User from './pages/User.jsx';
 import Registration from './security/registration.jsx';
@@ -23,6 +24,7 @@ function App() {
             <Route path="/user" element={<User />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
+            <Route path="/cars" element={<Cars />} />
           </Routes>
         </Router>
       </AuthProvider>
