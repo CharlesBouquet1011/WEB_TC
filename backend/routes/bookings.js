@@ -25,7 +25,10 @@ router.get("/seeAll",csrfProtection,limiter,auth, async (req,res)=>{
 router.delete("/delete",csrfProtection,limiter,auth,async (req,res) => {
     try{
         const {idBooking} = req.body
-        const deletedBooking=await Booking.findByIdAndDelete(idBooking) //suppression de l'utilisateur
+        if (typeof idBooking !=="string"){
+            res.status(400).json({erreur: "Id Invalide"})
+        }
+        const deletedBooking=await Booking.findByIdAndDelete({ _id: { $eq: idBooking } }) //suppression de l'utilisateur
         console.log("Réservation supprimée")
         res.status(200).json({message: "Réservation supprimée"})
     }catch (err){
