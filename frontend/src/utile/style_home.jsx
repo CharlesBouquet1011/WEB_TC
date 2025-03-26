@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export function Fond({ children }) {
     return (
-        <div className="container-fluid">
+        <div className='container-fluid'>
             {/* Corps principal */}
             <main>
                 {children}

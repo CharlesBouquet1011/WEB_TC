@@ -6,6 +6,7 @@ import Switch from '../utile/bouton_login.jsx';
 function Fond({ children }) {
     return (
         <div className="container-fluid">
+            <div className='container-vide'>
             {/* En-tête */}
             <header className="bg-dark text-white p-3 mb-4">
                 <div className="container">
@@ -25,6 +26,7 @@ function Fond({ children }) {
                     <p>&copy; Driving Enhanced. Tous droits réservés.</p>
                 </div>
             </footer>
+            </div>
         </div>
     );
 }
