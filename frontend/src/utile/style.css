@@ -31,6 +31,11 @@ h1 {
     object-fit: cover; 
 }
 
+.ombre:hover {
+    background-color: rgb(10, 10, 10);
+    opacity: 0.5;
+    }
+
 /* Styles de la vidéo */
 .video-container {
     position: relative; /* Positionne par rapport au composant parent */
