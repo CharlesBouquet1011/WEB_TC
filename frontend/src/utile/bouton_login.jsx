@@ -12,15 +12,15 @@ function Switch({classe,page,texte}) {
 
     case "profil":
       return (
-        <button className="btn" onClick={() => change(page, navigate)}>
-          <img src="/images/profil.jpg" alt="Profil" className="button-image" />
+        <button className="btn btn-image" onClick={() => change(page, navigate)}>
+          <img src="/image/profil.png" alt="Profil" className="button-image" />
         </button>
       );
     
     case "home":
     return (
-        <button className="btn" onClick={() => change(page, navigate)}>
-        <img src="/images/home.jpg" alt="Accueil" className="button-home" />
+        <button className="btn btn-home" onClick={() => change(page, navigate)}>
+        <img src="/image/home.png" alt="Accueil" className="button-home" />
         </button>
     ); 
     default:

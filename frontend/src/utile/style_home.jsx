@@ -31,7 +31,7 @@ export function Menu() {
           <div className="container d-flex justify-content-between align-items-center">
             {/* Bouton menu (hamburger) */}
             <button className="btn btn-light" onClick={() => setIsOpen(!isOpen)}>
-              <img src="/images/menu.png" alt="menu" className="menu" />
+              <img src="/image/menu.png" alt="menu" class="menu" />
             </button>
   
             {/* Titre du site */}
@@ -48,7 +48,6 @@ export function Menu() {
             <ul>
               <li><Link to="/">Accueil</Link></li>
               <li><Link to="/cars">Voitures</Link></li>
-              <li><Link to="/about">À propos</Link></li>
               <li><Link to="/contact">Contact</Link></li>
             </ul>
           </nav>

@@ -15,7 +15,7 @@ function Fond({ children }) {
             </header>
 
             {/* Corps principal */}
-            <main>
+            <main className='flex-grow-1'>
                 {children}
             </main>
 
