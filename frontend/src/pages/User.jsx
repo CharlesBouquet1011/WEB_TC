@@ -5,7 +5,7 @@ import {SeeUserBookings} from "../Locations/seeBookings";
 import Logout from "../security/logout";
 import Logged from "../Contexts/Authenticated";
 import DeleteAccount from "../security/deleteAccount";
-import Fond from "../utile/style_home";
+import Fond from "../utile/style";
 
 export default function User(){
     const {csrfToken}= useCSRF();
