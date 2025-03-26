@@ -3,10 +3,9 @@ import './style.css'; // Importer un fichier CSS personnalisé si nécessaire
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function Fond({ children }) {
+export function Fond({ children }) {
     return (
         <div className="container-fluid">
-            <Header/>
             {/* Corps principal */}
             <main>
                 {children}
@@ -22,7 +21,7 @@ function Fond({ children }) {
     );
 }
 
-function Header() {
+export function Menu() {
     const [isOpen, setIsOpen] = useState(false);
   
     return (

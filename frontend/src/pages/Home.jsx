@@ -1,6 +1,7 @@
 import logo from '../logo.svg';
 import Switch from '../utile/bouton_login.jsx';
-import Fond from '../utile/style_home.jsx';
+import {Fond,Menu} from '../utile/style_home.jsx';
+
 
 
 export default function Home(){
@@ -15,9 +16,8 @@ export default function Home(){
         <div className="overlay">
             <h1>Driving Enhanced</h1>
         </div>
+        <Menu/>
         </div>
-
-
         
         <Switch classe={"profil"} page={"/login"} texte={"connexion"} />
         <Switch classe={"bouton"} page={"/cars"} texte={"nos voitures"} />
