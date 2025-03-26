@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/mongo");
 
 const carSchema = new mongoose.Schema({
   marque: String,

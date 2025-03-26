@@ -4,11 +4,29 @@ function Registration() {
   
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
+  const [message, setMessage] = useState('')
+  const [Password, setPassword]=useState('')
+  const [Cpassword, setCPassword]=useState('')
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
     }
   }, [isLoaded, fetchCSRFToken]);
+
+  useEffect(()=>{
+     //utiliser les hooks
+    if ( Password && Password.length>0 &&
+    Cpassword && Cpassword.length >0 &&
+    Password!=Cpassword){
+      setMessage("Mot de passe et confirmation du mot de passe différents")
+    }
+    else{
+      setMessage("")
+    }
+
+  },[Cpassword,Password])
+
+
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
     <div className="Registration-form">
@@ -23,9 +41,11 @@ function Registration() {
         <label htmlFor="Phone">Numéro de téléphone</label> <br /> 
         <input type="number" id="Phone" name="Phone" /> <br />
         <label htmlFor="password">Mot de passe</label> <br /> 
-        <input type="password" id="password" name="password" /> <br />
+        <input type="password" id="password" name="password" onChange={()=>setPassword(document.getElementById("password").value)} /> <br />
         <label htmlFor="cpassword">Confirmer le mot de passe</label> <br />
-        <input type="password" id="cpassword" name="cpassword" /> <br />
+
+        <input type="password" id="cpassword" name="cpassword" onChange={()=>setCPassword((document.getElementById("cpassword").value))}/> <br />
+        <MotdepasseIdentique message={message} />
       </form>
       
 
@@ -111,7 +131,6 @@ async function submit(csrfToken){
           credentials: 'include',
           body: JSON.stringify(data),
         });
-        console.log(response)
     } catch (err){
         console.error("erreur",err)
     }   
@@ -133,6 +152,25 @@ function verifMotDePasse(motdePasse){
   }
   return retour1 & retour2
 }
+
+function MotdepasseIdentique(messagedic){
+  const {message}=messagedic
+  if (message && message.length>0){
+    return(
+      <>
+      <br />
+      <p className="texte">
+        {message}
+      </p>
+      </>
+    )
+  }
+  else {
+
+    return null;
+  }
+}
+
 
 export default Registration;
 

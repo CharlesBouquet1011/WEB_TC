@@ -19,6 +19,7 @@ export function CSRFProvider({children}) {
       const data = await response.json();
       setCsrfToken(data.csrfToken);
       setIsLoaded(true);
+      console.log("Csrf Token récupéré")
       return data.csrfToken;
     } catch (err) {
       console.error("erreur:", err);
