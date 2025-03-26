@@ -12,9 +12,10 @@ import Cars from './Cars/Cars.jsx';
 import { AuthProvider } from './Contexts/Authenticated.js';
 import User from './pages/User.jsx';
 import Registration from './security/registration.jsx';
+import { Admin } from "./Admin/Admin.js"
+
 function App() {
-  
-  
+
   return (
     <CSRFProvider>
       <AuthProvider>
@@ -25,6 +26,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Registration />} />
             <Route path="/cars" element={<Cars />} />
+            <Route path="/admin" element={<Admin />} />
           </Routes>
         </Router>
       </AuthProvider>
