@@ -11,7 +11,7 @@ function Fond({ children }) {
             <header className="bg-dark text-white p-3 mb-4">
                 <div className="container">
                     <Switch classe={"home"} page={"/"} texte={"Accueil"} />
-                    <h1>Driving Enhanced</h1>
+                    <h1 className='text-center'>Driving Enhanced</h1>
                 </div>
             </header>
 
