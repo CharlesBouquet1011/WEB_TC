@@ -5,6 +5,7 @@ import {SeeUserBookings} from "../Locations/seeBookings";
 import Logout from "../security/logout";
 import Logged from "../Contexts/Authenticated";
 import DeleteAccount from "../security/deleteAccount";
+import Fond from "../utile/style_home";
 
 export default function User(){
     const {csrfToken}= useCSRF();
@@ -15,12 +16,15 @@ export default function User(){
     
     return(//il faudra rajouter des composants ici
         <Logged>
-            <div>
-                <h1> Vous êtes connectés</h1>
-                <SeeUserBookings />
-                <Logout />
-                <DeleteAccount />
-            </div>
+            <Fond>
+                <div>
+                    <h1> Vous êtes connectés</h1>
+                    <SeeUserBookings />
+                    <Logout />
+                    <DeleteAccount />
+                </div>
+            </Fond>
+            
         </Logged>
         
     )
