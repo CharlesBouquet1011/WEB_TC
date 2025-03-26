@@ -30,7 +30,6 @@ router.post("/registration", csrfProtection, limiter, async (req,res)=>{
             return ;
         } 
 
-
         const hashedPassword=await hashString(Password)
         
         const newUser = new User({
@@ -38,10 +37,10 @@ router.post("/registration", csrfProtection, limiter, async (req,res)=>{
             phoneNumber: PhoneNumber,
             email: email,
             password: hashedPassword, // Pense à hasher le mot de passe en prod
-          });
+        });
       
-          await newUser.save();
-        console.log("utilisateur enregistré: " , newUser )
+        await newUser.save();
+            console.log("utilisateur enregistré: " , newUser )
         res.status(200).json({ok: "requête reçue"})
     }
     catch (err){

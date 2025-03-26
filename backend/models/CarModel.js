@@ -1,10 +1,11 @@
-const mongoose = require("../config/mongo");
+const mongoose = require("mongoose");
 
 const carSchema = new mongoose.Schema({
   marque: String,
   modele: String,
+  plaque: String,
   prix: Number, //il faudra probablement d'autres propriétés
-  ImageURL: String,
+  imageURL: String,
   carburant: String,
   transmission: String,
   description: String
