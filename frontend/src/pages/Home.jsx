@@ -1,4 +1,3 @@
-import logo from '../logo.svg';
 import Switch from '../utile/bouton_login.jsx';
 import Fond from '../utile/style.jsx';
 

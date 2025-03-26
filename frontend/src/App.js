@@ -1,6 +1,5 @@
 
 import './App.css';
-import ItemsList from './ItemList.jsx';
 import React, { useState, useEffect } from 'react';
 
 import { CSRFProvider } from './Contexts/CsrfContext.js';
