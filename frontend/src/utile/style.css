@@ -31,11 +31,6 @@ h1 {
     object-fit: cover; 
 }
 
-.btn-hover:hover {
-    transform: scale(1.1);  /* Agrandit le bouton */
-    transition: transform 0.3s ease-in-out;  /* L'animation de l'effet */
-}
-
 /* Styles de la vidéo */
 .video-container {
     position: relative; /* Positionne par rapport au composant parent */
@@ -43,6 +38,7 @@ h1 {
     height: 100vh; /*hauteur de la video en % */
     overflow: hidden;
 }
+
 
 /* Vidéo */
 .background-video {
