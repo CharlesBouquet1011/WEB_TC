@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router";
-import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import {SeeUserBookings} from "../Locations/seeBookings";
 import Logout from "../security/logout";
@@ -10,10 +8,6 @@ import Fond from "../utile/style";
 export default function User(){
     const {csrfToken}= useCSRF();
 
-
-    
-
-    
     return(//il faudra rajouter des composants ici
         <Logged>
             <Fond>
