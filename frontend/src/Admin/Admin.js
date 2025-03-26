@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Header } from "./components/Header.js"
 import { Tile } from './components/Tile.js';
 import { Edit } from './components/Edit.js';
+import { LocationTile } from './components/LocationTile.js';
+import { EditLocation } from './components/EditLocation.js';
 
 // import ferrariImage from "../public/ferrari.png"; 
 const cars = [
@@ -22,6 +24,13 @@ const cars = [
   { image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqKsjrD7AVwpiCotPiIxBEOtAa-jbDIeChEw&s", model: "Lexus LC 500", plate: "EV-146-QZ" }
 ];
 
+const locations = [
+  { plate: "FW-245-MD", model: "Bugatti Chiron", startTime: "2025-03-26", endTime: "2025-05-11", userId: "mathis"},
+  { plate: "QR-982-ZX", model: "Lamborghini Aventador SVJ", startTime: "2025-02-26", endTime: "2025-06-25", userId: "anais"},
+  { plate: "YL-318-WG", model: "Porsche 911 Turbo S", startTime: "2025-04-05", endTime: "2025-04-30", userId: "charles"},
+  { plate: "PJ-728-RM", model: "Mercedes-AMG GT Black Series", startTime: "2025-05-12", endTime: "2025-07-26", userId: "paulhenri"}
+]
+
 export function Admin() {
   const [activeTab, setActiveTab] = useState(0);
   const [editTab, setEditTab] = useState(false);
@@ -30,6 +39,7 @@ export function Admin() {
     <div>
       <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
 
+      {/* Vehicles Management */}
       {activeTab===0 && editTab===false && (
         <div className="container mt-4">
           <div className="row g-4">
@@ -43,6 +53,22 @@ export function Admin() {
 
       {activeTab===0 && editTab===true && (
         <Edit setEditTab={setEditTab}></Edit>
+      )}
+
+      {/* Location Management */}
+      {activeTab === 1 && !editTab && (
+        <div className="container mt-4">
+          <div className="row g-4">
+            <button type="button" className="btn btn-secondary btn-lg" onClick={() => setEditTab(true)}>Ajouter une location +</button>
+            {locations.map((location, index) => (
+              <LocationTile key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditTab={setEditTab}/>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 1 && editTab && (
+        <EditLocation setEditTab={setEditTab} />
       )}
     </div>
   );
