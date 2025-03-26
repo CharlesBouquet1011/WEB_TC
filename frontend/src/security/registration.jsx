@@ -3,6 +3,7 @@ import { useCSRF } from "../Contexts/CsrfContext";
 import Fond from '../utile/style.jsx';
 import { useNavigate } from "react-router";
 
+
 function Registration() {
   const navigate=useNavigate()
 
@@ -75,35 +76,111 @@ function Registration() {
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
     <Fond>
-      <div className="Registration-form">
-        <h2>Créez un compte dès maintenant !</h2>
-        <form>
-          <AfficheGrosseErreur message={erreurs.grosseErreur} />
-          <label htmlFor="Name">Nom de famille</label> <br />
-          <input type="text" id="Name" name="Name" onChange={(event)=>handleChange(event,setName)} /> <br />
-          <AfficheErreur message={erreurs.name} />
-          <label htmlFor="FirstName">Prénom</label> <br />
-          <input type="text" id="FirstName" name="FirstName" onChange={(event)=>handleChange(event,setFName)} /> <br />
-          <AfficheErreur message={erreurs.fname} />
-          <label htmlFor="email">Mail</label> <br />
-          <input type="text" id="email" name="email" onChange={(event)=>handleChange(event,setMail)} /> <br />
-          <AfficheErreur message={erreurs.mail} />
-          <label htmlFor="Phone">Numéro de téléphone</label> <br /> 
-          <input type="text " id="Phone" name="Phone" onChange={(event)=>handleChange(event,setPhoneNumber)}/> <br />
-          <AfficheErreur message={erreurs.phoneNumber} />
-          <label htmlFor="password">Mot de passe</label> <br /> 
-          <input type="password" id="password" name="password" onChange={(event)=>handleChange(event,setPassword)} /> <br />
-          <AfficheErreur message={erreurs.password1} />
+      <div className="container-fluid vh-100">
+        <div className="row h-100">
+          {/* Image Section */}
+          <div className="col-md-6 p-0 d-none d-md-block position-relative">
+            <img 
+              src="/api/placeholder/800/1200" 
+              alt="Registration background" 
+              className="img-fluid w-100 h-100 object-cover position-absolute"
+              style={{objectFit: 'cover', opacity: 0.7}}
+            />
+          </div>
 
-          <label htmlFor="cpassword">Confirmer le mot de passe</label> <br />
+          {/* Registration Form Section */}
+          <div className="col-md-6 d-flex align-items-center justify-content-center">
+            <div className="w-75">
+              <h2 className="mb-4">Créez un compte</h2>
+              <p className="text-muted mb-4">Rejoignez notre communauté dès maintenant</p>
 
-          <input type="password" id="cpassword" name="cpassword" onChange={(event)=>handleChange(event,setCPassword)}/> <br />
-          <AfficheErreur message={erreurs.password} />
-        </form>
-        
+              {/* Large Error Message */}
+              {erreurs.grosseErreur && (
+                <div className="alert alert-danger mb-4" role="alert">
+                  {erreurs.grosseErreur}
+                </div>
+              )}
 
-        <button id="submit" onClick={() => submit(csrfToken,setErreurs,[name,fname,mail,phoneNumber,Password,Cpassword],navigate)}> s'inscrire </button>
+              <form>
+                <div className="mb-3">
+                  <label htmlFor="Name" className="form-label">Nom de famille</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="Name"
+                    onChange={(event) => handleChange(event, setName)} 
+                  />
+                  {erreurs.name && <small className="text-danger">{erreurs.name}</small>}
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="FirstName" className="form-label">Prénom</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="FirstName"
+                    onChange={(event) => handleChange(event, setFName)} 
+                  />
+                  {erreurs.fname && <small className="text-danger">{erreurs.fname}</small>}
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Mail</label>
+                  <input 
+                    type="email" 
+                    className="form-control" 
+                    id="email"
+                    onChange={(event) => handleChange(event, setMail)} 
+                  />
+                  {erreurs.mail && <small className="text-danger">{erreurs.mail}</small>}
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="Phone" className="form-label">Numéro de téléphone</label>
+                  <input 
+                    type="tel" 
+                    className="form-control" 
+                    id="Phone"
+                    onChange={(event) => handleChange(event, setPhoneNumber)}
+                  />
+                  {erreurs.phoneNumber && <small className="text-danger">{erreurs.phoneNumber}</small>}
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Mot de passe</label>
+                  <input 
+                    type="password" 
+                    className="form-control" 
+                    id="password"
+                    onChange={(event) => handleChange(event, setPassword)} 
+                  />
+                  {erreurs.password1 && <small className="text-danger">{erreurs.password1}</small>}
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="cpassword" className="form-label">Confirmer le mot de passe</label>
+                  <input 
+                    type="password" 
+                    className="form-control" 
+                    id="cpassword"
+                    onChange={(event) => handleChange(event, setCPassword)}
+                  />
+                  {erreurs.password && <small className="text-danger">{erreurs.password}</small>}
+                </div>
+
+                <button 
+                  type="button" 
+                  className="btn btn-dark w-100 mt-3"
+                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
+                >
+                  S'inscrire
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
+      <br />
     </Fond>
   );
 }
@@ -172,7 +249,7 @@ async function checkErreurs(name,fname,mail,phone,password,cpassword,setErreurs)
           ))
         }
         //vérifications
-        if (!name || !fname || !mail || !phone || !password || !cpassword){
+        if ((!name || !fname || !mail || !phone || !password || !cpassword) && !(!name && !fname && !mail && !phone && !password && !cpassword)){ //si tous les champs ne sont pas remplis mais pas si aucun n'est rempli
           setErreurs(etatPrec=>({
             ...etatPrec,
             grosseErreur:"Veuillez remplir tous les champs",}
@@ -364,41 +441,6 @@ function verifMotDePasse(motdePasse){
     
   }
   return retour1 && retour2
-}
-
-function AfficheErreur(messagedic){
-  const {message}=messagedic
-  if (message && message.length>0){
-    return(
-      <>
-      <br />
-      <p className="texte">
-        {message}
-      </p>
-      </>
-    )
-  }
-  else {
-
-    return null;
-  }
-}
-function AfficheGrosseErreur(messagedic){
-  const {message}=messagedic
-  if (message && message.length>0){
-    return(
-      <>
-      <br />
-      <div className="texte">
-        {message}
-      </div>
-      </>
-    )
-  }
-  else {
-
-    return null;
-  }
 }
 
 async function mailChecker(mail,csrfToken){
