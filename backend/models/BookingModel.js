@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../config/mongo");
 const BookingSchema=new mongoose.Schema({
   dateDebut: Date,
   dateFin: Date,

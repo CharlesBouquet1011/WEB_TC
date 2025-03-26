@@ -1,5 +1,7 @@
 import React from 'react';
-import './style.css'; // Importer un fichier CSS personnalisé si nécessaire
+import './style.css';
+import Switch from '../utile/bouton_login.jsx';
+
 
 function Fond({ children }) {
     return (
@@ -7,6 +9,7 @@ function Fond({ children }) {
             {/* En-tête */}
             <header className="bg-dark text-white p-3 mb-4">
                 <div className="container">
+                    <Switch classe={"home"} page={"/"} texte={"Accueil"} />
                     <h1>Driving Enhanced</h1>
                 </div>
             </header>
