@@ -7,7 +7,16 @@ h1 {
     font-weight: bold;
 }
 
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Pour pousser le footer en bas si la page est vide */
+}
+
 .button-image {
+    position: absolute;
+    top: 2%;
+    right: 2%;
     width: 40px;
     height: 40px;
     object-fit: cover; 
@@ -25,9 +34,9 @@ h1 {
 
 /* Styles de la vidéo */
 .video-container {
-    position: relative; /* Positionne par rapport à son parent */
+    position: relative; /* Positionne par rapport au composant parent */
     width: 100%;
-    height: 50vh; /* Définir la hauteur de la vidéo à 50% de la fenêtre */
+    height: 100vh; /*hauteur de la video en % */
     overflow: hidden;
 }
 
@@ -41,14 +50,14 @@ h1 {
 /* Overlay pour le texte */
 .overlay {
     position: absolute;
-    top: 10%;
-    right: 10%; /* Positionner le texte à droite de la vidéo */
+    top: 80%;
+    right: 10%;
     transform: translate(0, -50%); /* Centrer verticalement par rapport à l'overlay */
     color: white;
     text-align: right;
     font-size: 2rem;
     font-weight: bold;
-    background: rgba(0, 0, 0, 0); /* Fond transparent */
+    background: rgba(0, 0, 0, 0);
     padding: 20px;
     border-radius: 10px;
 }
@@ -126,7 +135,7 @@ h1 {
     position: absolute;
     top: 10px;
     left: 10px;
-    background: rgba(226, 219, 219, 0.5);
+    background: rgba(226, 219, 219, 0);
     z-index: 1010; /* S'assurer que l'icône du menu soit toujours au-dessus */
 }
 
@@ -137,6 +146,5 @@ footer {
     padding: 20px;
     background-color: #343a40;
     color: white;
-    position: relative;
     z-index: 10;
 }
