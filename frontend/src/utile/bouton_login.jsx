@@ -5,21 +5,21 @@ function Switch({classe,page,texte}) {
   switch (classe) {
     case "bouton":
       return (
-        <button className="btn btn-primary" onClick={() => change(page, navigate)}>
+        <button className="btn btn-primary btn-hover" onClick={() => change(page, navigate)}>
           {texte}
         </button>
       );
 
     case "profil":
       return (
-        <button className="btn" onClick={() => change(page, navigate)}>
+        <button className="btn btn-hover" onClick={() => change(page, navigate)}>
           <img src="/image/profil.png" alt="Profil" className="button-image" />
         </button>
       );
     
     case "home":
     return (
-        <button className="btn" onClick={() => change(page, navigate)}>
+        <button className="btn btn-hover" onClick={() => change(page, navigate)}>
         <img src="/image/home.png" alt="Accueil" className="button-home" />
         </button>
     ); 
