@@ -1,6 +1,6 @@
 import Switch from '../utile/bouton_login.jsx';
 import {Fond,Menu} from '../utile/style_home.jsx';
-
+import Assistance from "../Locations/Assistance.jsx"
 
 
 export default function Home(){
@@ -28,6 +28,7 @@ export default function Home(){
         <strong>Exigez l’excellence. Conduisez sans limites.</strong>  
         </p>
       </div>
+      <Assistance />
       </Fond>
 
     )
