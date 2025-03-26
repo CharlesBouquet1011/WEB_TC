@@ -11,7 +11,7 @@ const Booking=require("../models/BookingModel.js")
 
 router.get("/seeAll",csrfProtection,limiter,auth, async (req,res)=>{
     try {
-        const {user} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
+        const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
         const bookings= await Booking.find().populate("voitureReservee")
         res.status(200).json({bookings: bookings})
         }
@@ -36,8 +36,8 @@ router.delete("/delete",csrfProtection,limiter,auth,async (req,res) => {
 
 router.get("/see",csrfProtection,limiter,auth, async (req,res)=>{
     try {
-        const {user} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
-        const bookings= await Booking.find({user: user}).populate("voitureReservee")
+        const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
+        const bookings= await Booking.find({user: userId}).populate("voitureReservee")
         res.status(200).json({bookings: bookings})
         }
     catch (err){
