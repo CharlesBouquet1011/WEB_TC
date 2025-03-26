@@ -81,9 +81,9 @@ function Registration() {
           {/* Image Section */}
           <div className="col-md-6 p-0 d-none d-md-block position-relative">
             <img 
-              src="/api/placeholder/800/1200" 
+              src="/image/voit1.jpg" 
               alt="Registration background" 
-              className="img-fluid w-100 h-100 object-cover position-absolute"
+              className="img-fluid w-80 h-80 position-absolute"
               style={{objectFit: 'cover', opacity: 0.7}}
             />
           </div>

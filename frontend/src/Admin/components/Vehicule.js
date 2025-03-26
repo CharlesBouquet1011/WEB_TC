@@ -19,32 +19,72 @@ import { Tile } from './Tile.js';
 //   { image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqKsjrD7AVwpiCotPiIxBEOtAa-jbDIeChEw&s", model: "Lexus LC 500", plate: "EV-146-QZ" }
 // ];
 
+const newCar = {
+  "marque": "Marque",
+  "plaque": "TC-404-IF",
+  "imageURL": "https://www.usinenouvelle.com/mediatheque/2/3/9/001298932_1200x800_c.jpg"
+}
+
 export function Vehicule({ setEditTab }) {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
     const fetchCars = async () => {
-        try {
-          const response = await fetch("http://localhost/api/cars");
-          if (!response.ok) {
-            throw new Error("Erreur lors de la récupération des véhicules");
-          }
-          const data = await response.json();
-          setCars(data);
-        } catch (error) {
-          console.error("Erreur:", error);
+      try {
+        const response = await fetch("http://localhost/api/cars");
+        if (!response.ok) {
+          throw new Error("Erreur lors de la récupération des véhicules");
         }
-      };
+        const data = await response.json();
+        setCars(data);
+      } catch (error) {
+        console.error("Erreur:", error);
+      }
+    };
   
     fetchCars();
-  }, []);
+  }, [cars.voitures]);
 
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce véhicule ?");
+    if (confirmDelete) {
+      try {
+        const response = await fetch(`http://localhost/api/cars/delete/${id}`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error("Erreur lors de la suppression du véhicule.");
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+      }
+    }
+  }
+
+  const handleAddCar = async () => {
+    try {
+      const response = await fetch(`http://localhost/api/cars/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newCar),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'ajout du véhicule.");
+      }
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
+  }
+
+// setEditTab(true)
   return (
     <div className="container mt-4">
       <div className="row g-4">
-        <button type="button" className="btn btn-secondary btn-lg" onClick={() => setEditTab(true)}>Ajouter un véhicule +</button>
+        <button type="button" className="btn btn-secondary btn-lg" onClick={() => handleAddCar()}>Ajouter un véhicule +</button>
         {cars.voitures?.map((car, index) => (
-            <Tile key={index} image={car.image} model={car.marque} plate={car.plate} setEditTab={setEditTab}/>
+          <Tile key={index} id={car._id} image={car.imageURL} model={car.marque} plate={car.plaque} handleDelete={handleDelete} setEditTab={setEditTab}/>
         )) || "Chargement..."}
       </div>
     </div>

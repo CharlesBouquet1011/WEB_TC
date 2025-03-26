@@ -1,4 +1,4 @@
-export function Tile({ image, model, plate, setEditTab }) {
+export function Tile({ id, image, model, plate, setEditTab, handleDelete}) {
   return (
     <div className="col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center">
       <div style={{ backgroundColor: "#d4e6f1", maxWidth: "300px", minHeight: "300px", minWidth: "230px"}} className="card p-3 shadow-lg rounded-4">
@@ -11,7 +11,7 @@ export function Tile({ image, model, plate, setEditTab }) {
         </div>
         <div className="d-flex justify-content-center gap-2 mt-2">
           <button className="btn btn-secondary px-3" onClick={() => setEditTab(true)}>Modifier</button>
-          <button className="btn btn-secondary px-3">Supprimer</button>
+          <button className="btn btn-secondary px-3" onClick={() => handleDelete(id)}>Supprimer</button>
         </div>
       </div>
     </div>
