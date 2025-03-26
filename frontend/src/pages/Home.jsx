@@ -9,7 +9,7 @@ export default function Home(){
         <div className="App">
         <div className="video-container">
         <video autoPlay loop muted playsInline className="background-video">
-         <source src={"/images/video.mp4"} type="video/mp4" />
+         <source src={"/image/video.mp4"} type="video/mp4" />
             Votre navigateur ne supporte pas les vidéos HTML5.
         </video>
         <div className="overlay">
