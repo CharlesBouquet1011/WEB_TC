@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Header } from "./components/Header.js"
 import { Tile } from './components/Tile.js';
 import { Edit } from './components/Edit.js';
-import { LocationTile } from './components/LocationTile.js';
+import { LocationRow } from './components/LocationRow.js';
 import { EditLocation } from './components/EditLocation.js';
 
 // import ferrariImage from "../public/ferrari.png"; 
@@ -58,12 +58,26 @@ export function Admin() {
       {/* Location Management */}
       {activeTab === 1 && !editTab && (
         <div className="container mt-4">
-          <div className="row g-4">
-            <button type="button" className="btn btn-secondary btn-lg" onClick={() => setEditTab(true)}>Ajouter une location +</button>
-            {locations.map((location, index) => (
-              <LocationTile key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditTab={setEditTab}/>
-            ))}
-          </div>
+          <div className="container mt-4">
+          <button type="button" className="btn btn-secondary btn-lg mb-3" onClick={() => setEditTab(true)}>Ajouter une location +</button>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Plaque</th>
+                <th>Modèle</th>
+                <th>Utilisateur</th>
+                <th>Début</th>
+                <th>Fin</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {locations.map((location, index) => (
+                <LocationRow key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditTab={setEditTab} />
+              ))}
+            </tbody>
+          </table>
+        </div>
         </div>
       )}
 
