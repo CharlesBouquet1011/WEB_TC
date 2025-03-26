@@ -1,7 +1,7 @@
 import Switch from '../utile/bouton_login.jsx';
 import {Fond,Menu} from '../utile/style_home.jsx';
 import Assistance from "../Locations/Assistance.jsx"
-
+const protocole="http://"
 
 export default function Home(){
     return(
@@ -9,7 +9,7 @@ export default function Home(){
         <div className="App">
         <div className="video-container">
         <video autoPlay loop muted playsInline className="background-video">
-         <source src={"/image/video.mp4"} type="video/mp4" />
+         <source src={protocole+"localhost/media/image/video.mp4"} type="video/mp4" />
             Votre navigateur ne supporte pas les vidéos HTML5.
         </video>
         <Switch classe={"profil"} page={"/login"} texte={"connexion"} />
