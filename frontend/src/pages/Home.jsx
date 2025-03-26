@@ -1,11 +1,11 @@
 import logo from '../logo.svg';
-import Registration from '../security/registration.jsx';
-import Login from '../security/login.jsx';
-import Switch from '../boutons/bouton_login.jsx';
+import Switch from '../utile/bouton_login.jsx';
+import Fond from '../utile/style.jsx';
 
-import Cars from '../Cars/Cars.jsx';
+
 export default function Home(){
     return(
+        <Fond>
         <div className="App">
         <header className="App-header">
           <p> 
@@ -14,9 +14,10 @@ export default function Home(){
         </header>
 
         
-        <Switch page={"/login"} texte={"connexion"} />
-        <Switch page={"/cars"} texte={"nos voitures"} />
+        <Switch classe={"profil"} page={"/login"} texte={"connexion"} />
+        <Switch classe={"bouton"} page={"/cars"} texte={"nos voitures"} />
       </div>
+      </Fond>
 
     )
 }

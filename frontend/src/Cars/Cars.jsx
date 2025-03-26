@@ -2,6 +2,8 @@ import Car from "./Car"
 import "./Cars.css"
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useState, useEffect } from "react";
+import Fond from '../utile/style.jsx';
+
 
 export default function Cars(){
     //récupérer les voitures quelque part
@@ -43,6 +45,7 @@ export default function Cars(){
         console.log(Voitures)
 
         return(
+            <Fond>
             <div className="product-card-container">
                 
                 {Voitures.map((care)=>(
@@ -50,12 +53,15 @@ export default function Cars(){
                         ImageUrl: care.ImageUrl, carburant: care.carburant, transmission: care.transmission, description : care.description }} />
     ))}
             </div>
+            </Fond>
         )
     }
 
     else{
         return(
+            <Fond>
             <h1>Il n'y a aucune voiture pour le moment</h1>
+            </Fond>
         )
     }
     

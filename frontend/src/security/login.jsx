@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useNavigate } from "react-router";
 import { useAuth } from "../Contexts/Authenticated";
+import Fond from '../utile/style.jsx';
+
+
 function Login() {
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
@@ -16,6 +19,7 @@ function Login() {
   
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
+    <Fond>
     <div className="Registration-form">
       <h2>Connexion à votre compte</h2>
       <form>
@@ -37,6 +41,7 @@ function Login() {
 
       </div>
     </div>
+    </Fond>
   );
 }
 

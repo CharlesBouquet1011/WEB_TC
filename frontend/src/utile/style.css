@@ -1,0 +1,18 @@
+.bg-dark {
+    background-color: #343a40 !important;
+}
+
+h1 {
+    font-family: 'Arial', sans-serif;
+    font-weight: bold;
+}
+
+.button-image {
+    width: 40px;
+    height: 40px;
+    object-fit: cover; 
+  }
+
+footer {
+    text-align: center;
+}

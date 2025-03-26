@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
+import Fond from '../utile/style.jsx';
+
 function Registration() {
   
   //récupérer les jetons csrf etc
@@ -11,6 +13,7 @@ function Registration() {
   }, [isLoaded, fetchCSRFToken]);
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
+    <Fond>
     <div className="Registration-form">
       <h2>Créez un compte dès maintenant !</h2>
       <form>
@@ -31,6 +34,7 @@ function Registration() {
 
       <button id="submit" onClick={() => submit(csrfToken)}> s'inscrire </button>
     </div>
+    </Fond>
   );
 }
 
