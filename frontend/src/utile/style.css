@@ -7,7 +7,7 @@ h1 {
     font-weight: bold;
 }
 
-.container-anais {
+.container-vide {
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* Pour pousser le footer en bas si la page est vide */
@@ -30,6 +30,11 @@ h1 {
     height: 40px;
     object-fit: cover; 
 }
+
+.ombre:hover {
+    background-color: rgb(10, 10, 10);
+    opacity: 0.5;
+    }
 
 /* Styles de la vidéo */
 .video-container {

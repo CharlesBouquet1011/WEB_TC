@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export function Fond({ children }) {
     return (
-        <div className="container-fluid">
+        <div className='container-fluid'>
             {/* Corps principal */}
             <main>
                 {children}
@@ -30,7 +30,7 @@ export function Menu() {
         <header className="bg-dark text-white p-3 mb-4 d-flex align-items-center">
           <div className="container d-flex justify-content-between align-items-center">
             {/* Bouton menu (hamburger) */}
-            <button className="btn btn-light" onClick={() => setIsOpen(!isOpen)}>
+            <button className="btn btn-light ombre" onClick={() => setIsOpen(!isOpen)}>
               <img src="/image/menu.png" alt="menu" class="menu" />
             </button>
   
