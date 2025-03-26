@@ -1,32 +1,27 @@
-import logo from '../logo.svg';
-import Registration from '../security/registration.jsx';
-import Login from '../security/login.jsx';
-import Switch from '../boutons/bouton_login.jsx';
+import Switch from '../utile/bouton_login.jsx';
+import Fond from '../utile/style_home.jsx';
 
-import Cars from '../Cars/Cars.jsx';
+
 export default function Home(){
     return(
+        <Fond>
         <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p> 
-            Edit <code>src/App.js</code> and save to reload. 
-            
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <div className="video-container">
+        <video autoPlay loop muted playsInline className="background-video">
+         <source src={"/images/video.mp4"} type="video/mp4" />
+            Votre navigateur ne supporte pas les vidéos HTML5.
+        </video>
+        <div className="overlay">
+            <h1>Driving Enhanced</h1>
+        </div>
+        </div>
+
 
         
-        <Switch page={"/login"} texte={"connexion"} />
-        <Cars />
+        <Switch classe={"profil"} page={"/login"} texte={"connexion"} />
+        <Switch classe={"bouton"} page={"/cars"} texte={"nos voitures"} />
       </div>
+      </Fond>
 
     )
 }
