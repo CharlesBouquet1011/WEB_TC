@@ -9,6 +9,8 @@ function Registration() {
   const [message, setMessage] = useState('')
   const [Password, setPassword]=useState('')
   const [Cpassword, setCPassword]=useState('')
+  const [erreurMail, setErreurMail]=useState("")
+  const [mail,setMail]=useState("")
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
@@ -27,7 +29,25 @@ function Registration() {
     }
 
   },[Cpassword,Password])
+  useEffect(()=>{
 
+    const  effect3= async()=>{
+      if (! (await mailChecker(mail,csrfToken)) &&
+    mail &&
+    mail.length>0
+  
+  ){
+      setErreurMail("Mail Incorrect")
+      console.log("mail incorrect")
+    }
+    else{
+      setErreurMail("")
+      console.log("mail correct")
+    }
+    }
+    effect3()
+    
+  },[mail])
 
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
@@ -40,7 +60,8 @@ function Registration() {
         <label htmlFor="FirstName">Prénom</label> <br />
         <input type="text" id="FirstName" name="FirstName" /> <br />
         <label htmlFor="email">Mail</label> <br />
-        <input type="text" id="email" name="email" /> <br />
+        <input type="text" id="email" name="email" onChange={()=>setMail(document.getElementById("email").value)} /> <br />
+        <AfficheErreur message={erreurMail} />
         <label htmlFor="Phone">Numéro de téléphone</label> <br /> 
         <input type="number" id="Phone" name="Phone" /> <br />
         <label htmlFor="password">Mot de passe</label> <br /> 
@@ -48,7 +69,7 @@ function Registration() {
         <label htmlFor="cpassword">Confirmer le mot de passe</label> <br />
 
         <input type="password" id="cpassword" name="cpassword" onChange={()=>setCPassword((document.getElementById("cpassword").value))}/> <br />
-        <MotdepasseIdentique message={message} />
+        <AfficheErreur message={message} />
       </form>
       
 
@@ -74,20 +95,7 @@ async function submit(csrfToken){
             document.getElementById("cpassword").value
 
         ]
-        try{
-            var checkmail = fetch("http://localhost:3000/api/security/mail-check", {
-              method: "POST",
-              headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
-                "Content-Type": "application/json",
-                'X-CSRF-Token': csrfToken,
-              },
-              credentials: 'include',
-              body: JSON.stringify({"email": mail}),
-            });
-            
-        } catch (err){
-            console.error("erreur",err)
-        }   
+         
         //vérifications
         if (!name || !fname || !mail || !phone || !password || !cpassword){
             alert("Veuillez remplir tous les champs")
@@ -106,19 +114,13 @@ async function submit(csrfToken){
           return ;
         }
 
-        if (!(mail.includes("@")) || !(mail.includes("."))){
-          alert("Votre email est incorrect")
-          return ;
-        }
 
         if (phone.length != 10 || phone[0]!="0"){
           alert("numéro de téléphone incorrect")
           return ;
         }
-        checkmail = await checkmail
-        checkmail= await checkmail.json();
         
-        if (checkmail.dispo != "dispo"){
+        if (await mailChecker(mail,csrfToken)){
           alert("Votre email est incorrect")
           return ;
         }
@@ -157,7 +159,7 @@ function verifMotDePasse(motdePasse){
   return retour1 & retour2
 }
 
-function MotdepasseIdentique(messagedic){
+function AfficheErreur(messagedic){
   const {message}=messagedic
   if (message && message.length>0){
     return(
@@ -174,7 +176,37 @@ function MotdepasseIdentique(messagedic){
     return null;
   }
 }
+async function mailChecker(mail,csrfToken){
+  try{
+    var checkmail = fetch("http://localhost:3000/api/security/mail-check", {
+      method: "POST",
+      headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
+        "Content-Type": "application/json",
+        'X-CSRF-Token': csrfToken,
+      },
+      credentials: 'include',
+      body: JSON.stringify({"email": mail}),
+    });
+    
+} catch (err){
+    console.error("erreur",err)
+}  
+  checkmail = await checkmail
+          checkmail= await checkmail.json();
+          if (checkmail.dispo != "dispo"){
+            return false ;}
+          else{
+            if (!(mail.includes("@")) || !(mail.includes("."))){
 
+              return false;
+            }
+            else{
+
+              return true
+            }
+          }
+          
+}
 
 export default Registration;
 
