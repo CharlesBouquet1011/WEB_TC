@@ -14,11 +14,12 @@ export default function Assistance(){
 }
 
 function Affichage({mail,phoneNumber}){
-    <div className="Assistance">
+    return(<div className="Assistance">
             Si vous avez un problème, contactez-nous: <br />
             {mail} <br />
             {phoneNumber}
-        </div>
+        </div>)
+    
 }
 
 function retrieveData(csrfToken,setMail,setPhoneNumber){
@@ -33,9 +34,10 @@ function retrieveData(csrfToken,setMail,setPhoneNumber){
     
         })
         request = await request.json()
-        const {mail,phonenumber}=request
+        const {mail,phoneNumber}=request
+        console.log(mail,phoneNumber)
         setMail(mail)
-        setPhoneNumber(phonenumber)
+        setPhoneNumber(phoneNumber)
 
         
     }
