@@ -20,6 +20,11 @@ export function AddLocation({ setAddLocationMode, locations, setLocations }) {
       return;
     }
 
+    if (new Date(endTime) <= new Date(startTime)) {
+      alert("La date de fin doit être postérieure à la date de début.");
+      return;
+    }
+
     const newLocation = {
       plate: selectedPlate,
       model: selectedModel,
