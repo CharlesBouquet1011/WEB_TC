@@ -11,7 +11,16 @@ h1 {
     width: 40px;
     height: 40px;
     object-fit: cover; 
-  }
+}
+
+.button-home {
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover; 
+}
 
 
 /* Styles de la vidéo */
