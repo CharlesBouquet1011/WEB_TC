@@ -2,7 +2,7 @@ import React from 'react';
 import './style.css'; // Importer un fichier CSS personnalisé si nécessaire
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
+const ProtoetDomaine="http://localhost/"
 export function Fond({ children }) {
     return (
         <div className='container-fluid'>
@@ -31,7 +31,7 @@ export function Menu() {
           <div className="container d-flex justify-content-between align-items-center">
             {/* Bouton menu (hamburger) */}
             <button className="btn btn-light" onClick={() => setIsOpen(!isOpen)}>
-              <img src="/image/menu.png" alt="menu" class="menu" />
+              <img src={ProtoetDomaine+"media/image/menu.png"} alt="menu" class="menu" />
             </button>
   
             {/* Titre du site */}

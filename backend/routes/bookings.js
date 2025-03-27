@@ -22,6 +22,20 @@ router.get("/seeAll",csrfProtection,limiter,auth, async (req,res)=>{
 
 })
 
+router.get("/infos",csrfProtection,async(req,res)=>{
+    try{
+        var mail= process.env.mail
+        var phoneNumber=process.env.phoneNumber
+        res.status(200).json({mail:mail,phoneNumber:phoneNumber})
+    } catch (err){
+        console.log("Erreur envoi mail + num tel",err)
+        res.status(500).json({erreur:"Erreur serveur"})
+    }
+    
+    
+})
+
+
 router.delete("/delete",csrfProtection,limiter,auth,async (req,res) => {
     try{
         const {idBooking} = req.body
