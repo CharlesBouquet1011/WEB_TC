@@ -23,15 +23,9 @@ router.get("/",csrfProtection, async (req,res)=>{
 
 router.post("/add", async (req,res)=>{
     try {
-        const { marque, plaque, imageURL } = req.body;
+       const newCar = new Cars (req.body);
 
-        const newCar = new Cars ({
-            marque: marque,
-            plaque: plaque,
-            imageURL: imageURL,
-        });
-
-        await newCar.save();
+       await newCar.save();
         console.log("Véhicule ajouté: ", newCar )
         res.status(200).json({message: "Véhicule ajouté"})
 

@@ -42,7 +42,7 @@ services:
     user: mongodb
     restart: on-failure
     volumes:
-      - mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
+      - ./mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
 
   nginx:
     build:

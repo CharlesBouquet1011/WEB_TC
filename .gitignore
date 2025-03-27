@@ -25,3 +25,4 @@
 *.jpg
 *.png
 *.mp4
+/mongo

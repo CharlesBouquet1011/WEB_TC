@@ -19,14 +19,62 @@ import { Tile } from './Tile.js';
 //   { image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqKsjrD7AVwpiCotPiIxBEOtAa-jbDIeChEw&s", model: "Lexus LC 500", plate: "EV-146-QZ" }
 // ];
 
-const newCar = {
-  "marque": "Marque",
-  "plaque": "TC-404-IF",
-  "imageURL": "https://www.usinenouvelle.com/mediatheque/2/3/9/001298932_1200x800_c.jpg"
-}
+const carList = [
+  {
+    "marque": "Bugatti",
+    "modele": "Chiron",
+    "plaque": "FW-245-MD",
+    "imageURL": "https://www.usinenouvelle.com/mediatheque/2/3/9/001298932_1200x800_c.jpg",
+    "prix": 485,
+    "carburant": "Diesel",
+    "transmission": "Manuelle",
+    "description": "Excellente"
+  },
+  {
+    "marque": "Lamborghini",
+    "modele": "Aventador SVJ",
+    "plaque": "QR-982-ZX",
+    "imageURL": "https://www.automotivpress.fr/wp-content/uploads/2019/03/Lamborghini-Aventador-SVJ-Roadster-8.jpg",
+    "prix": 956,
+    "carburant": "Essence",
+    "transmission": "Automatique",
+    "description": "Ouverture papillon"
+  },
+  {
+    "marque": "Rolls-Royce",
+    "modele": "Phantom",
+    "plaque": "XT-527-KH",
+    "imageURL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_IrIRnm_G2Fj-KNpDNNe70-9JPlivwQbHSA&s",
+    "prix": 10.569,
+    "carburant": "Diesel",
+    "transmission": "Manuelle",
+    "description": "Confortable"
+  },
+  {
+    "marque": "Porsche",
+    "modele": "911",
+    "plaque": "YL-318-WG",
+    "imageURL": "https://i.gaw.to/content/photos/41/69/416992-la-nouvelle-porsche-911-turbo-s-grimpe-a-641-chevaux.jpg",
+    "prix": 259,
+    "carburant": "Électrique",
+    "transmission": "Automatique",
+    "description": "Sport"
+  },
+  {
+    "marque": "Aston Martin",
+    "modele": "DBS Superleggera",
+    "plaque": "MK-654-VT",
+    "imageURL": "https://i1.wp.com/pdlv.fr/wp-content/uploads/2021/11/70292-autoart-aston-martin-dbs-2.jpg?fit=1200%2C723",
+    "prix": 469,
+    "carburant": "Essence",
+    "transmission": "Manuelle",
+    "description": "Élégante"
+  },
+];
 
 export function Vehicule({ setEditTab }) {
   const [cars, setCars] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -37,13 +85,13 @@ export function Vehicule({ setEditTab }) {
         }
         const data = await response.json();
         setCars(data);
+        setRefresh(false);
       } catch (error) {
         console.error("Erreur:", error);
       }
     };
-  
     fetchCars();
-  }, [cars.voitures]);
+  }, [refresh]);
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce véhicule ?");
@@ -55,6 +103,7 @@ export function Vehicule({ setEditTab }) {
         if (!response.ok) {
           throw new Error("Erreur lors de la suppression du véhicule.");
         }
+        setRefresh(true);
       } catch (error) {
         console.error("Erreur:", error);
       }
@@ -63,16 +112,18 @@ export function Vehicule({ setEditTab }) {
 
   const handleAddCar = async () => {
     try {
+      const randomCar =  carList[Math.floor(Math.random()*carList.length)];
       const response = await fetch(`http://localhost/api/cars/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newCar),
+        body: JSON.stringify(randomCar),
       });
       if (!response.ok) {
         throw new Error("Erreur lors de l'ajout du véhicule.");
       }
+      setRefresh(true);
     } catch (error) {
       console.error("Erreur:", error);
     }
@@ -84,7 +135,7 @@ export function Vehicule({ setEditTab }) {
       <div className="row g-4">
         <button type="button" className="btn btn-secondary btn-lg" onClick={() => handleAddCar()}>Ajouter un véhicule +</button>
         {cars.voitures?.map((car, index) => (
-          <Tile key={index} id={car._id} image={car.imageURL} model={car.marque} plate={car.plaque} handleDelete={handleDelete} setEditTab={setEditTab}/>
+          <Tile key={index} id={car._id} image={car.imageURL} name={car.marque+" "+car.modele} plate={car.plaque} handleDelete={handleDelete} setEditTab={setEditTab}/>
         )) || "Chargement..."}
       </div>
     </div>
