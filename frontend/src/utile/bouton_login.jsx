@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
-const ProtoetDomaine='http://localhost/'
+import { useVar } from "../Contexts/VariablesGlobales";
 function Switch({classe,page,texte}) {
+  const {ProtocoleEtDomaine}=useVar()
   const navigate=useNavigate()
   switch (classe) {
     case "bouton":
@@ -13,14 +14,14 @@ function Switch({classe,page,texte}) {
     case "profil":
       return (
         <button className="btn btn-image ombre" onClick={() => change(page, navigate)}>
-          <img src={ProtoetDomaine+"media/image/profil.jpg"} alt="Profil" className="button-image" />
+          <img src={ProtocoleEtDomaine+"media/image/profil.jpg"} alt="Profil" className="button-image" />
         </button>
       );
     
     case "home":
     return (
         <button className="btn btn-home ombre" onClick={() => change(page, navigate)}>
-        <img src={ProtoetDomaine+"media/image/home.jpg"} alt="Accueil" className="button-home" />
+        <img src={ProtocoleEtDomaine+"media/image/home.jpg"} alt="Accueil" className="button-home" />
         </button>
     ); 
     default:
