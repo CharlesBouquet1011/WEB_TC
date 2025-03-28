@@ -85,8 +85,8 @@ function Registration() {
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
     <Fond>
-      <div className="container-fluid vh-100">
-        <div className="row h-100">
+      <div className="container-fluid min-h-screen flex flex-col">
+        <div className="row flex-grow">
           {/* Image Section */}
           <div className="col-md-6 p-0 d-none d-md-block position-relative">
             <img 
