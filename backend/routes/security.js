@@ -66,7 +66,7 @@ async function hashString(string){
 }
 
 //vérifie que le mail de l'utilisateur qui s'inscrit n'est pas déjà utilisé
-router.post("/mail-check",csrfProtection, limiter, async (req,res)=> {
+router.post("/mail-check", async (req,res)=> {
     const {email} = req.body;
 
     try{

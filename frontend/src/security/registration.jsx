@@ -18,6 +18,14 @@ function Registration() {
   const [fname, setFName]=useState("")
   const [phoneNumber,setPhoneNumber]=useState("")
   const {ProtocoleEtDomaine}=useVar()
+
+  const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate,ProtocoleEtDomaine) =>{
+    if (event.key==="Enter"){
+      event.preventDefault()
+      submit(csrfToken, setErreurs, champs, navigate,ProtocoleEtDomaine)
+    }
+  }
+
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
@@ -110,6 +118,7 @@ function Registration() {
                     className="form-control" 
                     id="Name"
                     onChange={(event) => handleChange(event, setName)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
                   />
                   {erreurs.name && <small className="text-danger">{erreurs.name}</small>}
                 </div>
@@ -121,6 +130,8 @@ function Registration() {
                     className="form-control" 
                     id="FirstName"
                     onChange={(event) => handleChange(event, setFName)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.fname && <small className="text-danger">{erreurs.fname}</small>}
                 </div>
@@ -132,6 +143,8 @@ function Registration() {
                     className="form-control" 
                     id="email"
                     onChange={(event) => handleChange(event, setMail)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.mail && <small className="text-danger">{erreurs.mail}</small>}
                 </div>
@@ -143,6 +156,8 @@ function Registration() {
                     className="form-control" 
                     id="Phone"
                     onChange={(event) => handleChange(event, setPhoneNumber)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.phoneNumber && <small className="text-danger">{erreurs.phoneNumber}</small>}
                 </div>
@@ -154,6 +169,8 @@ function Registration() {
                     className="form-control" 
                     id="password"
                     onChange={(event) => handleChange(event, setPassword)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.password1 && <small className="text-danger">{erreurs.password1}</small>}
                 </div>
@@ -165,6 +182,8 @@ function Registration() {
                     className="form-control" 
                     id="cpassword"
                     onChange={(event) => handleChange(event, setCPassword)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.password && <small className="text-danger">{erreurs.password}</small>}
                 </div>
@@ -221,7 +240,20 @@ async function submit(csrfToken,setErreurs,champs,navigate,proto){
           credentials: 'include',
           body: JSON.stringify(data),
         });
-        navigate("/login")
+        console.log("response ok:" ,response.ok)
+        if (response.ok) {
+          console.log("on va au /login")
+          console.log(navigate)
+          // Si la requête réussit, on redirige
+          navigate("/login");
+
+        } else {
+          const errorData = await response.json();
+          setErreurs(prevState => ({
+            ...prevState,
+            grosseErreur: errorData.message || "Erreur serveur, veuillez réessayer plus tard",
+          }));
+        }
 
     } catch (err){
         console.error("erreur",err)
