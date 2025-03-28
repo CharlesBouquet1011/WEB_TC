@@ -3,16 +3,18 @@ import { useCSRF } from "../Contexts/CsrfContext";
 import { useNavigate } from "react-router";
 import { useAuth } from "../Contexts/Authenticated";
 import Fond from '../utile/style.jsx';
+import { useVar } from "../Contexts/VariablesGlobales.js";
 
 
 function Login() {
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
+  const {ProtocoleEtDomaine}=useVar()
   const navigate=useNavigate()
  const {triedLogging,setTriedLogging}=useAuth()
   const handleEnterKey = (event,csrfToken,navigate,triedLogging,setTriedLogging) =>{
     if (event.key==="Enter"){
-      submitr(csrfToken,navigate,triedLogging,setTriedLogging)
+      submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine)
     }
   }
   useEffect(() => {
@@ -124,14 +126,14 @@ function Login() {
 }
 
 
-async function submitr(csrfToken,navigate,triedLogging,setTriedLogging){
+async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine){
     
     var email,password
     email=document.getElementById("login-email").value
     password=document.getElementById("login-password").value
     
     try{
-        var authentification=await fetch("http://localhost:3000/api/security/login", {
+        var authentification=await fetch(ProtocoleEtDomaine+"api/security/login", {
             method:"POST",
             headers:{
                 "Content-type":"application/json",

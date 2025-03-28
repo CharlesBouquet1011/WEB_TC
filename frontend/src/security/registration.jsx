@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import Fond from '../utile/style.jsx';
 import { useNavigate } from "react-router";
+import { useVar } from "../Contexts/VariablesGlobales.js";
 
 
 function Registration() {
@@ -16,7 +17,7 @@ function Registration() {
   const [name,setName]=useState("")
   const [fname, setFName]=useState("")
   const [phoneNumber,setPhoneNumber]=useState("")
-
+  const {ProtocoleEtDomaine}=useVar()
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
@@ -44,7 +45,7 @@ function Registration() {
   useEffect(()=>{
 
     const  effect3= async()=>{
-      if (! (await mailChecker(mail,csrfToken)) &&
+      if (! (await mailChecker(mail,csrfToken,ProtocoleEtDomaine)) &&
     mail &&
     mail.length>0
   
@@ -171,7 +172,7 @@ function Registration() {
                 <button 
                   type="button" 
                   className="btn btn-dark w-100 mt-3"
-                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
+                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
                 >
                   S'inscrire
                 </button>
@@ -185,7 +186,7 @@ function Registration() {
   );
 }
 
-async function submit(csrfToken,setErreurs,champs,navigate){
+async function submit(csrfToken,setErreurs,champs,navigate,proto){
     try {
               //récupérer les données du forms
 
@@ -195,7 +196,7 @@ async function submit(csrfToken,setErreurs,champs,navigate){
         //il y a des erreurs
         return ;
       }
-      if (!(await mailChecker(mail,csrfToken))){
+      if (!(await mailChecker(mail,csrfToken,proto))){
         setErreurs(etatPrec=>({
           ...etatPrec,
           grosseErreur:"Votre email est incorrect",}
@@ -211,7 +212,7 @@ async function submit(csrfToken,setErreurs,champs,navigate){
 
         const data={"Name": name, "FirstName": fname , "email": mail, "PhoneNumber":phone,"Password":password }
 
-        const response = await fetch("http://localhost:3000/api/security/registration", {
+        const response = await fetch(proto+"api/security/registration", {
           method: "POST",
           headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
             "Content-Type": "application/json",
@@ -443,9 +444,9 @@ function verifMotDePasse(motdePasse){
   return retour1 && retour2
 }
 
-async function mailChecker(mail,csrfToken){
+async function mailChecker(mail,csrfToken,proto){
   try{
-    var checkmail = fetch("http://localhost:3000/api/security/mail-check", {
+    var checkmail = fetch(proto+"api/security/mail-check", {
       method: "POST",
       headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
         "Content-Type": "application/json",

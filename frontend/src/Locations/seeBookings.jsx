@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
+import { useVar } from "../Contexts/VariablesGlobales";
 
 function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer, on a pas encore une 2e page qui nécessite d'être connecté pour être dessus
   //récupérer les jetons csrf etc
@@ -58,7 +59,7 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
   
 export default function SeeAllBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-
+  const {ProtocoleEtDomaine}=useVar()
   const [bookings, setbookings] = useState([]);
 
   useEffect(() => {
@@ -69,7 +70,7 @@ export default function SeeAllBookings(){
   useEffect(()=>{ //on récupère les bookings
     const fetchBookings= async () =>{
         try {
-            const response = await fetch("http://localhost:3000/api/bookings/seeAll", {
+            const response = await fetch(ProtocoleEtDomaine+"api/bookings/seeAll", {
                 method: "GET",
                 headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                   "Content-Type": "application/json",
@@ -101,7 +102,7 @@ export function SeeUserBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
 
   const [bookings, setbookings] = useState([]);
-
+  const {ProtocoleEtDomaine}=useVar()
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
@@ -110,7 +111,7 @@ export function SeeUserBookings(){
   useEffect(()=>{ //on récupère les bookings
     const fetchBookings= async () =>{
         try {
-            const response = await fetch("http://localhost:3000/api/bookings/see", {
+            const response = await fetch(ProtocoleEtDomaine+"api/bookings/see", {
                 method: "GET",
                 headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                   "Content-Type": "application/json",
