@@ -12,7 +12,7 @@ services:
     user: backend_node
     volumes:
       - ./backend:/app
-      - /app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
+      - backend_modules:/app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
     depends_on:
       - bd_mongo
   react:
@@ -30,8 +30,8 @@ services:
     user: react
     volumes:
       - ./frontend:/app
-      - /app/node_modules
-      - /app/build
+      - react_modules:/app/node_modules
+      - react_build:/app/build
   bd_mongo:
     container_name: bd_mongo
     image: mongo:latest
@@ -42,7 +42,7 @@ services:
     user: mongodb
     restart: on-failure
     volumes:
-      - ./mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
+      - mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
 
   nginx:
     build:
@@ -58,3 +58,6 @@ services:
     
 volumes:
   mongo: #lire explication dans volume bd_mongo, ici c'est pour que docker gère tout seul le volume
+  react_modules:
+  react_build:
+  backend_modules:
