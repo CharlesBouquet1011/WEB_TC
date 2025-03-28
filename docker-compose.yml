@@ -42,7 +42,7 @@ services:
     user: mongodb
     restart: on-failure
     volumes:
-      - mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
+      - ./mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
 
   nginx:
     build:
@@ -53,6 +53,8 @@ services:
       - "3000:80" #pour le hot reloading de react qui est sur le port 3000
     depends_on:
       - backend-node
+    volumes:
+     - ./nginx/media:/app/media
     
 volumes:
   mongo: #lire explication dans volume bd_mongo, ici c'est pour que docker gère tout seul le volume

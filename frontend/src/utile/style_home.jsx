@@ -2,8 +2,9 @@ import React from 'react';
 import './style.css'; // Importer un fichier CSS personnalisé si nécessaire
 import { Link } from "react-router-dom";
 import { useState } from "react";
-
+import { useVar } from '../Contexts/VariablesGlobales';
 export function Fond({ children }) {
+    
     return (
         <div className='container-fluid'>
             {/* Corps principal */}
@@ -23,15 +24,15 @@ export function Fond({ children }) {
 
 export function Menu() {
     const [isOpen, setIsOpen] = useState(false);
-  
+    const {ProtocoleEtDomaine}=useVar()
     return (
       <>
         {/* Navbar Bootstrap avec bouton menu */}
         <header className="bg-dark text-white p-3 mb-4 d-flex align-items-center">
           <div className="container d-flex justify-content-between align-items-center">
             {/* Bouton menu (hamburger) */}
-            <button className="btn btn-light ombre" onClick={() => setIsOpen(!isOpen)}>
-              <img src="/image/menu.png" alt="menu" class="menu" />
+            <button className="btn btn-light" onClick={() => setIsOpen(!isOpen)}>
+              <img src={ProtocoleEtDomaine+"media/image/menu.png"} alt="menu" class="menu" />
             </button>
   
             {/* Titre du site */}

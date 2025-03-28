@@ -1,15 +1,17 @@
 import Switch from '../utile/bouton_login.jsx';
 import {Fond,Menu} from '../utile/style_home.jsx';
-
+import Assistance from "../Locations/Assistance.jsx"
+import { useVar } from '../Contexts/VariablesGlobales.js';
 
 
 export default function Home(){
+    const {ProtocoleEtDomaine}=useVar()
     return(
         <Fond>
         <div className="App">
         <div className="video-container">
         <video autoPlay loop muted playsInline className="background-video">
-         <source src={"/image/video.mp4"} type="video/mp4" />
+         <source src={ProtocoleEtDomaine+"media/image/video.mp4"} type="video/mp4" />
             Votre navigateur ne supporte pas les vidéos HTML5.
         </video>
         <Switch classe={"profil"} page={"/login"} texte={"connexion"} />
@@ -28,6 +30,7 @@ export default function Home(){
         <strong>Exigez l’excellence. Conduisez sans limites.</strong>  
         </p>
       </div>
+      <Assistance />
       </Fond>
 
     )

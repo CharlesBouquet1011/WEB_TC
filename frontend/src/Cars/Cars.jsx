@@ -19,39 +19,28 @@ export default function Cars(){
                       "Content-Type": "application/json",
                       'X-CSRF-Token': csrfToken,
                     },
-                    credentials: 'include',
-                    
+                    credentials: 'include', 
                   });
                 if (response.ok){
-                    const temp=await response.json()
-                    const {voitures}= temp
+                    const {voitures} = await response.json()
                     setVoitures(voitures)
                 }
-                
-                
-                
-    
             } catch (err){
                 console.error("Erreur lors de la vérification du login :",err)
-    
-    
             }
         }
         requete();
-    },
-[])
+    }, []);
     
     if (Voitures && Voitures.length>0){
-        console.log(Voitures)
-
         return(
             <Fond>
             <div className="product-card-container">
                 
-                {Voitures.map((care)=>(
-                    <Car car={{marque:care.marque, modele:care.modele, prix : care.prix, 
+                {Voitures.map((care, index)=>(
+                    <Car key={index} car={{marque:care.marque, modele:care.modele, prix : care.prix, 
                         ImageUrl: care.ImageUrl, carburant: care.carburant, transmission: care.transmission, description : care.description }} />
-    ))}
+                ))}
             </div>
             </Fond>
         )
