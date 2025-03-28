@@ -3,17 +3,18 @@ import "./Cars.css"
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useState, useEffect } from "react";
 import Fond from '../utile/style.jsx';
+import { useVar } from "../Contexts/VariablesGlobales.js";
 
 
 export default function Cars(){
     //récupérer les voitures quelque part
     const {csrfToken}= useCSRF();
     const [Voitures, setVoitures] = useState([]);
-    
+    const {ProtocoleEtDomaine}=useVar()
     useEffect(()=>{
         const requete= async () =>{
             try {
-                const response = await fetch("http://localhost:3000/api/cars", {
+                const response = await fetch(ProtocoleEtDomaine+"api/cars", {
                     method: "GET",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",
@@ -56,34 +57,4 @@ export default function Cars(){
     
 }
 
-
-function retrieveCars(csrfToken,setVoitures){
-    const requete= async () =>{
-        try {
-            const response = await fetch("http://localhost:3000/api/cars", {
-                method: "GET",
-                headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
-                  "Content-Type": "application/json",
-                  'X-CSRF-Token': csrfToken,
-                },
-                credentials: 'include',
-                
-              });
-            if (response.ok){
-                const temp=await response.json()
-                const {voitures}= temp
-                setVoitures(voitures)
-            }
-            
-            
-            
-
-        } catch (err){
-            console.error("Erreur lors de la vérification du login :",err)
-
-
-        }
-    }
-    requete();
-}
 

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useCSRF } from "./CsrfContext";
+import { useVar } from './VariablesGlobales';
 
 const AuthContext = createContext();
 
@@ -7,7 +8,7 @@ export function AuthProvider({children}){
     const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
     const [logged, setlogged] = useState(false)
     const [triedLogging,setTriedLogging] = useState(false)
-
+    const {ProtocoleEtDomaine}=useVar()
     useEffect(() => {
         if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
           fetchCSRFToken();
@@ -17,7 +18,7 @@ export function AuthProvider({children}){
      useEffect(()=>{ //vérifie si l'utilisateur est connecté
         const isLogged= async () =>{
             try {
-                const response = await fetch("http://localhost:3000/api/security/logged", {
+                const response = await fetch(ProtocoleEtDomaine+"api/security/logged", {
                     method: "GET",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",

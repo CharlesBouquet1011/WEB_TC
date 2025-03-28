@@ -1,11 +1,12 @@
 import React, { createContext, useState, useContext } from 'react';
+import { useVar } from './VariablesGlobales';
 const CSRFContext = createContext();
 
 export function CSRFProvider({children}) {
   const [csrfToken, setCsrfToken] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
-  
+  const {ProtocoleEtDomaine}=useVar()
   // Fonction à appeler uniquement quand vous avez besoin du token
   //remaniement pour vérifier si le jeton est en train de load ou est déjà chargé pour ne pas charger énormément de jetons différents
   const fetchCSRFToken = async () => {
@@ -13,7 +14,7 @@ export function CSRFProvider({children}) {
     
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/security/csrf-token", { //comme avant
+      const response = await fetch(ProtocoleEtDomaine+"api/security/csrf-token", { //comme avant
         credentials: 'include' //pour le cookie
       });
       const data = await response.json();
