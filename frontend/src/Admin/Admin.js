@@ -74,8 +74,14 @@ export function Admin() {
         />
       )}
 
+      {/* Edit Location Page*/}
       {activeTab === 1 && editLoc && (
-        <EditLocation setEditLoc={setEditLoc} />
+        <EditLocation 
+          setEditLoc={setEditLoc} 
+          selectedLocation={editLoc}
+          locations={locations}
+          setLocations={setLocations}
+        />
       )}
     </div>
   );
