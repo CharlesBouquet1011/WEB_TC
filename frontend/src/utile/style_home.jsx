@@ -32,7 +32,7 @@ export function Menu() {
           <div className="container d-flex justify-content-between align-items-center">
             {/* Bouton menu (hamburger) */}
             <button className="btn btn-light" onClick={() => setIsOpen(!isOpen)}>
-              <img src={ProtocoleEtDomaine+"media/image/menu.png"} alt="menu" class="menu" />
+              <img src={ProtocoleEtDomaine+"media/image/menu.png"} alt="menu" className="menu" />
             </button>
   
             {/* Titre du site */}
