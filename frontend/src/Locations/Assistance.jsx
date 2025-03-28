@@ -1,4 +1,3 @@
-
 //c'est quasi que de l'HTML là
 import {useState,useEffect} from "react"
 import { useCSRF } from "../Contexts/CsrfContext"
@@ -39,7 +38,6 @@ function retrieveData(csrfToken,setMail,setPhoneNumber,domaine){
         })
         request = await request.json()
         const {mail,phoneNumber}=request
-        console.log(mail,phoneNumber)
         setMail(mail)
         setPhoneNumber(phoneNumber)
         req()

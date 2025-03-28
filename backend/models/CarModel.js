@@ -4,8 +4,10 @@ const carSchema = new mongoose.Schema({
   marque: String,
   modele: String,
   plaque: String,
-  prix: Number, //il faudra probablement d'autres propriétés
   imageURL: String,
+  type: String,
+  nb_places: Number,
+  prix: Number,
   carburant: String,
   transmission: String,
   description: String
