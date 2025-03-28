@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Tile } from './Tile.js';
+import { Edit } from './Edit.js';
 import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
@@ -164,11 +165,13 @@ const carList = [
   }
 ];
 
-export function Vehicule({ setEditTab }) {
+export function Vehicule({}) {
   const [cars, setCars] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [editTab, setEditTab] = useState(false);
   const {ProtocoleEtDomaine}=useVar()
   const {csrfToken}=useCSRF()
+
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -225,16 +228,24 @@ export function Vehicule({ setEditTab }) {
       console.error("Erreur:", error);
     }
   }
+  console.log(editTab);
 
-// setEditTab(true)
-  return (
-    <div className="container mt-4">
-      <div className="row g-4">
-        <button type="button" className="btn btn-secondary btn-lg" onClick={() => handleAddCar()}>Ajouter un véhicule +</button>
-        {cars.voitures?.map((car, index) => (
-          <Tile key={index} id={car._id} image={car.imageURL} name={car.marque+" "+car.modele} plate={car.plaque} handleDelete={handleDelete} setEditTab={setEditTab}/>
-        )) || "Chargement..."}
+  if (editTab === false) {
+    return (
+      <div className="container mt-4">
+        <div className="row g-4">
+          <button type="button" className="btn btn-secondary btn-lg" onClick={() => handleAddCar()}>Ajouter un véhicule +</button>
+          {cars.voitures?.map((car, index) => (
+            <Tile key={index} id={car._id} image={car.imageURL} name={car.marque+" "+car.modele} plate={car.plaque} setEditTab={setEditTab} handleDelete={handleDelete}/>
+          )) || "Chargement..."}
+        </div>
       </div>
-    </div>
-  );
+    )
+  } else {
+    return (
+      <div>
+        <Edit marque={cars.voitures?.find(car => car._id === editTab)} setEditTab={setEditTab}/>
+      </div>
+    );
+  }
 }
