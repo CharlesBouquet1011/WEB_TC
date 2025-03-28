@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Tile } from './Tile.js';
 import { useVar } from '../../Contexts/VariablesGlobales.js';
+import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 // import ferrariImage from "../public/ferrari.png"; 
 
@@ -167,7 +168,7 @@ export function Vehicule({ setEditTab }) {
   const [cars, setCars] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const {ProtocoleEtDomaine}=useVar()
-
+  const {csrfToken}=useCSRF()
   useEffect(() => {
     const fetchCars = async () => {
       try {
@@ -191,6 +192,9 @@ export function Vehicule({ setEditTab }) {
       try {
         const response = await fetch(`${ProtocoleEtDomaine}api/cars/delete/${id}`, {
           method: 'DELETE',
+          headers:{
+            'X-CSRF-Token': csrfToken,
+          }
         });
         if (!response.ok) {
           throw new Error("Erreur lors de la suppression du véhicule.");
@@ -209,6 +213,7 @@ export function Vehicule({ setEditTab }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'X-CSRF-Token': csrfToken,
         },
         body: JSON.stringify(randomCar),
       });
