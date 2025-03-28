@@ -17,30 +17,27 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
     
     
     return (
-      <div className="Booking-list">
-          <h2> {a} </h2>
-        <table>
+      <div className="Booking-list p-4 bg-gray-100 rounded-xl shadow-md">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">{a}</h2>
+        <table className="table-auto w-full border-collapse border border-gray-200">
           <thead>
-              <tr>
-                  
-                  <th>Date de Début </th>
-                  <th>Date de fin </th>
-                  
-                  <th>Voiture réservée</th>
-              </tr>
-  
+            <tr className="bg-gray-50">
+              <th className="px-4 py-2 border border-gray-200">Date de début</th>
+              <th className="px-4 py-2 border border-gray-200">Date de fin</th>
+              <th className="px-4 py-2 border border-gray-200">Voiture réservée</th>
+            </tr>
           </thead>
           <tbody>
-              {bookings.map((booking)=>(
-                  <Booking booking={booking} />
-  
-  
-              ))}
-              
+            {bookings.map((booking) => (
+              <Booking
+                key={booking.id} // Assurez-vous que chaque réservation a un ID unique
+                dateDebut={booking.dateDebut}
+                dateFin={booking.dateFin}
+                voitureReservee={booking.voitureReservee}
+              />
+            ))}
           </tbody>
-  
         </table>
-  
       </div>
     );//rajouter booking._id pour récupérer l'ID et ajouter le bouton pour supprimer ?
   }//mettre la requête dans un autre composant pour pouvoir avoir un seebooking by user et pour tout le monde ?
@@ -51,7 +48,7 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
     else{
       a="Il n'y a aucune réservation"
     }
-    return (<div> {a}</div>)
+    return (<div className="text-gray-500 text-lg">{a}</div>)
   }
   }
   
@@ -136,14 +133,15 @@ export function SeeUserBookings(){
 }
 
 //présentejuste les bookings 
-function Booking(booking){
+function Booking({ dateDebut, dateFin, voitureReservee }) {
   return (
     <tr>
-                      <td>{booking.dateDebut} </td>
-                      <td>{booking.dateFin}</td>
-                      
-                      <td>{booking.voitureReservee.marque + booking.voitureReservee.modele} </td>
-                  </tr>
-  )
+      <td className="px-4 py-2 border border-gray-200">{dateDebut}</td>
+      <td className="px-4 py-2 border border-gray-200">{dateFin}</td>
+      <td className="px-4 py-2 border border-gray-200">
+        {voitureReservee.marque + " " + voitureReservee.modele}
+      </td>
+    </tr>
+  );
 }
 
