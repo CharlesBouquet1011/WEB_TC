@@ -7,9 +7,7 @@ require('dotenv').config();
 
 const Cars=require("../models/CarModel.js")
 
-// REMETTRE csrfProtection, limiter
-
-router.get("/",csrfProtection, limiter, async (req,res)=>{
+router.get("/", csrfProtection, limiter, async (req,res)=>{
     try {
         const voitures= await Cars.find({})
         res.status(200).json({voitures: voitures})
@@ -21,7 +19,7 @@ router.get("/",csrfProtection, limiter, async (req,res)=>{
 
 })
 
-router.post("/add", async (req,res)=>{
+router.post("/add", csrfProtection, limiter, async (req,res)=>{
     try {
        const newCar = new Cars (req.body);
 

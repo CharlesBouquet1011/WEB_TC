@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import { Header } from "./components/Header.js"
 import { Vehicule } from './components/Vehicule.js';
-import { Edit } from './components/Edit.js';
 import { LocationRow } from './components/LocationRow.js';
 import { EditLocation } from './components/EditLocation.js';
 import { AddLocation } from './components/AddLocation.js';
@@ -16,7 +15,6 @@ const initialLocations = [
 
 export function Admin() {
   const [activeTab, setActiveTab] = useState(0);
-  const [editTab, setEditTab] = useState(false);
   const [editLoc, setEditLoc] = useState(false);
   const [addLocationMode, setAddLocationMode] = useState(false);
   const [locations, setLocations] = useState(initialLocations);
@@ -33,12 +31,8 @@ export function Admin() {
       <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
 
       {/* Vehicles Management */}
-      {activeTab===0 && editTab===false && (
-        <Vehicule setEditTab={setEditTab}/>
-      )}
-
-      {activeTab===0 && editTab===true && (
-        <Edit setEditTab={setEditTab}></Edit>
+      {activeTab===0 && (
+        <Vehicule/>
       )}
 
       {/* Location Management */}
