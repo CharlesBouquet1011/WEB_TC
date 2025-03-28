@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Tile } from './Tile.js';
+import { useVar } from '../../Contexts/VariablesGlobales.js';
 
 // import ferrariImage from "../public/ferrari.png"; 
 
@@ -165,11 +166,12 @@ const carList = [
 export function Vehicule({ setEditTab }) {
   const [cars, setCars] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const {ProtocoleEtDomaine}=useVar()
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await fetch("http://localhost/api/cars");
+        const response = await fetch(ProtocoleEtDomaine+"api/cars");
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des véhicules");
         }
@@ -187,7 +189,7 @@ export function Vehicule({ setEditTab }) {
     const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce véhicule ?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost/api/cars/delete/${id}`, {
+        const response = await fetch(`${ProtocoleEtDomaine}api/cars/delete/${id}`, {
           method: 'DELETE',
         });
         if (!response.ok) {
@@ -203,7 +205,7 @@ export function Vehicule({ setEditTab }) {
   const handleAddCar = async () => {
     try {
       const randomCar =  carList[Math.floor(Math.random()*carList.length)];
-      const response = await fetch(`http://localhost/api/cars/add`, {
+      const response = await fetch(`${ProtocoleEtDomaine}api/cars/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
