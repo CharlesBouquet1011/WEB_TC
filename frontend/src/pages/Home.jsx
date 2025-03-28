@@ -31,7 +31,6 @@ export default function Home(){
         <strong>Exigez l’excellence. Conduisez sans limites.</strong>  
         </p>
       </div>
-      <Assistance />
       </Fond>
       </div>
 

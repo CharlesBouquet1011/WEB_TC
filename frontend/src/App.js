@@ -13,6 +13,7 @@ import User from './pages/User.jsx';
 import Registration from './security/registration.jsx';
 import { Admin } from "./Admin/Admin.js"
 import { VarProvider } from './Contexts/VariablesGlobales.js';
+import Assistance from './Locations/Assistance.jsx';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
               <Route path="/register" element={<Registration />} />
               <Route path="/cars" element={<Cars />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/contact" element={<Assistance />} />
             </Routes>
           </Router>
         </AuthProvider>

@@ -2,6 +2,8 @@
 import {useState,useEffect} from "react"
 import { useCSRF } from "../Contexts/CsrfContext"
 import { useVar } from "../Contexts/VariablesGlobales"
+import Fond from "../utile/style.jsx";
+
 export default function Assistance(){
     const [mail,setMail]=useState("")
     const {csrfToken}=useCSRF()
@@ -16,11 +18,12 @@ export default function Assistance(){
 
 function Affichage({mail,phoneNumber}){
     return(<div className="Assistance">
+        <Fond>
             Si vous avez un problème, contactez-nous: <br />
             {mail} <br />
             {phoneNumber}
+        </Fond>
         </div>)
-    
 }
 
 function retrieveData(csrfToken,setMail,setPhoneNumber,domaine){
