@@ -101,7 +101,7 @@ router.post("/login",csrfProtection,limiter, async (req,res) =>{
             
            const hashedPassword=user.password
             
-            match= await bcrypt.compare(Password,hashedPassword)
+            const match= await bcrypt.compare(Password,hashedPassword)
             if (match){
 
                 const token = jwt.sign(
@@ -192,6 +192,23 @@ router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
         res.status(500).json({erreur: "Erreur serveur"})
     }
 
+})
+
+router.post("/ispassword",csrfProtection,limiter,auth,async(req,res)=>{
+    try{
+        const {userId}=req.user
+        const user= User.findById(userId)
+        const hashedPassword=user.password
+        const Password=req.body.password
+
+        const match= await bcrypt.compare(Password,hashedPassword)
+        res.status(200).json({isEqual:match})
+
+    }catch (err){
+        console.log("Erreur lors de la vérification du mot de passe: " + err)
+        res.status(500).json({Erreur:"Erreur serveur"})
+    }
+    
 })
 
 module.exports = router;
