@@ -510,7 +510,7 @@ async function mailChecker(mail,csrfToken,proto){
           
 }
 //utiliser que sur les fonction setmachin truc de useState
-function handleChange(event,fonction){
+export function handleChange(event,fonction){
   fonction(event.target.value)
 }
 

@@ -4,6 +4,7 @@ import Logout from "../security/logout";
 import Logged from "../Contexts/Authenticated";
 import DeleteAccount from "../security/deleteAccount";
 import Fond from "../utile/style";
+import { ChangePasswordForm } from "../security/changePassword";
 
 export default function User(){
     const {csrfToken}= useCSRF();
@@ -17,10 +18,11 @@ export default function User(){
                         <SeeUserBookings />
                         <Logout />
                         <DeleteAccount />
+                        <ChangePasswordForm />
                         </div>
                     </div>
                 </Fond>
-            
+                
         </Logged>
         
     )
