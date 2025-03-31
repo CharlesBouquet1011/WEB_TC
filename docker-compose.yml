@@ -12,9 +12,12 @@ services:
     user: backend_node
     volumes:
       - ./backend:/app
-      - /app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
+      - backend_modules:/app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
     depends_on:
       - bd_mongo
+    networks:
+      - nginx-backend
+      - backend-bd
   react:
     container_name: react
     build:
@@ -30,8 +33,10 @@ services:
     user: react
     volumes:
       - ./frontend:/app
-      - /app/node_modules
-      - /app/build
+      - react_modules:/app/node_modules
+      - react_build:/app/build
+    networks:
+      - nginx-frontend
   bd_mongo:
     container_name: bd_mongo
     image: mongo:latest
@@ -42,8 +47,9 @@ services:
     user: mongodb
     restart: on-failure
     volumes:
-      - ./mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
-
+      - mongo:/data/db #mongo stocke ses données dans data/db, utile pour pas que les données soient supprimés si on supprime le conteneur
+    networks:
+      - backend-bd
   nginx:
     build:
       context: .
@@ -55,6 +61,42 @@ services:
       - backend-node
     volumes:
      - ./nginx/media:/app/media
-    
+    networks:
+      - nginx-backend
+      - nginx-frontend
 volumes:
   mongo: #lire explication dans volume bd_mongo, ici c'est pour que docker gère tout seul le volume
+  react_modules:
+  react_build:
+  backend_modules:
+
+networks:
+  backend-bd:
+    driver: bridge
+    name: backend-bd
+    ipam:
+      config:
+        - subnet: 192.168.1.0/29 #docker voulait pas me laisser créer de /30, askip il utilise une ip pour lui (autre que l'adresse réseau et broadcast)
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.bridge.enable_gateway: "false"
+
+  nginx-backend:
+    driver: bridge
+    name : nginx-bd
+    ipam:
+      config:
+        - subnet: 192.168.1.8/29
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.bridge.enable_gateway: "false"
+
+  nginx-frontend:
+    driver: bridge
+    name: nginx-frontend
+    ipam:
+      config:
+      - subnet: 192.168.1.16/29
+    driver_opts:
+      com.docker.network.bridge.enable_ip_masquerade: "false"
+      com.docker.network.bridge.enable_gateway: "false"

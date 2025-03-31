@@ -1,21 +1,29 @@
 import { useNavigate } from "react-router";
 import { useCSRF } from "../Contexts/CsrfContext";
+import { useVar } from "../Contexts/VariablesGlobales";
 export default function Logout(){
     const {csrfToken}= useCSRF();
     const navigate=useNavigate()
-
+    const {ProtocoleEtDomaine}=useVar()
 
     return(
-    <button onClick={() =>logout(csrfToken,navigate)}>Se déconnecter</button>
+        <button
+      className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
+      onClick={() =>logout(csrfToken,navigate,ProtocoleEtDomaine)}
+    >
+      Se déconnecter
+    </button>
+    
     )
 }
 
 
-function logout(csrfToken,navigate){
+function logout(csrfToken,navigate,proto){
     //on se déconnecte
+
     const deconnexion= async () =>{
             try {
-                const response = await fetch("http://localhost:3000/api/security/logout", {
+                const response = await fetch(proto+"api/security/logout", {
                     method: "POST",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",

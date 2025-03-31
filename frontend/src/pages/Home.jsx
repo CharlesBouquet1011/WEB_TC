@@ -7,6 +7,8 @@ import { useVar } from '../Contexts/VariablesGlobales.js';
 export default function Home(){
     const {ProtocoleEtDomaine}=useVar()
     return(
+        <div>
+        <Menu/>
         <Fond>
         <div className="App">
         <div className="video-container">
@@ -18,7 +20,6 @@ export default function Home(){
         <div className="overlay">
             <h1>Driving Enhanced</h1>
         </div>
-        <Menu/>
         </div>
         <h2>Driving Enhanced – L'Élégance et la Puissance au Bout des Doigts</h2>
         <p className="text-center mx-auto w-50">Vivez une expérience de conduite inégalée avec Driving Enhanced, votre référence en location de voitures de luxe. Que ce soit pour un voyage d’affaires, un événement spécial ou simplement pour le plaisir, notre flotte d’exception vous garantit style, confort et performance. Prenez le volant. Dominez la route. Luxe, prestige et sensations fortes vous attendent.
@@ -30,8 +31,8 @@ export default function Home(){
         <strong>Exigez l’excellence. Conduisez sans limites.</strong>  
         </p>
       </div>
-      <Assistance />
       </Fond>
+      </div>
 
     )
 }

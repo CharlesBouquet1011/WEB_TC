@@ -6,18 +6,19 @@ import { useState, useEffect } from "react";
 import "./deleteBooking.css"; 
 
 import { useCSRF } from "../Contexts/CsrfContext";
+import { useVar } from "../Contexts/VariablesGlobales";
 Modal.setAppElement("#root"); // Obligatoire pour l'accessibilité
 
 export default function DeleteBooking({idBooking}) {
     const { csrfToken } = useCSRF();
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
-  
+    const {ProtocoleEtDomaine} =useVar()
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
   
     const confirmDeletion = () => {
-      BookingDeletion(csrfToken, navigate,idBooking);
+      BookingDeletion(csrfToken, navigate,idBooking,ProtocoleEtDomaine);
       closeModal();
     };
   
@@ -50,11 +51,11 @@ export default function DeleteBooking({idBooking}) {
     );
   }
 
-function BookingDeletion(csrfToken,navigate,idBooking){
+function BookingDeletion(csrfToken,navigate,idBooking,domaine){
     //on se déconnecte
     const deletion= async () =>{
             try {
-                const response = await fetch("http://localhost:3000/api/bookings/delete", {
+                const response = await fetch(domaine + "api/bookings/delete", {
                     method: "DELETE",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",

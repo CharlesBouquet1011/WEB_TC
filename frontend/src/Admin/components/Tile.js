@@ -10,7 +10,7 @@ export function Tile({ id, image, name, plate, setEditTab, handleDelete}) {
           <p className="text-muted">{plate}</p>
         </div>
         <div className="d-flex justify-content-center gap-2 mt-2">
-          <button className="btn btn-secondary px-3" onClick={() => setEditTab(true)}>Modifier</button>
+          <button className="btn btn-secondary px-3" onClick={() => setEditTab(id)}>Modifier</button>
           <button className="btn btn-secondary px-3" onClick={() => handleDelete(id)}>Supprimer</button>
         </div>
       </div>

@@ -25,18 +25,17 @@ CMD ["nginx", "-g", "daemon off;"]
 
 FROM node:23-alpine3.20 AS react
 WORKDIR /app
-COPY /frontend ./
+COPY ./frontend/package.json /app/
 EXPOSE 3000
-RUN npm install
 #prod
 #RUN npm run build
 #en dev y a pas build
 RUN adduser -S react
-RUN chmod 700 /app/node_modules
-RUN chown -R react /app
 
-
+RUN chown -R react /app && chmod -R 755 /app
 USER react
+RUN npm install
+
 #prod
 #CMD ["npx", "serve", "build", "-p", "3000"] 
 #dev

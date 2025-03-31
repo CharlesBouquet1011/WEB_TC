@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import Fond from '../utile/style.jsx';
 import { useNavigate } from "react-router";
+import { useVar } from "../Contexts/VariablesGlobales.js";
 
 
 function Registration() {
@@ -16,6 +17,14 @@ function Registration() {
   const [name,setName]=useState("")
   const [fname, setFName]=useState("")
   const [phoneNumber,setPhoneNumber]=useState("")
+  const {ProtocoleEtDomaine}=useVar()
+
+  const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate,ProtocoleEtDomaine) =>{
+    if (event.key==="Enter"){
+      event.preventDefault()
+      submit(csrfToken, setErreurs, champs, navigate,ProtocoleEtDomaine)
+    }
+  }
 
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
@@ -44,7 +53,7 @@ function Registration() {
   useEffect(()=>{
 
     const  effect3= async()=>{
-      if (! (await mailChecker(mail,csrfToken)) &&
+      if (! (await mailChecker(mail,csrfToken,ProtocoleEtDomaine)) &&
     mail &&
     mail.length>0
   
@@ -76,8 +85,8 @@ function Registration() {
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
     <Fond>
-      <div className="container-fluid vh-100">
-        <div className="row h-100">
+      <div className="container-fluid min-h-screen flex flex-col">
+        <div className="row flex-grow">
           {/* Image Section */}
           <div className="col-md-6 p-0 d-none d-md-block position-relative">
             <img 
@@ -109,6 +118,7 @@ function Registration() {
                     className="form-control" 
                     id="Name"
                     onChange={(event) => handleChange(event, setName)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
                   />
                   {erreurs.name && <small className="text-danger">{erreurs.name}</small>}
                 </div>
@@ -120,6 +130,8 @@ function Registration() {
                     className="form-control" 
                     id="FirstName"
                     onChange={(event) => handleChange(event, setFName)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.fname && <small className="text-danger">{erreurs.fname}</small>}
                 </div>
@@ -131,6 +143,8 @@ function Registration() {
                     className="form-control" 
                     id="email"
                     onChange={(event) => handleChange(event, setMail)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.mail && <small className="text-danger">{erreurs.mail}</small>}
                 </div>
@@ -142,6 +156,8 @@ function Registration() {
                     className="form-control" 
                     id="Phone"
                     onChange={(event) => handleChange(event, setPhoneNumber)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.phoneNumber && <small className="text-danger">{erreurs.phoneNumber}</small>}
                 </div>
@@ -153,6 +169,8 @@ function Registration() {
                     className="form-control" 
                     id="password"
                     onChange={(event) => handleChange(event, setPassword)} 
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.password1 && <small className="text-danger">{erreurs.password1}</small>}
                 </div>
@@ -164,6 +182,8 @@ function Registration() {
                     className="form-control" 
                     id="cpassword"
                     onChange={(event) => handleChange(event, setCPassword)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+
                   />
                   {erreurs.password && <small className="text-danger">{erreurs.password}</small>}
                 </div>
@@ -171,7 +191,7 @@ function Registration() {
                 <button 
                   type="button" 
                   className="btn btn-dark w-100 mt-3"
-                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
+                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
                 >
                   S'inscrire
                 </button>
@@ -185,7 +205,7 @@ function Registration() {
   );
 }
 
-async function submit(csrfToken,setErreurs,champs,navigate){
+async function submit(csrfToken,setErreurs,champs,navigate,proto){
     try {
               //récupérer les données du forms
 
@@ -195,7 +215,7 @@ async function submit(csrfToken,setErreurs,champs,navigate){
         //il y a des erreurs
         return ;
       }
-      if (!(await mailChecker(mail,csrfToken))){
+      if (!(await mailChecker(mail,csrfToken,proto))){
         setErreurs(etatPrec=>({
           ...etatPrec,
           grosseErreur:"Votre email est incorrect",}
@@ -211,7 +231,7 @@ async function submit(csrfToken,setErreurs,champs,navigate){
 
         const data={"Name": name, "FirstName": fname , "email": mail, "PhoneNumber":phone,"Password":password }
 
-        const response = await fetch("http://localhost:3000/api/security/registration", {
+        const response = await fetch(proto+"api/security/registration", {
           method: "POST",
           headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
             "Content-Type": "application/json",
@@ -220,7 +240,20 @@ async function submit(csrfToken,setErreurs,champs,navigate){
           credentials: 'include',
           body: JSON.stringify(data),
         });
-        navigate("/login")
+        console.log("response ok:" ,response.ok)
+        if (response.ok) {
+          console.log("on va au /login")
+          console.log(navigate)
+          // Si la requête réussit, on redirige
+          navigate("/login");
+
+        } else {
+          const errorData = await response.json();
+          setErreurs(prevState => ({
+            ...prevState,
+            grosseErreur: errorData.message || "Erreur serveur, veuillez réessayer plus tard",
+          }));
+        }
 
     } catch (err){
         console.error("erreur",err)
@@ -369,7 +402,7 @@ async function checkErreursSubmit(name,fname,mail,phone,password,cpassword,setEr
     ))
   }
   
-  if (password.toUpperCase()==password || password.toLowerCase()==password){
+  if (contientPasMajetMin(password)){
     setErreurs(etatPrec=>({
       ...etatPrec,
       grosseErreur:"Veuillez inclure des majuscules et des minuscules",}
@@ -424,10 +457,12 @@ async function checkErreursSubmit(name,fname,mail,phone,password,cpassword,setEr
 
 }
 
-
+export function contientPasMajetMin(password){
+  return password.toUpperCase()==password || password.toLowerCase()==password
+}
 
 //renvoie True si le mot de passe est suffisamment sécurisé, false sinon
-function verifMotDePasse(motdePasse){
+export function verifMotDePasse(motdePasse){
   const nombres=["0","1","2","3","4","5","6","7","8","9"]
   const symboles_speciaux=["#","_","|","@","€","$","?",".",";",",","/","!","%","$","*","+","-","£"]
   var retour1=false
@@ -443,9 +478,9 @@ function verifMotDePasse(motdePasse){
   return retour1 && retour2
 }
 
-async function mailChecker(mail,csrfToken){
+async function mailChecker(mail,csrfToken,proto){
   try{
-    var checkmail = fetch("http://localhost:3000/api/security/mail-check", {
+    var checkmail = fetch(proto+"api/security/mail-check", {
       method: "POST",
       headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
         "Content-Type": "application/json",
@@ -477,7 +512,7 @@ async function mailChecker(mail,csrfToken){
           
 }
 //utiliser que sur les fonction setmachin truc de useState
-function handleChange(event,fonction){
+export function handleChange(event,fonction){
   fonction(event.target.value)
 }
 
