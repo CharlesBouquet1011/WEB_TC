@@ -33,7 +33,7 @@ services:
     user: react
     volumes:
       - ./frontend:/app
-      - react_modules:/app/node_modules
+
       - react_build:/app/build
     networks:
       - nginx-frontend
