@@ -34,13 +34,15 @@ export default function Cars(){
     }, []);
     
     if (Voitures && Voitures.length>0){
+        
         return(
             <Fond>
-            <div className="product-card-container">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-8 bg-gray-50">
                 
                 {Voitures.map((care, index)=>(
+                    
                     <Car key={index} car={{marque:care.marque, modele:care.modele, prix : care.prix, 
-                        ImageUrl: care.ImageUrl, carburant: care.carburant, transmission: care.transmission, description : care.description }} />
+                        ImageUrl: care.imageURL, carburant: care.carburant, transmission: care.transmission, description : care.description }} />
                 ))}
             </div>
             </Fond>
