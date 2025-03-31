@@ -2,8 +2,7 @@ import Switch from '../utile/bouton_login.jsx';
 import {Fond,Menu} from '../utile/style_home.jsx';
 import {useLocation} from "react-router";
 import { useVar } from '../Contexts/VariablesGlobales.js';
-import {DatePicker} from 'react-datepicker' 
-import "react-datepicker/dist/react-datepicker.css"; // Don't forget the CSS
+
 
 
 function Reservation(){
