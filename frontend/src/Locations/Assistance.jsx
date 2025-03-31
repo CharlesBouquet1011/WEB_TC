@@ -43,9 +43,10 @@ function retrieveData(csrfToken,setMail,setPhoneNumber,domaine){
         const {mail,phoneNumber}=request
         setMail(mail)
         setPhoneNumber(phoneNumber)
-        req()
+        
         
     }
+    req()
     } catch (err){
         console.error("Erreur lors de l'execution de retrieve Data :", err)
     }
