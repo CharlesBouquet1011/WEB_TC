@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const csrfProtection=require("../config/csrf");
+const csrfProtection=require("../config/csrf.js");
 
 const User = require("../models/UserModel.js");
 const limiter = require("../config/rateLimiter.js");
 const bcrypt = require("bcrypt");
 require('dotenv').config();
-const auth=require("../config/authenticator.js")
+//const auth=require("../config/authenticator.js")
 const Booking=require("../models/BookingModel.js")
 
-router.get("/seeAll",csrfProtection,limiter,auth, async (req,res)=>{
+router.get("/seeAll",csrfProtection,limiter, async (req,res)=>{ // rajouter auth
     try {
         const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
         const bookings= await Booking.find().populate("voitureReservee")
@@ -20,6 +20,20 @@ router.get("/seeAll",csrfProtection,limiter,auth, async (req,res)=>{
         console.log("Erreur: ",err)
     }
 
+})
+
+router.post("/add", async (req,res)=>{
+    try {
+       const newBooking = new Booking (req.body);
+
+       await newBooking.save();
+        console.log("Location ajoutée: ", newBooking )
+        res.status(200).json({message: "Location ajoutée"})
+
+    } catch (err) {
+        res.status(500).json({erreur: "Erreur serveur"})
+        console.log("Erreur: ",err)
+    }
 })
 
 router.get("/infos",csrfProtection,async(req,res)=>{
@@ -36,7 +50,7 @@ router.get("/infos",csrfProtection,async(req,res)=>{
 })
 
 
-router.delete("/delete",csrfProtection,limiter,auth,async (req,res) => {
+router.delete("/delete",csrfProtection,limiter,async (req,res) => {
     try{
         const {idBooking} = req.body
         if (typeof idBooking !=="string"){
@@ -51,7 +65,7 @@ router.delete("/delete",csrfProtection,limiter,auth,async (req,res) => {
     }
 })
 
-router.get("/see",csrfProtection,limiter,auth, async (req,res)=>{
+router.get("/see",csrfProtection,limiter, async (req,res)=>{
     try {
         const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
         const bookings= await Booking.find({user: userId}).populate("voitureReservee")
