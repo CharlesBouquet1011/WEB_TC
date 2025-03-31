@@ -18,6 +18,7 @@ export function ChangePasswordForm(){
     const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate,ProtocoleEtDomaine,isErreur,setIsErreur) =>{
         if (event.key==="Enter"){
           event.preventDefault()
+          console.log(champs)
           submit(csrfToken, setErreurs,champs, navigate,ProtocoleEtDomaine,isErreur,setIsErreur)
         }
       }
@@ -27,6 +28,13 @@ export function ChangePasswordForm(){
         setIsErreur(false)
 
     },[Password,NewPassword,CNewPassword])
+    useEffect(()=>{
+      setErreurs(etatPrec=>({
+        ...etatPrec,
+        PasswordErreur:""
+      }))
+    },[Password])
+    
     return (
         
           <>
@@ -111,12 +119,13 @@ export function ChangePasswordForm(){
 }
 
 
+
 //renvoie vrai s'il y a une erreur
 function checkErreursSubmit(Password,NewPassword,CNewPassword,ProtocoleEtDomaine,csrfToken,setErreurs,setIsErreur){
     
     if (Password.length>0 && NewPassword.length>0 && CNewPassword.length>0){
-        checkErreurs(Password,NewPassword,CNewPassword,setErreurs)
-        checkPassword(NewPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setIsErreur)
+        checkErreurs(Password,NewPassword,CNewPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setIsErreur)
+        checkPassword(Password,setErreurs,setIsErreur)
     }
     
     else{
@@ -160,46 +169,21 @@ function checkErreurs(Password,NewPassword,CNewPassword,setErreurs,ProtocoleEtDo
         CNewPasswordErreur:"",}
       ))
     }
+    if (NewPassword.length>0){
+      checkPassword(NewPassword,setErreurs,setIsErreur)
+    }
 
 }
 
-function checkPassword(formPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setIsErreur){
-    const request= async () =>{
-        try {
-            const response = await fetch(ProtocoleEtDomaine+"api/security/ispassword", {
-                method: "POST",
-                headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
-                  "Content-Type": "application/json",
-                  'X-CSRF-Token': csrfToken,
-                },
-                credentials: 'include',
-                body: JSON.stringify({password:formPassword})
-                
-              });
-            if (response.ok){
-                const {isEqual} = await response.json()
-                if (!isEqual){
-                    setErreurs(etatPrec=>({
-                        ...etatPrec,
-                        PasswordErreur:"Votre mot de passe est incorrect",}
-                      ))
-                      setIsErreur(true)
-                }
-                
-                return null;
-            }
-            
-            
-
-            
-
-        } catch (err){
-            console.error("Erreur lors de la vérification du login :",err)
-            setIsErreur(true)
-
-        }
+function checkPassword(formPassword,setErreurs,setIsErreur){
+    if (formPassword.length<10){
+      setErreurs(etatPrec=>({
+        ...etatPrec,
+        NewPasswordErreur:"Veuillez rentrer au minimum 10 caractères"
+      }))
     }
-    request()
+    else{
+      
     if (contientPasMajetMin(formPassword) ){
       setErreurs(etatPrec=>({
         ...etatPrec,
@@ -207,13 +191,27 @@ function checkPassword(formPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setI
       ))
       setIsErreur(true)
     }
-    if (verifMotDePasse(formPassword)){
-      setErreurs(etatPrec=>({
-        ...etatPrec,
-        NewPasswordErreur:"Veuillez mettre des symboles spéciaux (#,_,$,..) et des chiffres dans votre nouveau mot de passe",}
-      ))
-      setIsErreur(true)
+    else{
+      if (!verifMotDePasse(formPassword)){
+        setErreurs(etatPrec=>({
+          ...etatPrec,
+          NewPasswordErreur:"Veuillez mettre des symboles spéciaux (#,_,$,..) et des chiffres dans votre nouveau mot de passe",}
+        ))
+        setIsErreur(true)
+      }
+      else{
+        setErreurs(etatPrec=>({
+          ...etatPrec,
+          NewPasswordErreur:"",}
+        ))
+      }
     }
+
+    }
+
+
+    
+
     
 }
 
@@ -233,7 +231,7 @@ function submit(csrfToken, setErreurs, champs, navigate,ProtocoleEtDomaine,isErr
               'X-CSRF-Token': csrfToken,
             },
             credentials: 'include',
-            body: JSON.stringify({password:Password})
+            body: JSON.stringify({oldPassword:Password,newPassword:NewPassword})
             
           });
         if (response.ok){

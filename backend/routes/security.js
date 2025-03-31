@@ -194,42 +194,26 @@ router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
 
 })
 
-router.post("/ispassword",csrfProtection,limiter,auth,async(req,res)=>{
-    try{
-        const {userId}=req.user
-        const user= await User.findById(userId)
-        const hashedPassword=user.password
-        const Password=req.body.password
 
-        const match= await bcrypt.compare(Password,hashedPassword)
-        res.status(200).json({isEqual:match})
-
-    }catch (err){
-        console.log("Erreur lors de la vérification du mot de passe: " + err)
-        res.status(500).json({Erreur:"Erreur serveur"})
-    }
-    
-})
 router.post("/changePassword",csrfProtection,limiter,auth,async(req,res)=>{
     try{
         const {userId}=req.user
         const user = await User.findById(userId)
-        console.log("UserID: ",userId)
-        console.log("User :", user)
-        const Password=req.body.password
-        const hashedPassword=await hashString(Password)
-        const savedPassword=user.password
-        console.log("mot de passe: ", Password)
-        console.log("mot de passe enregistré: ",savedPassword)
-        const match= await bcrypt.compare(Password,savedPassword)
+       
+        const OldPassword=req.body.oldPassword
+        const NewPassword=req.body.newPassword
+
+        
+        const match= await bcrypt.compare(OldPassword,user.password)
         if (match){
+            const hashedPassword=await hashString(NewPassword)
             user.password=hashedPassword
             await user.save()
-            res.status(200)
             console.log("Mot de passe modifié")
+            res.status(200).json({message: "Mot de passe modifié",isEqual:true});
         }
         else {
-            res.status(403).json({Erreur: "Mot de passe incorrect" })
+            res.status(403).json({Erreur: "Mot de passe incorrect",isEqual:false })
             console.log("Mot de passe incorrect")
         }
         
