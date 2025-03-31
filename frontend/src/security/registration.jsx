@@ -402,7 +402,7 @@ async function checkErreursSubmit(name,fname,mail,phone,password,cpassword,setEr
     ))
   }
   
-  if (password.toUpperCase()==password || password.toLowerCase()==password){
+  if (contientPasMajetMin(password)){
     setErreurs(etatPrec=>({
       ...etatPrec,
       grosseErreur:"Veuillez inclure des majuscules et des minuscules",}
@@ -457,10 +457,12 @@ async function checkErreursSubmit(name,fname,mail,phone,password,cpassword,setEr
 
 }
 
-
+export function contientPasMajetMin(password){
+  return password.toUpperCase()==password || password.toLowerCase()==password
+}
 
 //renvoie True si le mot de passe est suffisamment sécurisé, false sinon
-function verifMotDePasse(motdePasse){
+export function verifMotDePasse(motdePasse){
   const nombres=["0","1","2","3","4","5","6","7","8","9"]
   const symboles_speciaux=["#","_","|","@","€","$","?",".",";",",","/","!","%","$","*","+","-","£"]
   var retour1=false

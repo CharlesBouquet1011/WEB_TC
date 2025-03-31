@@ -197,7 +197,7 @@ router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
 router.post("/ispassword",csrfProtection,limiter,auth,async(req,res)=>{
     try{
         const {userId}=req.user
-        const user= User.findById(userId)
+        const user= await User.findById(userId)
         const hashedPassword=user.password
         const Password=req.body.password
 
@@ -209,6 +209,35 @@ router.post("/ispassword",csrfProtection,limiter,auth,async(req,res)=>{
         res.status(500).json({Erreur:"Erreur serveur"})
     }
     
+})
+router.post("/changePassword",csrfProtection,limiter,auth,async(req,res)=>{
+    try{
+        const {userId}=req.user
+        const user = await User.findById(userId)
+        console.log("UserID: ",userId)
+        console.log("User :", user)
+        const Password=req.body.password
+        const hashedPassword=await hashString(Password)
+        const savedPassword=user.password
+        console.log("mot de passe: ", Password)
+        console.log("mot de passe enregistré: ",savedPassword)
+        const match= await bcrypt.compare(Password,savedPassword)
+        if (match){
+            user.password=hashedPassword
+            await user.save()
+            res.status(200)
+            console.log("Mot de passe modifié")
+        }
+        else {
+            res.status(403).json({Erreur: "Mot de passe incorrect" })
+            console.log("Mot de passe incorrect")
+        }
+        
+    }catch (err){
+        res.status(500).json({Erreur:"Erreur serveur"})
+        console.log("Erreur: ",err)
+
+    }
 })
 
 module.exports = router;
