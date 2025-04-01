@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Tile } from './Tile.js';
-import { Edit } from './Edit.js';
+import { EditCar } from './EditCar.js';
 import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
@@ -166,11 +166,12 @@ const carList = [
 ];
 
 export function Vehicule({}) {
+  const {ProtocoleEtDomaine}=useVar();
+  const {csrfToken}=useCSRF();
+
   const [cars, setCars] = useState([]);
-  const [refresh, setRefresh] = useState(false);
+  const [refresh, setRefresh] = useState(false); // supprimer (remplacer par editTab) lorsque le bouton "ajouter" affiche la page d'édition
   const [editTab, setEditTab] = useState(false);
-  const {ProtocoleEtDomaine}=useVar()
-  const {csrfToken}=useCSRF()
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -228,7 +229,6 @@ export function Vehicule({}) {
       console.error("Erreur:", error);
     }
   }
-  console.log(editTab);
 
   if (editTab === false) {
     return (
@@ -236,7 +236,7 @@ export function Vehicule({}) {
         <div className="row g-4">
           <button type="button" className="btn btn-secondary btn-lg" onClick={() => handleAddCar()}>Ajouter un véhicule +</button>
           {cars.voitures?.map((car, index) => (
-            <Tile key={index} id={car._id} image={car.imageURL} name={car.marque+" "+car.modele} plate={car.plaque} setEditTab={setEditTab} handleDelete={handleDelete}/>
+            <Tile key={index} id={car._id} car={car} setEditTab={setEditTab} handleDelete={handleDelete}/>
           )) || "Chargement..."}
         </div>
       </div>
@@ -244,7 +244,7 @@ export function Vehicule({}) {
   } else {
     return (
       <div>
-        <Edit marque={cars.voitures?.find(car => car._id === editTab)} setEditTab={setEditTab}/>
+        <EditCar car={cars.voitures?.find(car => car._id === editTab)} setEditTab={setEditTab} setRefresh={setRefresh}/>
       </div>
     );
   }

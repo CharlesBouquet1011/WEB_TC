@@ -9,7 +9,7 @@ const Cars=require("../models/CarModel.js")
 
 router.get("/", csrfProtection, limiter, async (req,res)=>{
     try {
-        const voitures= await Cars.find({})
+        const voitures = await Cars.find({})
         res.status(200).json({voitures: voitures})
 
     } catch (err) {
@@ -25,7 +25,7 @@ router.post("/add", csrfProtection, limiter, async (req,res)=>{
 
        await newCar.save();
         console.log("Véhicule ajouté: ", newCar )
-        res.status(200).json({message: "Véhicule ajouté"})
+        res.status(200).json({message: "Véhicule ajouté avec succès"})
 
     } catch (err) {
         res.status(500).json({erreur: "Erreur serveur"})
@@ -47,6 +47,22 @@ router.delete("/delete/:id", csrfProtection, limiter, async (req, res) => {
     } catch (err) {
         console.error("Erreur: ", err);
         res.status(500).json({erreur: "Erreur serveur"});
+    }
+});
+
+router.post("/edit", csrfProtection, limiter, async (req, res) => {
+    try {
+        const { _id, ...updatedFields } = req.body;
+        const updatedCar = await Cars.findByIdAndUpdate(_id,updatedFields);
+
+        if (!updatedCar) {
+            return res.status(404).json({ message: "Véhicule non trouvé" });
+        }
+        console.log("Base de données des véhicules mise à jour")
+        res.status(200).json({message: "Véhicule mis à jour avec succès"});
+
+    } catch (error) {
+        res.status(500).json({ message: "Erreur serveur", error });
     }
 });
 
