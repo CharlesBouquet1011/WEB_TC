@@ -1,9 +1,11 @@
 import Fond from '../utile/style.jsx';
-import { useVar } from '../Contexts/VariablesGlobales.js';
+import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
+import { useCSRF } from "../Contexts/CsrfContext";
+
 
 function Reservation(){
   const {voitureSelectionnee} = useVar();
@@ -12,13 +14,16 @@ function Reservation(){
   const [endDate, setEndDate] = useState(null);
   const [disponible, setDisponible] = useState(null);
   const navigate = useNavigate();
+  const {ProtocoleEtDomaine} =useVar();
+  const { csrfToken } = useCSRF();
   const checkDisponibilite = () => {
     const estDispo = Math.random() > 0.5; // Simuler la disponibilité
     setDisponible(estDispo);
     if (!estDispo) {
         setIsOpen(true); // Ouvre le pop-up si non disponible
       } else {
-        navigate("/confirmation")
+        navigate("/confirmation");
+        AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine)
       }
 
   };
@@ -143,3 +148,31 @@ function Reservation(){
 }
 
 export default Reservation;
+
+function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine){
+    //on se déconnecte
+    const ajout= async () =>{
+            try {
+                const response = await fetch(domaine + "api/bookings/add", {
+                    method: "POST",
+                    headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
+                      "Content-Type": "application/json",
+                      'X-CSRF-Token': csrfToken,
+                    },
+                    credentials: 'include',
+                    body:JSON.stringify({dateDebut:startDate, dateFin:endDate,voitureReservee: voitureSelectionnee})
+                    
+                  });
+                if (response.ok){                   
+                    return null;
+                }
+    
+            } catch (err){
+                console.error("Erreur lors de l'ajout du booking :",err)
+    
+    
+            }
+        }
+        console.log("ca a marche")
+        ajout();
+    }
