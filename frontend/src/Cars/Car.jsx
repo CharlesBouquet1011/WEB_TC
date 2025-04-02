@@ -13,7 +13,7 @@ export default function Car({car}){
       console.log("UseEffect")
       if (voitureSelectionnee){
         
-        navigate("/cars/reserve")
+        navigate("/cars/location")
       }
       
 
