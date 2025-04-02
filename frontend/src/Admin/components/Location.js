@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { LocationRow } from './LocationRow.js';
 import { AddLocation } from './AddLocation.js';
 
-export function Location() {
+export function Location({}) {
     const [locations, setLocations] = useState([]);
     const [refresh, setRefresh] = useState(false);
     const [addLocationMode, setAddLocationMode] = useState(false);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchLocations = async () => {
@@ -21,28 +20,21 @@ export function Location() {
             }
             const data = await response.json();
             console.log("Bookings data:", data);
-
-            if (data.bookings) {
-                setLocations(data.bookings);
-              } else {
-                setLocations(Array.isArray(data) ? data : []);
-              }
-
+            setLocations(data);
             setRefresh(false);
-            setError(null);
+
           } catch (error) {
             console.error("Erreur:", error);
-            setError(error.message);
           }
         };
         fetchLocations();
       }, [refresh]);
 
-    const handleDelete = async (plate) => {
+    const handleDelete = async (id) => {
         const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette location ?");
         if (confirmDelete) {
             try {
-                const response = await fetch(`http://localhost/api/bookings/delete/${plate}`, {
+                const response = await fetch(`http://localhost/api/bookings/delete/${id}`, {
                     method: "DELETE",
                 });
 
@@ -53,7 +45,6 @@ export function Location() {
                 setRefresh(true);
             } catch (error) {
                 console.error("Erreur:", error);
-                setError(error.message);
             }
         }
     };
@@ -83,18 +74,17 @@ export function Location() {
             setAddLocationMode(false);
         } catch (error) {
             console.error("Erreur:", error);
-            setError(error.message);
         }
     };
-    
+
+    if (!addLocationMode) {
+        return (
+            
+        )
+    }
+
     return (
         <div className="container mt-4">
-            {error && (
-                <div className="alert alert-danger" role="alert">
-                    {error}
-                </div>
-            )}
-
             {/* Add Location Form - Appears when addLocationMode is true */}
             {addLocationMode && handleAddLocation && (
                 <AddLocation 

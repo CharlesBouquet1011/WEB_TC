@@ -14,17 +14,10 @@ const initialLocations = [
 ]
 
 export function Admin() {
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(1);
   const [editLoc, setEditLoc] = useState(false);
   const [addLocationMode, setAddLocationMode] = useState(false);
   const [locations, setLocations] = useState(initialLocations);
-
-  const handleDelete = (plate) => {
-    const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette location ?");
-    if (confirmDelete) {
-      setLocations(locations.filter(location => location.plate !== plate));
-    }
-  };
 
   return (
     <div>
@@ -52,7 +45,7 @@ export function Admin() {
             </thead>
             <tbody>
               {locations.map((location, index) => (
-                <LocationRow key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditLoc={setEditLoc} handleDelete={handleDelete}/>
+                <LocationRow key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditLoc={setEditLoc}/>
               ))}
             </tbody>
           </table>
