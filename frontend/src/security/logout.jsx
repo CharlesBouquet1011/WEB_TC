@@ -7,7 +7,13 @@ export default function Logout(){
     const {ProtocoleEtDomaine}=useVar()
 
     return(
-    <button onClick={() =>logout(csrfToken,navigate,ProtocoleEtDomaine)}>Se déconnecter</button>
+        <button
+      className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
+      onClick={() =>logout(csrfToken,navigate,ProtocoleEtDomaine)}
+    >
+      Se déconnecter
+    </button>
+    
     )
 }
 

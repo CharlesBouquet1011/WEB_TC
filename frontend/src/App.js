@@ -28,7 +28,8 @@ function App() {
               <Route path="/user" element={<User />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Registration />} />
-              <Route path="/cars" element={<Cars />} />
+              <Route exact path="/cars" element={<Cars />} />
+                <Route exact path="/cars/reserve" element={<Reservation />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/contact" element={<Assistance />} />
               <Route path="/location" element={<Reservation />} />

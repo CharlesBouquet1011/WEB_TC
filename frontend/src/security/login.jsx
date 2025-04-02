@@ -89,7 +89,8 @@ function Login() {
                 csrfToken, 
                 navigate, 
                 triedLogging, 
-                setTriedLogging
+                setTriedLogging,
+                ProtocoleEtDomaine
               )}
             >
               Se connecter
@@ -100,7 +101,7 @@ function Login() {
                 Vous n'avez pas de compte ? 
                 <a 
                   href="/register" 
-                  className="ms-2 text-blue text-decoration-none"
+                  className="ms-2 text-blue-500 text-decoration-none"
                 >
                   Inscrivez-vous ici
                 </a>
