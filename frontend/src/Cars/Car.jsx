@@ -1,21 +1,21 @@
 import "./Car.css"
 import { useNavigate } from "react-router";
 import { useVar } from '../Contexts/VariablesGlobales.js';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function Car({car}){
     const navigate=useNavigate()
     const {voitureSelectionnee,setVoitureSelectionnee}=useVar()
     const {marque, modele, prix, ImageUrl, carburant, transmission, description } = car
-
+    const[charge,setCharge]=useState(false)
     useEffect(()=>{
       console.log("UseEffect")
-      if (voitureSelectionnee){
+      if (charge && voitureSelectionnee){
         
         navigate("/cars/location")
       }
-      
+      setCharge(true)
 
     },[voitureSelectionnee,navigate])
 
