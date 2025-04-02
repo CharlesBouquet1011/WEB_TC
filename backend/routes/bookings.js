@@ -9,9 +9,11 @@ require('dotenv').config();
 //const auth=require("../config/authenticator.js")
 const Booking=require("../models/BookingModel.js")
 
-router.get("/seeAll",csrfProtection,limiter, async (req,res)=>{ // rajouter auth
+const auth=require("../config/authenticator.js")
+
+//récupérer tous bookings d'un utilisateur
+router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{ 
     try {
-        const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
         const bookings= await Booking.find().populate("voitureReservee")
         res.status(200).json({bookings: bookings})
         }
@@ -22,10 +24,11 @@ router.get("/seeAll",csrfProtection,limiter, async (req,res)=>{ // rajouter auth
 
 })
 
-router.post("/add", async (req,res)=>{
+//un utilisateur ajoute une résa
+router.post("/add", csrfProtection,auth,limiter, async (req,res)=>{
     try {
        const newBooking = new Booking (req.body);
-
+       const {userId} = req.user
        await newBooking.save();
         console.log("Location ajoutée: ", newBooking )
         res.status(200).json({message: "Location ajoutée"})
@@ -65,7 +68,7 @@ router.delete("/delete",csrfProtection,limiter,async (req,res) => {
     }
 })
 
-router.get("/see",csrfProtection,limiter, async (req,res)=>{
+router.get("/see",csrfProtection,auth,limiter, async (req,res)=>{
     try {
         const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
         const bookings= await Booking.find({user: userId}).populate("voitureReservee")
