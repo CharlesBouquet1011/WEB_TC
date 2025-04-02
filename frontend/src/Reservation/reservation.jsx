@@ -10,9 +10,10 @@ function Reservation(){
   console.log(useVar())
   console.log("Voiture sélectionnée :",voitureSelectionnee)
   if (!voitureSelectionnee){
-    return(<div>
+    return(
+        <Fond>
       Veuillez sélectionner une voiture au préalable
-    </div>)
+      </Fond>)
   }
   else{
     return(
