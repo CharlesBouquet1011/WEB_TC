@@ -1,7 +1,6 @@
 
 import './App.css';
 import React, { useState, useEffect } from 'react';
-
 import { CSRFProvider } from './Contexts/CsrfContext.js';
 import SeeBookings from "./Locations/seeBookings.jsx"
 import { BrowserRouter as Router, Routes, Route } from "react-router";
@@ -15,6 +14,7 @@ import { Admin } from "./Admin/Admin.js"
 import { VarProvider } from './Contexts/VariablesGlobales.js';
 import Assistance from './Locations/Assistance.jsx';
 import Reservation from './Reservation/reservation.jsx';
+import Confirmation from './Reservation/confirmation.jsx';
 
 function App() {
 
@@ -32,6 +32,7 @@ function App() {
                 <Route exact path="/cars/location" element={<Reservation />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/contact" element={<Assistance />} />
+              <Route path="/confirmation" element={<Confirmation />} />
             </Routes>
           </Router>
         </AuthProvider>
