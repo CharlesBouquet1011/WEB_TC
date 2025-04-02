@@ -7,12 +7,6 @@ h1 {
     font-weight: bold;
 }
 
-.container-vide {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Pour pousser le footer en bas si la page est vide */
-}
-
 /* Styles de la vidéo */
 .video-container {
     position: relative; /* Positionne par rapport au composant parent */
