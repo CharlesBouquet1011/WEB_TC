@@ -36,7 +36,7 @@ export default function DeleteBooking({idBooking}) {
         >
           <h2 className="Booking-delete-modal-title">Confirmation</h2>
           <p className="Booking-delete-modal-message">
-            Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.
+            Êtes-vous sûr de vouloir supprimer cette réservation ? Cette action est irréversible mais vous serez remboursé.
           </p>
           <div className="Booking-delete-modal-actions">
             <button className="Booking-delete-cancel-button" onClick={closeModal}>

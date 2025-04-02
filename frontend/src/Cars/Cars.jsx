@@ -86,7 +86,7 @@ export default function Cars(){
     
 }
 
-const AnimationCarteCar = ({ car, index, isInitiallyVisible }) => {
+export const AnimationCarteCar = ({ car, index, isInitiallyVisible }) => {
     const [ref, inView] = useInView({
       triggerOnce: true, //l'animation ne se fait qu'une fois
       threshold: 0.1 //considéré visible dès que 10% de sa surface devrait être visible
