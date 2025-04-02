@@ -13,6 +13,7 @@ function Reservation(){
   const [isOpen, setIsOpen] = useState(false); // Pour contrôler l'ouverture du pop-up
   const [endDate, setEndDate] = useState(null);
   const [disponible, setDisponible] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
   const {ProtocoleEtDomaine} =useVar();
   const { csrfToken } = useCSRF();
@@ -22,8 +23,7 @@ function Reservation(){
     if (!estDispo) {
         setIsOpen(true); // Ouvre le pop-up si non disponible
       } else {
-        navigate("/confirmation");
-        AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine)
+        AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine, navigate, setError)
       }
 
   };
@@ -114,6 +114,9 @@ function Reservation(){
               Vérifier la disponibilité
             </button>
             </div>
+            <div>
+                {error && <p className="text-red-500">{error}</p>} 
+            </div>
 
             {isOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
@@ -149,30 +152,30 @@ function Reservation(){
 
 export default Reservation;
 
-function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine){
-    //on se déconnecte
+function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,navigate,setError){
+    setError(null);
     const ajout= async () =>{
             try {
                 const response = await fetch(domaine + "api/bookings/add", {
                     method: "POST",
-                    headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
-                      "Content-Type": "application/json",
+                    headers: { 
                       'X-CSRF-Token': csrfToken,
                     },
                     credentials: 'include',
-                    body:JSON.stringify({dateDebut:startDate, dateFin:endDate,voitureReservee: voitureSelectionnee})
+                    body:JSON.stringify({dateDebut:startDate, dateFin:endDate,voitureReservee: voitureSelectionnee._id})
                     
                   });
                 if (response.ok){                   
-                    return null;
+                    navigate("/confirmation");
+                } else {
+                    console.error("Erreur lors de l'ajout du booking :");
+                    setError("Veuillez reessayer plus tard"); 
                 }
     
             } catch (err){
-                console.error("Erreur lors de l'ajout du booking :",err)
-    
-    
+               return (null);                 
+
             }
         }
-        console.log("ca a marche")
         ajout();
     }
