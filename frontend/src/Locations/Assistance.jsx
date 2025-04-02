@@ -17,13 +17,25 @@ export default function Assistance(){
 }
 
 function Affichage({mail,phoneNumber}){
-    return(<div className="Assistance">
+    return(
         <Fond>
-            Si vous avez un problème, contactez-nous: <br />
-            {mail} <br />
-            {phoneNumber}
+        <div className="container d-flex align-items-center justify-content-center vh-100">
+            <div className="card text-white bg-dark shadow-lg p-5 border border-warning rounded-3" style={{ maxWidth: "500px" }}>
+                <div className="card-body text-center">
+                    <h1 className="display-4 fw-bold text-warning">Assistance</h1>
+                    <p className="lead">Si vous avez un problème, contactez-nous :</p>
+                    <hr className="border-warning" />
+                    <p className="fs-5">
+                        📧 <a href={`mailto:${mail}`} className="text-warning text-decoration-none">{mail}</a>
+                    </p>
+                    <p className="fs-5">
+                        📞 <a href={`tel:${phoneNumber}`} className="text-warning text-decoration-none">{phoneNumber}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
         </Fond>
-        </div>)
+        )
 }
 
 function retrieveData(csrfToken,setMail,setPhoneNumber,domaine){
@@ -43,9 +55,10 @@ function retrieveData(csrfToken,setMail,setPhoneNumber,domaine){
         const {mail,phoneNumber}=request
         setMail(mail)
         setPhoneNumber(phoneNumber)
-        req()
+        
         
     }
+    req()
     } catch (err){
         console.error("Erreur lors de l'execution de retrieve Data :", err)
     }

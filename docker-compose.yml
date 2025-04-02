@@ -33,7 +33,8 @@ services:
     user: react
     volumes:
       - ./frontend:/app
-      - react_modules:/app/node_modules
+      - /app/node_modules
+
       - react_build:/app/build
     networks:
       - nginx-frontend
@@ -66,7 +67,6 @@ services:
       - nginx-frontend
 volumes:
   mongo: #lire explication dans volume bd_mongo, ici c'est pour que docker gère tout seul le volume
-  react_modules:
   react_build:
   backend_modules:
 

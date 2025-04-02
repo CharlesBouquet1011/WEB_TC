@@ -14,6 +14,7 @@ import Registration from './security/registration.jsx';
 import { Admin } from "./Admin/Admin.js"
 import { VarProvider } from './Contexts/VariablesGlobales.js';
 import Assistance from './Locations/Assistance.jsx';
+import Reservation from './Reservation/reservation.jsx';
 
 function App() {
 
@@ -27,7 +28,8 @@ function App() {
               <Route path="/user" element={<User />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Registration />} />
-              <Route path="/cars" element={<Cars />} />
+              <Route exact path="/cars" element={<Cars />} />
+                <Route exact path="/cars/location" element={<Reservation />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/contact" element={<Assistance />} />
             </Routes>
