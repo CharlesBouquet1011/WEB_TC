@@ -5,30 +5,43 @@ import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCSRF } from "../Contexts/CsrfContext";
+import React, { useEffect } from 'react';
+import Confirmation from "./confirmation.jsx"
+
 
 
 function Reservation(){
   const {voitureSelectionnee} = useVar();
+  console.log(voitureSelectionnee);
   const [startDate, setStartDate] = useState(null);
   const [isOpen, setIsOpen] = useState(false); // Pour contrôler l'ouverture du pop-up
+  const closePopup = () => setIsOpen(false);
   const [endDate, setEndDate] = useState(null);
   const [disponible, setDisponible] = useState(null);
   const [error, setError] = useState(null);
+  const [paiement, setPaiement] = useState(null);
+  const [dateError, setDateError] = useState("");
   const navigate = useNavigate();
   const {ProtocoleEtDomaine} =useVar();
   const { csrfToken } = useCSRF();
+  useEffect(() => {
+    fetch("/api/cars")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Cars with IDs:", data.voitures); // Vérifie ici que chaque voiture a un _id
+      });
+    }, [])
+  console.log("Voiture sélectionnée:", voitureSelectionnee);  // Vérifie l'ID dans le state
   const checkDisponibilite = () => {
     const estDispo = Math.random() > 0.5; // Simuler la disponibilité
     setDisponible(estDispo);
     if (!estDispo) {
         setIsOpen(true); // Ouvre le pop-up si non disponible
-      } else {
-        AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine, navigate, setError)
+      } else{
+        AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine, navigate, setError);
+        setPaiement("en cours")        
       }
-
-  };
-  const closePopup = () => setIsOpen(false);
-
+    }
   if (!voitureSelectionnee) {
     return (
       <Fond>
@@ -104,9 +117,10 @@ function Reservation(){
             <button
               onClick={() =>{
                 if (!startDate || !endDate) {
-                    alert("Veuillez sélectionner des dates");
+                    setDateError("Veuillez sélectionner des dates avant de vérifier la disponibilité.");
                     return;
-                  }
+                }
+                  setDateError("");
                   checkDisponibilite(); //random pour l'instant
               }} 
               className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg text-lg hover:bg-black transition"
@@ -114,6 +128,7 @@ function Reservation(){
               Vérifier la disponibilité
             </button>
             </div>
+                {dateError && <p className="text-red-500 text-sm mt-2">{dateError}</p>}
             <div>
                 {error && <p className="text-red-500">{error}</p>} 
             </div>
@@ -136,6 +151,9 @@ function Reservation(){
             </div>
             </div>
             )}
+            </div>
+                {paiement && <p className="text-red-500 text-sm mt-2"><Confirmation/></p>}
+            <div>
 
             <button
               className="mt-4 block text-gray-500 underline hover:text-black transition"
@@ -147,7 +165,7 @@ function Reservation(){
         </div>
       </Fond>
     );
-  }
+    };
 }
 
 export default Reservation;
@@ -156,20 +174,22 @@ function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,navi
     setError(null);
     const ajout= async () =>{
             try {
+                const formattedStartDate = startDate.toISOString();
+                const formattedEndDate = endDate.toISOString();
                 const response = await fetch(domaine + "api/bookings/add", {
                     method: "POST",
                     headers: { 
                       'X-CSRF-Token': csrfToken,
                     },
                     credentials: 'include',
-                    body:JSON.stringify({dateDebut:startDate, dateFin:endDate,voitureReservee: voitureSelectionnee._id})
+                    body:JSON.stringify({dateDebut:formattedStartDate, dateFin: formattedEndDate,voitureReservee: voitureSelectionnee._id})
                     
                   });
                 if (response.ok){                   
-                    navigate("/confirmation");
+                    return(null);
                 } else {
                     console.error("Erreur lors de l'ajout du booking :");
-                    setError("Veuillez reessayer plus tard"); 
+                    setError("Veuillez réessayer plus tard"); 
                 }
     
             } catch (err){

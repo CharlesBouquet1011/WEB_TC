@@ -60,6 +60,7 @@ export function Menu() {
           <nav className="mt-16 p-4">
             <ul className="space-y-4 text-lg">
               <li><Link to="/cars" className="block px-6 py-2 hover:bg-gray-700 rounded">Voitures</Link></li>
+              <li><Link to="/services" className="block px-6 py-2 hover:bg-gray-700 rounded">Services</Link></li>
               <li><Link to="/contact" className="block px-6 py-2 hover:bg-gray-700 rounded">Contact</Link></li>
             </ul>
           </nav>

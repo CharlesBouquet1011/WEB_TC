@@ -30,12 +30,11 @@ export default function Car({car}){
   {/* Encadré sombre en haut */}
   <div className="absolute top-0 left-0 w-full bg-black bg-opacity-50 text-white p-4">
     <h1 className="text-3xl font-bold">{marque}</h1>
-    <p className="mt-1 text-sm uppercase">{carburant}</p>
   </div>
 
   {/* Contenu texte */}
   <div className="p-4">
-    <h2 className="text-xl font-semibold">{modele}</h2>
+    <h2 className="text-xl font-semibold">{modele} ({carburant})</h2>
     <p className="text-sm text-gray-700 mb-4">{description}</p>
     <p className="text-lg font-bold text-black">{`À partir de ${prix} €`}</p>
   </div>
