@@ -77,7 +77,7 @@ export function ChangePasswordForm(){
                     </div>
     
                     <div className="mb-3">
-                      <label htmlFor="Newpassword" className="form-label">Nouveau mot e passe</label>
+                      <label htmlFor="Newpassword" className="form-label">Nouveau mot de passe</label>
                       <input 
                         type="password" 
                         className="form-control" 
@@ -89,7 +89,7 @@ export function ChangePasswordForm(){
                       {erreurs.NewPasswordErreur && <small className="text-danger">{erreurs.NewPasswordErreur}</small>}
                     </div>
                     <div className="mb-3">
-                      <label htmlFor="CNewPassword" className="form-label">Nouveau mot e passe</label>
+                      <label htmlFor="CNewPassword" className="form-label">Nouveau mot de passe</label>
                       <input 
                         type="password" 
                         className="form-control" 
@@ -106,7 +106,7 @@ export function ChangePasswordForm(){
                       className="btn btn-dark w-100 mt-3"
                       onClick={() => submit(csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,ProtocoleEtDomaine,isErreur,setIsErreur)}
                     >
-                      S'inscrire
+                      Changer le mot de passe
                     </button>
                   </form>
                 </div>
@@ -118,7 +118,13 @@ export function ChangePasswordForm(){
         )
 }
 
+export function ChangePasswordButton(){
+  const navigate=useNavigate()
 
+  return(
+    <button onClick={()=>navigate("/user/changePassword")}>Changer le mot de passe</button>
+  )
+}
 
 //renvoie vrai s'il y a une erreur
 function checkErreursSubmit(Password,NewPassword,CNewPassword,ProtocoleEtDomaine,csrfToken,setErreurs,setIsErreur){

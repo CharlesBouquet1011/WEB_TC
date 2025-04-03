@@ -1,3 +1,4 @@
+import Logged from '../Contexts/Authenticated.js';
 import Fond from '../utile/style.jsx';
 import React, { useState } from "react";
 
@@ -17,6 +18,7 @@ function Confirmation(){
 
     return (
         <Fond>
+          <Logged>
           <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
             {/* Section Options */}
             <div className="mb-6">
@@ -66,6 +68,7 @@ function Confirmation(){
               </div>
             )}
           </div>
+          </Logged>
         </Fond>
       );
 }

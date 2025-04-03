@@ -11,7 +11,6 @@ export default function Car({car}){
     //const carId=car._id //pour Anaïs, qu'elle sache comment trouver l'ID
     const[charge,setCharge]=useState(false)
     useEffect(()=>{
-      console.log("UseEffect")
       if (charge && voitureSelectionnee){
         
         navigate("/cars/location")
