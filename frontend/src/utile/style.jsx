@@ -15,12 +15,13 @@ function Fond({ children }) {
                 {children}
             </main>
             
-            {/* Pied de page */}
+            {/* Pied de page 
             <footer className="bg-gray-900 text-white text-center p-5">
                 <div className="container mx-auto">
                 <p>&copy; Driving Enhanced. Tous droits réservés.</p>
                 </div>
             </footer>
+            */}
         </div>
     );
 }
