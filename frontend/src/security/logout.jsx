@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
+import { useAuth } from "../Contexts/Authenticated";
 export default function Logout(){
     const {csrfToken}= useCSRF();
     const navigate=useNavigate()
     const {ProtocoleEtDomaine}=useVar()
-
+    const {triedLogging,setTriedLogging}=useAuth()
+    
     return(
         <button
       className="px-6 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition"
-      onClick={() =>logout(csrfToken,navigate,ProtocoleEtDomaine)}
+      onClick={() =>logout(csrfToken,navigate,ProtocoleEtDomaine,triedLogging,setTriedLogging)}
     >
       Se déconnecter
     </button>
@@ -18,7 +20,7 @@ export default function Logout(){
 }
 
 
-function logout(csrfToken,navigate,proto){
+function logout(csrfToken,navigate,proto,triedLogging,setTriedLogging){
     //on se déconnecte
 
     const deconnexion= async () =>{
@@ -33,6 +35,7 @@ function logout(csrfToken,navigate,proto){
                     
                   });
                 if (response.ok){
+                    setTriedLogging(!triedLogging)
                     navigate("/")
                     
                     return null;

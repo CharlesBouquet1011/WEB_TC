@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 export default function Car({car}){
     const navigate=useNavigate()
     const {voitureSelectionnee,setVoitureSelectionnee}=useVar()
-    const {marque, modele, prix, ImageUrl, carburant, transmission, description } = car
+    const {marque, modele, prix, imageURL, carburant, transmission, description } = car
+    //const carId=car._id //pour Anaïs, qu'elle sache comment trouver l'ID
     const[charge,setCharge]=useState(false)
     useEffect(()=>{
-      console.log("UseEffect")
       if (charge && voitureSelectionnee){
         
         navigate("/cars/location")
@@ -24,7 +24,7 @@ export default function Car({car}){
         <div className="relative w-80 rounded-2xl overflow-hidden shadow-xl bg-white transition-transform transform hover:scale-105">
   {/* Image */}
   <div className="w-full h-64 overflow-hidden">
-    <img src={ImageUrl} alt={`${marque} ${modele}`} className="w-full h-full object-cover" />
+    <img src={imageURL} alt={`${marque} ${modele}`} className="w-full h-full object-cover" />
   </div>
 
   {/* Encadré sombre en haut */}

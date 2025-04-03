@@ -5,11 +5,11 @@ const VarContext = createContext();
 export function VarProvider({children}){
     const [ProtocoleEtDomaine, setProtocoleEtDomaine] = useState("http://localhost/")
     const [voitureSelectionnee,setVoitureSelectionnee]=useState(null) //pour afficher et choisir la voiture à louer
-    
+    const [erreurLogin,setErreurLogin]=useState("")
         
         
         return(
-            <VarContext.Provider value={{ProtocoleEtDomaine,voitureSelectionnee,setVoitureSelectionnee}}>
+            <VarContext.Provider value={{ProtocoleEtDomaine,voitureSelectionnee,setVoitureSelectionnee,erreurLogin,setErreurLogin}}>
                 {children}
             </VarContext.Provider>
         )
