@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useCSRF } from "./CsrfContext";
 import { useVar } from './VariablesGlobales';
-
+import {useNavigate} from "react-router";
 const AuthContext = createContext();
 
 export function AuthProvider({children}){
@@ -9,6 +9,8 @@ export function AuthProvider({children}){
     const [logged, setlogged] = useState(false)
     const [triedLogging,setTriedLogging] = useState(false)
     const {ProtocoleEtDomaine}=useVar()
+    const [loading,setLoading]=useState(true)
+    
     useEffect(() => {
         if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
           fetchCSRFToken();
@@ -43,16 +45,20 @@ export function AuthProvider({children}){
     
     
             }
+            finally{
+                setLoading(false)
+            }
         }
         isLogged()
         setTriedLogging(false)
+        
         ;},
         [triedLogging,csrfToken] 
     )
         
         
         return(
-            <AuthContext.Provider value={{logged,setlogged,triedLogging,setTriedLogging}}>
+            <AuthContext.Provider value={{logged,setlogged,triedLogging,setTriedLogging,loading}}>
                 {children}
             </AuthContext.Provider>
         )
@@ -68,7 +74,13 @@ export function useAuth(){
 }
 //permet de ne donner accès aux enfants seulement si l'on est connecté
 export default function Logged({children}){
-    const {logged} = useAuth()
+    const {logged,loading} = useAuth()
+    const navigate=useNavigate()
+    const {setErreurLogin}=useVar()
+    console.log("Logged" , logged)
+    if (loading){
+        return null
+    }
     if (logged){
         return(
             <>
@@ -77,10 +89,9 @@ export default function Logged({children}){
         )
     }
     else{
-        return(
-            <h1>
-                Veuillez vous connecter
-            </h1>
-        )
+        setErreurLogin("Veuillez vous connecter pour accéder à cette page")
+        navigate("/login")
+        console.log("Pas connecté")
+        return null
     }
 }

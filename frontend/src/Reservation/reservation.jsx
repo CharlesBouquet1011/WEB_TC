@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCSRF } from "../Contexts/CsrfContext";
+import Logged from "../Contexts/Authenticated";
 
 
 function Reservation(){
@@ -32,6 +33,7 @@ function Reservation(){
   if (!voitureSelectionnee) {
     return (
       <Fond>
+        <Logged>
         <div>
             Veuillez sélectionner une voiture au préalable
             <button
@@ -41,11 +43,13 @@ function Reservation(){
               ← Retour à la sélection
             </button>
         </div>
+        </Logged>
       </Fond>
     );
   } else {
     return (
       <Fond>
+        <Logged>
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-10 p-6">
           <div className="relative w-full h-80">
             <img
@@ -145,6 +149,7 @@ function Reservation(){
             </button>
           </div>
         </div>
+        </Logged>
       </Fond>
     );
   }
