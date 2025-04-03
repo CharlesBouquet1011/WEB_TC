@@ -20,6 +20,7 @@ export function AuthProvider({children}){
      useEffect(()=>{ //vérifie si l'utilisateur est connecté
         const isLogged= async () =>{
             try {
+                setLoading(true)
                 const response = await fetch(ProtocoleEtDomaine+"api/security/logged", {
                     method: "GET",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
