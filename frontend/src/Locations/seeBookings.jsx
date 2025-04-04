@@ -134,10 +134,21 @@ export function SeeUserBookings(){
 
 //présentejuste les bookings 
 function Booking({ dateDebut, dateFin, voitureReservee }) {
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const jour = String(date.getDate()).padStart(2, '0');
+    const mois = date.toLocaleString('fr-FR', { month: 'long' });
+    const annee = date.getFullYear();
+    const heures = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `Le ${jour} ${mois.charAt(0).toUpperCase() + mois.slice(1)} ${annee} à ${heures}h${minutes}`;
+  };
+
   return (
     <tr>
-      <td className="px-4 py-2 border border-gray-200">{dateDebut}</td>
-      <td className="px-4 py-2 border border-gray-200">{dateFin}</td>
+      <td className="px-4 py-2 border border-gray-200">{formatDate(dateDebut)}</td>
+      <td className="px-4 py-2 border border-gray-200">{formatDate(dateFin)}</td>
       <td className="px-4 py-2 border border-gray-200">
         {voitureReservee.marque + " " + voitureReservee.modele}
       </td>

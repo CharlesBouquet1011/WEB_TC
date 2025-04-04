@@ -66,7 +66,7 @@ function Reservation(){
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-10 p-6">
           <div className="relative w-full h-80">
             <img
-              src={voitureSelectionnee.ImageUrl} //affiche l'image de la voiture
+              src={voitureSelectionnee.imageURL} //affiche l'image de la voiture
               alt={`${voitureSelectionnee.marque} ${voitureSelectionnee.modele}`}
               className="w-full h-full object-cover rounded-xl"
             />
