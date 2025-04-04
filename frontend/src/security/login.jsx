@@ -9,13 +9,20 @@ import { useVar } from "../Contexts/VariablesGlobales.js";
 function Login() {
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-  const {ProtocoleEtDomaine,erreurLogin,setErreurLogin}=useVar()
+  const {ProtocoleEtDomaine,erreurLogin,setErreurLogin,redirectAfterLogin}=useVar()
   const navigate=useNavigate()
- const {triedLogging,setTriedLogging}=useAuth()
+ const {triedLogging,setTriedLogging,logged}=useAuth()
+  useEffect(()=>{
+    if (logged){
+      navigate(redirectAfterLogin)
+    }
+  },[logged])
+  
+
   const handleEnterKey = (event,csrfToken,navigate,triedLogging,setTriedLogging,setErreurLogin) =>{
     
     if (event.key==="Enter"){
-      submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin)
+      submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin,redirectAfterLogin)
     }
   }
   useEffect(() => {
@@ -101,7 +108,8 @@ function Login() {
                 triedLogging, 
                 setTriedLogging,
                 ProtocoleEtDomaine,
-                setErreurLogin
+                setErreurLogin,
+                redirectAfterLogin
               )}}
             >
               Se connecter
@@ -139,7 +147,7 @@ function Login() {
 }
 
 
-async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin){
+async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin,redirectAfterLogin){
     setErreurLogin("")
     var email,password
     email=document.getElementById("login-email").value
@@ -168,7 +176,7 @@ async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,Protocole
 
         console.log("connecté")
         setTriedLogging(true)
-        navigate("/user")
+        navigate(redirectAfterLogin)
         
 
     } catch (error){

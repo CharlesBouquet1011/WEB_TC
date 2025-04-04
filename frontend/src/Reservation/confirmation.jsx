@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useVar } from "../Contexts/VariablesGlobales";
 
 
 export default function Confirmation(){
     const [isOpen, setIsOpen] = useState(true);
     const navigate = useNavigate();
+    const {setRedirectAfterLogin}=useVar()
+    setRedirectAfterLogin("/confirmation")
     const handleAction = () => {
         setIsOpen(false); 
         navigate("/user");

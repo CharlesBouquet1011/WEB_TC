@@ -2,8 +2,9 @@ import { useNavigate } from "react-router";
 import { useVar } from "../Contexts/VariablesGlobales";
 
 function Switch({classe,page,texte}) {
-  const {ProtocoleEtDomaine}=useVar()
+  const {ProtocoleEtDomaine,setRedirectAfterLogin}=useVar()
   const navigate=useNavigate()
+  setRedirectAfterLogin("/user")
   switch (classe) {
     case "bouton":
       return (
