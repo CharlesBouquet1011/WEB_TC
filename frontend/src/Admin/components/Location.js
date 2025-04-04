@@ -20,7 +20,6 @@ export function Location({}) {
           try {
             const response = await fetch(ProtocoleEtDomaine+"api/bookings/seeAll");
             if (!response.ok) {
-                const errorText = await response.text();
                 throw new Error(`Erreur lors de la récupération des locations: ${response.status}`);
             }
             const data = await response.json();
