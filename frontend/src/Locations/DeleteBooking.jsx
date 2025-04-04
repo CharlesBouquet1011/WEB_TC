@@ -3,13 +3,14 @@
 import { useNavigate } from "react-router";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
-import "./deleteBooking.css"; 
+import "./DeleteBooking.css"; 
 
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
 Modal.setAppElement("#root"); // Obligatoire pour l'accessibilité
 
 export default function DeleteBooking({idBooking}) {
+  console.log("idBooking :",idBooking)
     const { csrfToken } = useCSRF();
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -25,7 +26,7 @@ export default function DeleteBooking({idBooking}) {
     return (
       <div>
         <button className="Booking-delete-button" onClick={openModal}>
-          Supprimer mon compte
+          Supprimer ma réservation
         </button>
         <Modal
           isOpen={modalIsOpen}
@@ -82,3 +83,5 @@ function BookingDeletion(csrfToken,navigate,idBooking,domaine){
         }
         deletion();
     }
+
+
