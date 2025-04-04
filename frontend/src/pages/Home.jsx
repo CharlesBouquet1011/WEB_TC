@@ -1,11 +1,13 @@
 import Switch from '../utile/bouton_login.jsx';
 import {Fond,Menu} from '../utile/style_home.jsx';
-import Assistance from "../Locations/Assistance.jsx"
 import { useVar } from '../Contexts/VariablesGlobales.js';
+import { useNavigate } from "react-router-dom";
+
 
 
 export default function Home(){
     const {ProtocoleEtDomaine}=useVar()
+    const navigate = useNavigate();
     return(
         <div>
         <Menu/>
@@ -20,6 +22,21 @@ export default function Home(){
         <div className="overlay">
             <h1>Driving Enhanced</h1>
         </div>
+        </div>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-4 mt-6">
+          <button
+            onClick={() => navigate("/cars")}
+            className="relative px-6 py-3 text-white rounded-lg text-center overflow-hidden group w-48 h-16"
+            >
+            <img
+                src={ProtocoleEtDomaine + "media/image/icone1.jpg"}
+                alt="Nos Voitures"
+                className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-75 transition"
+            />
+            <span className="relative z-10 font-semibold">Nos Voitures</span>
+          </button>
+          <button onClick={() => navigate("/services")} className="px-6 py-3 bg-gray-800 text-white rounded-lg text-center hover:bg-black transition">Nos Services</button>
+          <button onClick={() => navigate("/contact")} className="px-6 py-3 bg-gray-800 text-white rounded-lg text-center hover:bg-black transition">Nous Contacter</button>
         </div>
         <h2>Driving Enhanced – L'Élégance et la Puissance au Bout des Doigts</h2>
         <p className="text-center mx-auto w-50">Vivez une expérience de conduite inégalée avec Driving Enhanced, votre référence en location de voitures de luxe. Que ce soit pour un voyage d’affaires, un événement spécial ou simplement pour le plaisir, notre flotte d’exception vous garantit style, confort et performance. Prenez le volant. Dominez la route. Luxe, prestige et sensations fortes vous attendent.

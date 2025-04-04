@@ -7,10 +7,10 @@ import { useEffect, useState } from "react";
 export default function Car({car}){
     const navigate=useNavigate()
     const {voitureSelectionnee,setVoitureSelectionnee}=useVar()
-    const {marque, modele, prix, ImageUrl, carburant, transmission, description } = car
+    const {marque, modele, prix, imageURL, carburant, transmission, description } = car
+    //const carId=car._id //pour Anaïs, qu'elle sache comment trouver l'ID
     const[charge,setCharge]=useState(false)
     useEffect(()=>{
-      console.log("UseEffect")
       if (charge && voitureSelectionnee){
         
         navigate("/cars/location")
@@ -24,18 +24,17 @@ export default function Car({car}){
         <div className="relative w-80 rounded-2xl overflow-hidden shadow-xl bg-white transition-transform transform hover:scale-105">
   {/* Image */}
   <div className="w-full h-64 overflow-hidden">
-    <img src={ImageUrl} alt={`${marque} ${modele}`} className="w-full h-full object-cover" />
+    <img src={imageURL} alt={`${marque} ${modele}`} className="w-full h-full object-cover" />
   </div>
 
   {/* Encadré sombre en haut */}
   <div className="absolute top-0 left-0 w-full bg-black bg-opacity-50 text-white p-4">
     <h1 className="text-3xl font-bold">{marque}</h1>
-    <p className="mt-1 text-sm uppercase">{carburant}</p>
   </div>
 
   {/* Contenu texte */}
   <div className="p-4">
-    <h2 className="text-xl font-semibold">{modele}</h2>
+    <h2 className="text-xl font-semibold">{modele} ({carburant})</h2>
     <p className="text-sm text-gray-700 mb-4">{description}</p>
     <p className="text-lg font-bold text-black">{`À partir de ${prix} €`}</p>
   </div>

@@ -5,6 +5,7 @@ import "./deleteAccount.css";
 
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
+import { useAuth } from "../Contexts/Authenticated";
 Modal.setAppElement("#root"); // Obligatoire pour l'accessibilité
 
 export default function DeleteAccount() {
@@ -15,8 +16,9 @@ export default function DeleteAccount() {
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
     const {ProtocoleEtDomaine}=useVar()
+    const {setTriedLogging,triedLogging}=useAuth()
     const confirmDeletion = () => {
-      accountDeletion(csrfToken, navigate,ProtocoleEtDomaine);
+      accountDeletion(csrfToken, navigate,ProtocoleEtDomaine,setTriedLogging,triedLogging);
       closeModal();
     };
   
@@ -58,7 +60,7 @@ export default function DeleteAccount() {
     );
   }
 
-function accountDeletion(csrfToken,navigate,ProtocoleEtDomaine){
+function accountDeletion(csrfToken,navigate,ProtocoleEtDomaine,setTriedLogging,triedLogging){
     //on se déconnecte
     
     const deletion= async () =>{
@@ -74,7 +76,7 @@ function accountDeletion(csrfToken,navigate,ProtocoleEtDomaine){
                   });
                 if (response.ok){
                     navigate("/")
-                    
+                    setTriedLogging(!triedLogging)
                     return null;
                 }
                 

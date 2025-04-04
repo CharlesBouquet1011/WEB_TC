@@ -14,7 +14,8 @@ import { Admin } from "./Admin/Admin.js"
 import { VarProvider } from './Contexts/VariablesGlobales.js';
 import Assistance from './Locations/Assistance.jsx';
 import Reservation from './Reservation/reservation.jsx';
-import Confirmation from './Reservation/confirmation.jsx';
+import Services from './pages/Services.jsx';
+import { ChangePasswordForm } from './security/changePassword.jsx';
 
 function App() {
 
@@ -26,13 +27,14 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/user" element={<User />} />
+                <Route path="/user/changePassword" element={<ChangePasswordForm />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Registration />} />
               <Route exact path="/cars" element={<Cars />} />
                 <Route exact path="/cars/location" element={<Reservation />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/contact" element={<Assistance />} />
-              <Route path="/confirmation" element={<Confirmation />} />
+              <Route path="/services" element={<Services />} />
             </Routes>
           </Router>
         </AuthProvider>

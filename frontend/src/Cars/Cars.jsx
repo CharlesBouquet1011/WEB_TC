@@ -110,15 +110,9 @@ export const AnimationCarteCar = ({ car, index, isInitiallyVisible }) => {
           delay: isInitiallyVisible ? index * 0.1 : 0 //si les voitures sont les premières, on delay leur apparition, sinon non 
         }}
       >
-        <Car car={{ //enfin on affiche la voiture (le plus important après tout)
-          marque: car.marque,
-          modele: car.modele,
-          prix: car.prix,
-          ImageUrl: car.imageURL,
-          carburant: car.carburant,
-          transmission: car.transmission,
-          description: car.description
-        }} />
+        <Car car={ //enfin on affiche la voiture (le plus important après tout)
+          car
+        } />
       </motion.div>
     );
   };

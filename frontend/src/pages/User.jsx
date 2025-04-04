@@ -4,7 +4,7 @@ import Logout from "../security/logout";
 import Logged from "../Contexts/Authenticated";
 import DeleteAccount from "../security/deleteAccount";
 import Fond from "../utile/style";
-import { ChangePasswordForm } from "../security/changePassword";
+import { ChangePasswordButton } from "../security/changePassword";
 
 export default function User(){
     const {csrfToken}= useCSRF();
@@ -16,9 +16,12 @@ export default function User(){
                         <h1 className="text-3xl font-bold text-gray-800">Vous êtes connectés</h1>
                         <div className="flex flex-col items-center space-y-4">
                         <SeeUserBookings />
-                        <Logout />
-                        <DeleteAccount />
-                        <ChangePasswordForm />
+                        <Logout /> {//bouton
+                        }
+                        <DeleteAccount />{//bouton
+
+                        }
+                        <ChangePasswordButton />
                         </div>
                     </div>
                 </Fond>

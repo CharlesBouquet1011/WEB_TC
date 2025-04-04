@@ -12,7 +12,7 @@ const Booking=require("../models/BookingModel.js")
 
 const auth=require("../config/authenticator.js")
 
-//récupérer tous bookings d'un utilisateur
+//récupérer tous les bookings 
 router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{ 
     try {
         const bookings= await Booking.find().populate("voitureReservee")
