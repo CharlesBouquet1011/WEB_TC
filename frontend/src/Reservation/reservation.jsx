@@ -99,7 +99,7 @@ function Reservation(){
                     return;
                 }
                   setDateError("");
-                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen);
+                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate);
               }} 
               className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg text-lg hover:bg-black transition"
             >
@@ -177,8 +177,8 @@ function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,navigate,dom
 }
 
 
-function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen) {
-    const checkDisponibiliteAPI = async () => {
+function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate) {
+  const checkDisponibiliteAPI = async () => {
         try {
             const response = await fetch(ProtocoleEtDomaine + "api/bookings/check-disponibilite", {
                 method: "POST",
@@ -197,7 +197,7 @@ function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,Prot
             if (response.ok) {
                 const data = await response.json();
                 if (data.disponible) {
-                    AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine, setError);
+                    AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, navigate, ProtocoleEtDomaine, setError);
                     setPaiement("en cours");
                 } else {
                     setIsOpen(true); // Ouvre le pop-up si non disponible
