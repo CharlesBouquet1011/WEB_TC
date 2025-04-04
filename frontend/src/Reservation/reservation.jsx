@@ -6,10 +6,6 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCSRF } from "../Contexts/CsrfContext";
 import React, { useEffect } from 'react';
-import Confirmation from "./confirmation.jsx"
-
-import Logged from "../Contexts/Authenticated";
-
 
 function Reservation(){
   const {voitureSelectionnee} = useVar();
@@ -27,7 +23,6 @@ function Reservation(){
   if (!voitureSelectionnee) {
     return (
       <Fond>
-        <Logged>
         <div>
             Veuillez sélectionner une voiture au préalable
             <button
@@ -37,13 +32,11 @@ function Reservation(){
               ← Retour à la sélection
             </button>
         </div>
-        </Logged>
       </Fond>
     );
   } else {
     return (
       <Fond>
-        <Logged>
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-10 p-6">
           <div className="relative w-full h-80">
             <img
@@ -137,9 +130,7 @@ function Reservation(){
             </div>
             )}
             </div>
-                {paiement && <div className="text-red-500 text-sm mt-2"><Confirmation/></div>}
             <div>
-
             <button
               className="mt-4 block text-gray-500 underline hover:text-black transition"
               onClick={() => navigate ("/cars")}
@@ -148,7 +139,6 @@ function Reservation(){
             </button>
           </div>
         </div>
-        </Logged>
       </Fond>
     );
     };
@@ -156,7 +146,7 @@ function Reservation(){
 
 export default Reservation;
 
-function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,setError){
+function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,navigate,domaine,setError){
     setError(null);
     const ajout= async () =>{
             try {
@@ -170,7 +160,8 @@ function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,setE
                     body:JSON.stringify({dateDebut:startDate.toISOString(), dateFin: endDate.toISOString(),voitureReservee: voitureSelectionnee._id})
                     
                   });
-                if (response.ok){                   
+                if (response.ok){
+                    navigate("/confirmation");                   
                     return(null);
                 } else {
                     console.error("Erreur lors de l'ajout du booking :");
