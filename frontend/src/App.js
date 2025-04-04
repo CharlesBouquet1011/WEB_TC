@@ -16,6 +16,7 @@ import Assistance from './Locations/Assistance.jsx';
 import Reservation from './Reservation/reservation.jsx';
 import Services from './pages/Services.jsx';
 import { ChangePasswordForm } from './security/changePassword.jsx';
+import Confirmation from './Reservation/confirmation.jsx'
 
 function App() {
 
@@ -35,6 +36,7 @@ function App() {
               <Route path="/admin" element={<Admin />} />
               <Route path="/contact" element={<Assistance />} />
               <Route path="/services" element={<Services />} />
+              <Route path="/confirmation" element={<Confirmation />} />
             </Routes>
           </Router>
         </AuthProvider>

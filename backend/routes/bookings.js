@@ -29,7 +29,7 @@ router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{
 router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
     try {
         const { dateDebut, dateFin, voitureReservee } = req.body;
-        const { userId } = req.user;
+        const { userId } = req.user || {userId: "guest-" + Date.now()};
         const newBooking = new Booking({
           dateDebut: new Date(dateDebut), // s'assurer que c'est bien un Date
           dateFin: new Date(dateFin),
@@ -37,6 +37,7 @@ router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
           user: userId,
           validated: false,
         });
+        console.log("je suis bien la")
        await newBooking.save();
        console.log("Location ajoutée: ", newBooking )
        res.status(200).json({message: "Location ajoutée"})
@@ -47,9 +48,10 @@ router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
     }
 })
 
-router.post("/check-disponibilite", csrfProtection, auth, async (req, res) => {
+router.post("/check-disponibilite", csrfProtection, async (req, res) => {
     try {
         const { dateDebut, dateFin, voitureReservee } = req.body;
+        console.log("j'arrive dans le verif");
         const bookings = await Booking.find({
             voitureReservee,
             $or: [
