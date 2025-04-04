@@ -162,6 +162,34 @@ router.post("/logout",csrfProtection,limiter, (req,res) => {
 
 })
 
+//Pour admin
+router.post("/seeAll", csrfProtection, limiter, auth, async (req, res)=>{
+    try {
+        const users = await User.find().populate("email")
+        res.status(200).json({users: users})
+        }
+    catch (err) {
+        res.status(500)
+        console.log("Erreur:", err)
+    }
+})
+
+router.post("/edit", csrfProtection, limiter, auth, async (req, res) => {
+    try {
+        const { _id, ...updatedFields } = req.body;
+        const updatedClient = await Users.findByIdAndUpdate(_id, updatedFields);
+
+        if (!updatedClient) {
+            return res.status(404).json({ message: "Client non trouvé" });
+        }
+        console.log("Base de données de clients mise à jour.")
+        res.status(200).json({message: "Client mis à jour avec succès"});
+
+    } catch (error) {
+        res.status(500).json({ message: "Erreur serveur", error });
+    }
+});
+
 router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
     //il faut supprimer toutes leurs réservations également
     const session = await mongoose.startSession();

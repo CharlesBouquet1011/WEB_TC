@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Header } from "./components/Header.js"
 import { Vehicule } from './components/Vehicule.js';
 import { Location } from './components/Location.js';
+import { Client } from './components/Client.js';
 
 export function Admin() {
   const [activeTab, setActiveTab] = useState(0);
@@ -16,9 +17,14 @@ export function Admin() {
         <Vehicule/>
       )}
 
-      {/* Location Management */}
+      {/* Locations Management */}
       {activeTab===1 && (
         <Location/>
+      )}
+
+      {/* Clients Management */}
+      {activeTab===2 && (
+        <Client/>
       )}
     </div>
   );

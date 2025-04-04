@@ -26,8 +26,7 @@ router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{
 })
 
 //un utilisateur ajoute une résa
-// Rajouter auth
-router.post("/add", csrfProtection,limiter, async (req,res)=>{
+router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
     try {
         const { dateDebut, dateFin, voitureReservee } = req.body;
         const { userId } = req.user || {userId: "guest-" + Date.now()};
