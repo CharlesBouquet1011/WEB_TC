@@ -4,12 +4,16 @@ import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 export function AddLocation({ setAddLocation, setRefresh }) {
-  console.log('setAddLocation type:', typeof setAddLocation);
   const{ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
   const { cars, loading, error: carsError } = useFetchCars();
 
-  const [locationAdded, setLocationAdded] = useState({});
+  const [locationAdded, setLocationAdded] = useState({
+    voitureReservee: "",
+    user: "",
+    dateDebut: "",
+    dateFin: "",
+  });
 
   const handleInputChange = (e) => {
     setLocationAdded((prev) => ({
@@ -19,17 +23,24 @@ export function AddLocation({ setAddLocation, setRefresh }) {
   };
 
   const handleSubmit = async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     if (!locationAdded.dateDebut || !locationAdded.dateFin || !locationAdded.user || !locationAdded.voitureReservee) {
       alert("Veuillez remplir tous les champs");
       return;
     }
+    if (new Date(locationAdded.dateDebut) < today) {
+      alert("Date de début invalide.");
+      return;
+    } 
     if (new Date(locationAdded.dateFin) <= new Date(locationAdded.dateDebut)) {
-      alert("La date de fin doit être postérieure à la date de début !");
+      alert("La date de fin doit être postérieure à la date de début.");
       return;
     }
 
     try {
-      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/edit`, {
+      console.log("Sending data:", locationAdded)
+      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/add`, {
         method: 'POST',
         headers:{
           "Content-Type": "application/json",
@@ -37,13 +48,18 @@ export function AddLocation({ setAddLocation, setRefresh }) {
         },
         body: JSON.stringify(locationAdded),
       });
+
+      const responseData = await response.json();
+
       if (!response.ok) {
-        throw new Error("Erreur lors de l'ajout de la location.");
+        throw new Error(`Erreur serveur: ${response.status} - ${responseData.message || "Aucune réponse"}`);
       }
+      console.log("Success:", responseData);
       setAddLocation(false);
       setRefresh(true);
     } catch (error) {
       console.error("Erreur:", error);
+      alert(`Erreur: ${error.message}`);
     }
   }
 
@@ -105,11 +121,11 @@ export function AddLocation({ setAddLocation, setRefresh }) {
             </div>
             <div className="mb-3">
               <label className="form-label">Date de début</label>
-              <input type="date" className="form-control" name="dateDebut" value={locationAdded.dateDebut} onChange={handleInputChange} />
+              <input type="date" className="form-control" name="dateDebut" value={locationAdded.dateDebut || ""} onChange={handleInputChange} />
             </div>
             <div className="mb-3">
               <label className="form-label">Date de fin</label>
-              <input type="date" className="form-control" name="dateFin" value={locationAdded.dateFin} onChange={handleInputChange} />
+              <input type="date" className="form-control" name="dateFin" value={locationAdded.dateFin || ""} onChange={handleInputChange} />
             </div>
             <button className="btn btn-primary" onClick={handleSubmit}>Valider</button>
           </>

@@ -26,10 +26,11 @@ router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{
 })
 
 //un utilisateur ajoute une résa
-router.post("/add", csrfProtection,auth,limiter, async (req,res)=>{
+// Rajouter auth
+router.post("/add", csrfProtection,limiter, async (req,res)=>{
     try {
        const newBooking = new Booking (req.body);
-       const {userId} = req.user
+
        await newBooking.save();
         console.log("Location ajoutée: ", newBooking )
         res.status(200).json({message: "Location ajoutée"})
