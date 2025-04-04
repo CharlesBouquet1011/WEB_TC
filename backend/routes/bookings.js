@@ -28,17 +28,44 @@ router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{
 //un utilisateur ajoute une résa
 router.post("/add", csrfProtection,auth,limiter, async (req,res)=>{
     try {
-       const newBooking = new Booking (req.body);
-       const {userId} = req.user
+        const { dateDebut, dateFin, voitureReservee } = req.body;
+        const { userId } = req.user;
+        const newBooking = new Booking({
+          dateDebut: new Date(dateDebut), // s'assurer que c'est bien un Date
+          dateFin: new Date(dateFin),
+          voitureReservee: voitureReservee,
+          user: userId,
+          validated: false,
+        });
        await newBooking.save();
-        console.log("Location ajoutée: ", newBooking )
-        res.status(200).json({message: "Location ajoutée"})
+       console.log("Location ajoutée: ", newBooking )
+       res.status(200).json({message: "Location ajoutée"})
 
     } catch (err) {
         res.status(500).json({erreur: "Erreur serveur"})
         console.log("Erreur: ",err)
     }
 })
+
+router.post("/check-disponibilite", csrfProtection, auth, async (req, res) => {
+    try {
+        const { dateDebut, dateFin, voitureReservee } = req.body;
+        const bookings = await Booking.find({
+            voitureReservee,
+            $or: [
+                { dateDebut: { $lt: new Date(dateFin) } },
+                { dateFin: { $gt: new Date(dateDebut) } }
+            ]
+        });
+        if (bookings.length > 0) {
+            return res.status(200).json({ disponible: false });
+        }
+        return res.status(200).json({ disponible: true });
+    } catch (err) {
+        console.error("Erreur lors de la vérification de la disponibilité:", err);
+        return res.status(500).json({ erreur: "Erreur serveur" });
+    }
+});
 
 router.get("/infos",csrfProtection,async(req,res)=>{
     try{
