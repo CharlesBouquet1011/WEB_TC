@@ -13,7 +13,6 @@ import Logged from "../Contexts/Authenticated";
 
 function Reservation(){
   const {voitureSelectionnee} = useVar();
-  console.log(voitureSelectionnee);
   const [startDate, setStartDate] = useState(null);
   const [isOpen, setIsOpen] = useState(false); // Pour contrôler l'ouverture du pop-up
   const closePopup = () => setIsOpen(false);
@@ -25,24 +24,6 @@ function Reservation(){
   const navigate = useNavigate();
   const {ProtocoleEtDomaine} =useVar();
   const { csrfToken } = useCSRF();
-  useEffect(() => {
-    fetch("/api/cars")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("Cars with IDs:", data.voitures); // Vérifie ici que chaque voiture a un _id
-      });
-    }, [])
-  console.log("Voiture sélectionnée:", voitureSelectionnee);  // Vérifie l'ID dans le state
-  const checkDisponibilite = () => {
-    const estDispo = Math.random() > 0.5; // Simuler la disponibilité
-    setDisponible(estDispo);
-    if (!estDispo) {
-        setIsOpen(true); // Ouvre le pop-up si non disponible
-      } else{
-        AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine, navigate, setError);
-        setPaiement("en cours")        
-      }
-    }
   if (!voitureSelectionnee) {
     return (
       <Fond>
@@ -66,7 +47,7 @@ function Reservation(){
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-10 p-6">
           <div className="relative w-full h-80">
             <img
-              src={voitureSelectionnee.ImageUrl} //affiche l'image de la voiture
+              src={voitureSelectionnee.imageURL} //affiche l'image de la voiture
               alt={`${voitureSelectionnee.marque} ${voitureSelectionnee.modele}`}
               className="w-full h-full object-cover rounded-xl"
             />
@@ -125,7 +106,7 @@ function Reservation(){
                     return;
                 }
                   setDateError("");
-                  checkDisponibilite(); //random pour l'instant
+                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen);
               }} 
               className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg text-lg hover:bg-black transition"
             >
@@ -156,7 +137,7 @@ function Reservation(){
             </div>
             )}
             </div>
-                {paiement && <p className="text-red-500 text-sm mt-2"><Confirmation/></p>}
+                {paiement && <div className="text-red-500 text-sm mt-2"><Confirmation/></div>}
             <div>
 
             <button
@@ -175,19 +156,18 @@ function Reservation(){
 
 export default Reservation;
 
-function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,navigate,setError){
+function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,setError){
     setError(null);
     const ajout= async () =>{
             try {
-                const formattedStartDate = startDate.toISOString();
-                const formattedEndDate = endDate.toISOString();
                 const response = await fetch(domaine + "api/bookings/add", {
                     method: "POST",
                     headers: { 
                       'X-CSRF-Token': csrfToken,
+                      'Content-Type': 'application/json'
                     },
                     credentials: 'include',
-                    body:JSON.stringify({dateDebut:formattedStartDate, dateFin: formattedEndDate,voitureReservee: voitureSelectionnee._id})
+                    body:JSON.stringify({dateDebut:startDate.toISOString(), dateFin: endDate.toISOString(),voitureReservee: voitureSelectionnee._id})
                     
                   });
                 if (response.ok){                   
@@ -203,4 +183,43 @@ function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,domaine,navi
             }
         }
         ajout();
-    }
+}
+
+
+function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen) {
+    const checkDisponibiliteAPI = async () => {
+        try {
+            const response = await fetch(ProtocoleEtDomaine + "api/bookings/check-disponibilite", {
+                method: "POST",
+                headers: {
+                    'X-CSRF-Token': csrfToken,
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    dateDebut: startDate.toISOString(),
+                    dateFin: endDate.toISOString(),
+                    voitureReservee: voitureSelectionnee._id
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.disponible) {
+                    AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, ProtocoleEtDomaine, setError);
+                    setPaiement("en cours");
+                } else {
+                    setIsOpen(true); // Ouvre le pop-up si non disponible
+                }
+            } else {
+                console.error("Erreur lors de la vérification de la disponibilité");
+                setError("Veuillez réessayer plus tard");
+            }
+        } catch (err) {
+            console.error("Erreur de communication avec l'API de disponibilité:", err);
+            setError("Erreur de communication avec le serveur");
+        }
+    };
+
+    checkDisponibiliteAPI();
+}
