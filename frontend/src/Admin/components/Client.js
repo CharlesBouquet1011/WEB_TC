@@ -8,28 +8,28 @@ const clientList = [
     {
         "name": "Mathis",
         "phoneNumber": 1,
-        "email": "mathis.ducher@insa-lyon.fr",
+        "email": "blabla@insa-lyon.fr",
         "password": "JeSuisMathis",
         "admin": true,
     },
     {
         "name": "Charles",
         "phoneNumber": 2,
-        "email": "charles.bouquet@insa-lyon.fr",
+        "email": "blibli@insa-lyon.fr",
         "password": "JeSuisCharles",
         "admin": false,
     },
     {
         "name": "Anais",
         "phoneNumber": 3,
-        "email": "anais.boisson@insa-lyon.fr",
+        "email": "bloblo@insa-lyon.fr",
         "password": "JeSuisAnais",
         "admin": false,
     },
     {
         "name": "Paul-Henri",
         "phoneNumber": 4,
-        "email": "paul-henri.lucotte@insa-lyon.fr",
+        "email": "blublu@insa-lyon.fr",
         "password": "JeSuisPH",
         "admin": true,
     }
@@ -46,13 +46,16 @@ export function Client({}) {
   useEffect(() => {
     const fetchClients = async () => {
       try {
+        console.log("Fetching clients...")
         const response = await fetch(ProtocoleEtDomaine+"api/security/seeAll");
+        console.log(response);
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des clients");
         }
         const data = await response.json();
         setClients(data);
         setRefresh(false);
+        console.log("Fetching alright")
       } catch (error) {
         console.error("Erreur:", error);
       }
@@ -83,6 +86,7 @@ export function Client({}) {
   const handleAddClient = async () => {
     try {
       const randomClient =  clientList[Math.floor(Math.random()*clientList.length)];
+      console.log(randomClient);
       const response = await fetch(`${ProtocoleEtDomaine}api/security/registration`, {
         method: 'POST',
         headers: {
@@ -91,13 +95,16 @@ export function Client({}) {
         },
         body: JSON.stringify(randomClient),
       });
+      console.log(response);
       if (!response.ok) {
         throw new Error("Erreur lors de l'ajout du client.");
       }
+      console.log("refresh")
       setRefresh(true);
     } catch (error) {
       console.error("Erreur:", error);
     }
+    console.log("are there any clients?", clients.users);
   }
   
   if (setEditClientMode === true) {
@@ -122,7 +129,7 @@ export function Client({}) {
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.map((client, index) => (
+                            {clients.users?.map((client, index) => (
                                 <ClientRow 
                                     key={client._id} 
                                     name={client.name} 
@@ -133,7 +140,7 @@ export function Client({}) {
                                     setEditClient={setEditClientMode}
                                     handleDelete={handleDelete} 
                                 />
-                            )) || "Chargement..."}
+                            ))}
                         </tbody>
                     </table>
                 ) : (

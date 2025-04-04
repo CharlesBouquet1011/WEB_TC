@@ -22,19 +22,21 @@ router.get("/csrf-token",csrfProtection, async (req,res) => {
 //inscription des utilisateurs
 router.post("/registration", csrfProtection, limiter, async (req,res)=>{
     try {
-        const { Name, FirstName, email, PhoneNumber, Password } = req.body;
+        const { name, phoneNumber, email, password } = req.body;
+        console.log("Received:",req.body);
+
         
         const existe= await User.exists().where("email").equals(email) //on vérifie qu'il n'y a pas de doublon de mail
         if (existe){
+            console.log("Pb d'email")
             res.status(500).json({error: "adresse mail déjà utilisée"}) //au cas où quelqu'un arrive à donner un mail non autorisé
             return ;
         } 
-
-        const hashedPassword=await hashString(Password)
+        const hashedPassword=await hashString(password)
         
         const newUser = new User({
-            name: Name + FirstName,
-            phoneNumber: PhoneNumber,
+            name: name,
+            phoneNumber: phoneNumber,
             email: email,
             password: hashedPassword, // Pense à hasher le mot de passe en prod
         });
@@ -50,6 +52,7 @@ router.post("/registration", csrfProtection, limiter, async (req,res)=>{
 
     }
 })
+
 //renvoie un hash du string en sortie
 async function hashString(string){
     try{
@@ -163,13 +166,15 @@ router.post("/logout",csrfProtection,limiter, (req,res) => {
 })
 
 //Pour admin
-router.post("/seeAll", csrfProtection, limiter, auth, async (req, res)=>{
+// Rajouter auth
+router.get("/seeAll", csrfProtection, limiter, async (req, res)=>{
     try {
-        const users = await User.find().populate("email")
+        console.log("Fetch request received")
+        const users = await User.find().select("-password")
         res.status(200).json({users: users})
         }
     catch (err) {
-        res.status(500)
+        res.status(500).json({erreur: "Erreur serveur"})
         console.log("Erreur:", err)
     }
 })
@@ -177,6 +182,7 @@ router.post("/seeAll", csrfProtection, limiter, auth, async (req, res)=>{
 router.post("/edit", csrfProtection, limiter, auth, async (req, res) => {
     try {
         const { _id, ...updatedFields } = req.body;
+        console.log(req.body);
         const updatedClient = await Users.findByIdAndUpdate(_id, updatedFields);
 
         if (!updatedClient) {
