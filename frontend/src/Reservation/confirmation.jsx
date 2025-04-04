@@ -1,8 +1,18 @@
 import Fond from '../utile/style.jsx';
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useVar } from "../Contexts/VariablesGlobales";
 
 
-function Confirmation(){
+export default function Confirmation(){
+    const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+    const {setRedirectAfterLogin}=useVar()
+    setRedirectAfterLogin("/confirmation")
+    const handleAction = () => {
+        setIsOpen(false); 
+        navigate("/user");
+    };
     const [options, setOptions] = useState({
         gps: false,
         siegeBebe: false,
@@ -12,7 +22,6 @@ function Confirmation(){
     const handleOptionChange = (option) => {
       setOptions((prev) => ({ ...prev, [option]: !prev[option] }));
     };
-    const [isOpen, setIsOpen] = useState(false); // Pour contrôler l'ouverture du pop-up
     const closePopup = () => setIsOpen(false);
 
     return (
@@ -69,4 +78,3 @@ function Confirmation(){
       );
 }
 
-export default Confirmation;
