@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { useCSRF } from "../Contexts/CsrfContext";
 import React, { useEffect } from 'react';
+import Logged from "../Contexts/Authenticated.js";
 
 function Reservation(){
   const {voitureSelectionnee} = useVar();
@@ -13,15 +14,17 @@ function Reservation(){
   const [isOpen, setIsOpen] = useState(false); // Pour contrôler l'ouverture du pop-up
   const closePopup = () => setIsOpen(false);
   const [endDate, setEndDate] = useState(null);
-  const [disponible, setDisponible] = useState(null);
   const [error, setError] = useState(null);
   const [paiement, setPaiement] = useState(null);
   const [dateError, setDateError] = useState("");
   const navigate = useNavigate();
   const {ProtocoleEtDomaine} =useVar();
   const { csrfToken } = useCSRF();
+  const {setRedirectAfterLogin}=useVar()
+  setRedirectAfterLogin("/cars/location")
   if (!voitureSelectionnee) {
     return (
+      <Logged>
       <Fond>
         <div>
             Veuillez sélectionner une voiture au préalable
@@ -33,9 +36,11 @@ function Reservation(){
             </button>
         </div>
       </Fond>
+      </Logged>
     );
   } else {
     return (
+      <Logged>
       <Fond>
         <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl overflow-hidden mt-10 p-6">
           <div className="relative w-full h-80">
@@ -140,6 +145,7 @@ function Reservation(){
           </div>
         </div>
       </Fond>
+      </Logged>
     );
     };
 }

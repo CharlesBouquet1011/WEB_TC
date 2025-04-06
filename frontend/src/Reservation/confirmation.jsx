@@ -1,18 +1,39 @@
 import Fond from '../utile/style.jsx';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useVar } from "../Contexts/VariablesGlobales";
+import Logged from "../Contexts/Authenticated.js";
+import SeeUserBookings from "./bookings.jsx";
+import { useCSRF } from "../Contexts/CsrfContext";
+import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
+
 
 
 export default function Confirmation(){
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
-    const {setRedirectAfterLogin}=useVar()
-    setRedirectAfterLogin("/confirmation")
-    const handleAction = () => {
+    const { ProtocoleEtDomaine } = useVar();
+    const { csrfToken } = useCSRF();
+    const handleAction = async () => {
+        try {
+          const response = await fetch(ProtocoleEtDomaine + "api/bookings/validate-user-bookings", {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-Token': csrfToken
+            },
+            credentials: "include",
+          });
+      
+          if (!response.ok) {
+            console.error("Erreur lors de la validation des réservations.");
+          }
+        } catch (err) {
+          console.error("Erreur réseau :", err);
+        }
+      
         setIsOpen(false); 
         navigate("/user");
-    };
+      };
     const [options, setOptions] = useState({
         gps: false,
         siegeBebe: false,
@@ -22,13 +43,14 @@ export default function Confirmation(){
     const handleOptionChange = (option) => {
       setOptions((prev) => ({ ...prev, [option]: !prev[option] }));
     };
-    const closePopup = () => setIsOpen(false);
 
     return (
+        <Logged>
         <Fond>
           <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
+          <SeeUserBookings/>
             {/* Section Options */}
-            <div className="mb-6">
+            <div className="mt-6 mb-6">
               <label className="block font-semibold text-lg">Options :</label>
               <div className="flex flex-col gap-4 mt-4">
                 {Object.keys(options).map((opt) => (
@@ -64,7 +86,7 @@ export default function Confirmation(){
                   </p>
                   <div className="flex justify-center mt-6">
                     <button
-                      onClick={closePopup}
+                      onClick={handleAction}
                       className="bg-gray-800 text-white px-6 py-2 rounded-lg hover:bg-black transition"
                     >
                       Paiement réussi (temporaire)
@@ -75,6 +97,7 @@ export default function Confirmation(){
             )}
           </div>
         </Fond>
+        </Logged>
       );
 }
 

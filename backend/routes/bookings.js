@@ -29,7 +29,7 @@ router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{
 router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
     try {
         const { dateDebut, dateFin, voitureReservee } = req.body;
-        const { userId } = req.user || {userId: "guest-" + Date.now()};
+        const { userId } = req.user;
         const newBooking = new Booking({
           dateDebut: new Date(dateDebut), // s'assurer que c'est bien un Date
           dateFin: new Date(dateFin),
@@ -37,7 +37,6 @@ router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
           user: userId,
           validated: false,
         });
-        console.log("je suis bien la")
        await newBooking.save();
        console.log("Location ajoutée: ", newBooking )
        res.status(200).json({message: "Location ajoutée"})
@@ -51,7 +50,6 @@ router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
 router.post("/check-disponibilite", csrfProtection, async (req, res) => {
     try {
         const { dateDebut, dateFin, voitureReservee } = req.body;
-        console.log("j'arrive dans le verif");
         const bookings = await Booking.find({
             voitureReservee,
             $or: [
@@ -68,6 +66,26 @@ router.post("/check-disponibilite", csrfProtection, async (req, res) => {
         return res.status(500).json({ erreur: "Erreur serveur" });
     }
 });
+
+router.post("/validate-user-bookings", auth, async (req, res) => {
+    try {
+      const userId = req.user._id;
+  
+      // Trouve les réservations non validées de cet utilisateur
+      const result = await Booking.updateMany(
+        { utilisateur: userId, validated: false },
+        { $set: { validated: true } }
+      );
+  
+      return res.status(200).json({
+        message: "Réservations validées",
+        modifiedCount: result.modifiedCount,
+      });
+    } catch (error) {
+      console.error("Erreur de validation des bookings :", error);
+      return res.status(500).json({ error: "Erreur serveur" });
+    }
+  });
 
 router.get("/infos",csrfProtection,async(req,res)=>{
     try{

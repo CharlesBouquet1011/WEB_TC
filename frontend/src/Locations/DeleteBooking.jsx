@@ -1,9 +1,7 @@
-
-
 import { useNavigate } from "react-router";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
-import "./deleteBooking.css"; 
+import "./DeleteBooking.css"; 
 
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
@@ -25,7 +23,7 @@ export default function DeleteBooking({idBooking}) {
     return (
       <div>
         <button className="Booking-delete-button" onClick={openModal}>
-          Supprimer mon compte
+          Supprimer ma reservation
         </button>
         <Modal
           isOpen={modalIsOpen}
