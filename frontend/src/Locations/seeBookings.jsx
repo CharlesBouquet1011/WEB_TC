@@ -7,7 +7,6 @@ import DeleteBooking from "./DeleteBooking";
 function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer, on a pas encore une 2e page qui nécessite d'être connecté pour être dessus
   //récupérer les jetons csrf etc
   let a
-
   if (bookings && bookings.length>0){
     if (a_moi){
       a="Mes réservations"
@@ -82,6 +81,8 @@ export default function SeeAllBookings(){
               });
             const temp=await response.json()
             setbookings(temp.bookings)
+            setLoadBooking(false)
+
 
         } catch (err){
             console.log("Erreur lors du chargement des locations :",err)
@@ -89,10 +90,9 @@ export default function SeeAllBookings(){
 
         }
     }
-    if (loadBookings){
+    
       fetchBookings();
-      setLoadBooking(false)
-    }
+    
     },
     [loadBookings,setLoadBooking] 
 )
@@ -105,7 +105,7 @@ export default function SeeAllBookings(){
 
 export function SeeUserBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-
+  console.log("affiche User Booking")
   const [bookings, setbookings] = useState([]);
   const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
   useEffect(() => {
@@ -127,6 +127,7 @@ export function SeeUserBookings(){
               });
             const temp=await response.json()
             setbookings(temp.bookings)
+            setLoadBooking(false)
 
         } catch (err){
             console.log("Erreur lors du chargement des locations :",err)
@@ -134,10 +135,8 @@ export function SeeUserBookings(){
 
         }
     }
-    if (loadBookings){
       fetchBookings();
-      setLoadBooking(false)
-    }
+    
     },
     [loadBookings,setLoadBooking] 
 )
