@@ -72,14 +72,18 @@ router.post("/validate-user-bookings", auth, async (req, res) => {
       const userId = req.user._id;
   
       // Trouve les réservations non validées de cet utilisateur
-      const result = await Booking.updateMany(
-        { utilisateur: userId, validated: false },
-        { $set: { validated: true } }
-      );
+      const bookings = await Booking.find({ utilisateur: userId, validated: false });
+      var modifiedCount=0
+      for (const booking of bookings){
+        modifiedCount=modifiedCount+1
+        booking.validated=true
+        await booking.save()
+      }
+      
   
       return res.status(200).json({
         message: "Réservations validées",
-        modifiedCount: result.modifiedCount,
+        modifiedCount: modifiedCount,
       });
     } catch (error) {
       console.error("Erreur de validation des bookings :", error);
