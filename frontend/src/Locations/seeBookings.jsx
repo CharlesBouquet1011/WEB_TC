@@ -33,7 +33,7 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
           <tbody>
             {bookings.map((booking) => (
               <Booking
-                key={booking.id} // Assurez-vous que chaque réservation a un ID unique
+                key={booking._id} // Assurez-vous que chaque réservation a un ID unique
                 dateDebut={booking.dateDebut}
                 dateFin={booking.dateFin}
                 voitureReservee={booking.voitureReservee}
@@ -60,7 +60,7 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
   
 export default function SeeAllBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-  const {ProtocoleEtDomaine}=useVar()
+  const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
   const [bookings, setbookings] = useState([]);
 
   useEffect(() => {
@@ -89,8 +89,12 @@ export default function SeeAllBookings(){
 
         }
     }
-    fetchBookings();},
-    [] 
+    if (loadBookings){
+      fetchBookings();
+      setLoadBooking(false)
+    }
+    },
+    [loadBookings,setLoadBooking] 
 )
   return (
     <SeeBookings bookings={bookings} a_moi={false} />
@@ -103,7 +107,7 @@ export function SeeUserBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
 
   const [bookings, setbookings] = useState([]);
-  const {ProtocoleEtDomaine}=useVar()
+  const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
@@ -130,14 +134,19 @@ export function SeeUserBookings(){
 
         }
     }
-    fetchBookings();},
-    [] 
+    if (loadBookings){
+      fetchBookings();
+      setLoadBooking(false)
+    }
+    },
+    [loadBookings,setLoadBooking] 
 )
   return (<SeeBookings bookings={bookings} a_moi={true}/>)
 }
 
 //présentejuste les bookings 
 function Booking({ dateDebut, dateFin, voitureReservee,idBooking }) {
+  console.log("id Booking (Booking):", idBooking)
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const jour = String(date.getDate()).padStart(2, '0');

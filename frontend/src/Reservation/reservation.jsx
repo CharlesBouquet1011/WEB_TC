@@ -18,7 +18,7 @@ function Reservation(){
   const [paiement, setPaiement] = useState(null);
   const [dateError, setDateError] = useState("");
   const navigate = useNavigate();
-  const {ProtocoleEtDomaine} =useVar();
+  const {ProtocoleEtDomaine,setLoadBooking} =useVar();
   const { csrfToken } = useCSRF();
   const {setRedirectAfterLogin}=useVar()
   setRedirectAfterLogin("/cars/location")
@@ -104,7 +104,7 @@ function Reservation(){
                     return;
                 }
                   setDateError("");
-                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate);
+                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate,setLoadBooking);
               }} 
               className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg text-lg hover:bg-black transition"
             >
@@ -183,7 +183,9 @@ function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,navigate,dom
 }
 
 
-function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate) {
+function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate,
+  setLoadBooking
+) {
   const checkDisponibiliteAPI = async () => {
         try {
             const response = await fetch(ProtocoleEtDomaine + "api/bookings/check-disponibilite", {
@@ -205,6 +207,7 @@ function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,Prot
                 if (data.disponible) {
                     AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, navigate, ProtocoleEtDomaine, setError);
                     setPaiement("en cours");
+                    setLoadBooking=true
                 } else {
                     setIsOpen(true); // Ouvre le pop-up si non disponible
                 }

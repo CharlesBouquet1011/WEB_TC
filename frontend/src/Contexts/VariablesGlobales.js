@@ -8,10 +8,11 @@ export function VarProvider({children}){
     const [erreurLogin,setErreurLogin]=useState("")
     const [redirectAfterLogin,setRedirectAfterLogin]=useState("/user")
     const [idBooking,setIdBooking]=useState(null)
+    const [loadBookings,setLoadBooking]=useState(true)
         
         return(
             <VarContext.Provider value={{ProtocoleEtDomaine,voitureSelectionnee,setVoitureSelectionnee,erreurLogin,setErreurLogin,redirectAfterLogin,setRedirectAfterLogin,
-                idBooking,setIdBooking
+                idBooking,setIdBooking,loadBookings,setLoadBooking
             }}>
                 {children}
             </VarContext.Provider>

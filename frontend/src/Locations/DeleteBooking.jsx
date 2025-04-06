@@ -12,12 +12,14 @@ export default function DeleteBooking({idBooking}) {
     const { csrfToken } = useCSRF();
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const {ProtocoleEtDomaine} =useVar()
+    const {ProtocoleEtDomaine,setLoadBooking} =useVar()
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
   
     const confirmDeletion = () => {
       BookingDeletion(csrfToken, navigate,idBooking,ProtocoleEtDomaine);
+      setLoadBooking(true)
+      console.log(setLoadBooking)
       closeModal();
     };
   
@@ -65,7 +67,8 @@ function BookingDeletion(csrfToken,navigate,idBooking,domaine){
                     
                   });
                 if (response.ok){
-                    navigate("/")
+                    console.log("réservation supprimée")
+
                     
                     return null;
                 }

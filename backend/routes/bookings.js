@@ -204,12 +204,11 @@ router.delete("/delete",csrfProtection,auth,limiter, async (req,res)=>{
         const {userId}=req.body
         const user=User.findById(userId)
         const {idBooking}=req.body
-        
         if (!user.admin){//si ce n'est pas un utilisateur admin
             if (typeof idBooking !=="string"){
                 res.status(400).json({erreur: "Id Invalide"})
             }else{
-                const booking=Booking.findById({_id:{$eq:idBooking}})
+                const booking=Booking.findById(idBooking)
                 //calculer le prix et rembourser en plus, on n'a pas besoin de s'en occuper ici n'ayant pas de plateforme de paiement
 
 
@@ -217,7 +216,7 @@ router.delete("/delete",csrfProtection,auth,limiter, async (req,res)=>{
                     res.status(403).json({erreur:"Vous n'êtes pas le propriétaire de la réservation"})
                 }
                 else{
-                    const deletedBooking=await Booking.findByIdAndDelete({ _id: { $eq: idBooking } }) //suppression de l'utilisateur
+                    const deletedBooking=await Booking.findByIdAndDelete( idBooking  ) //suppression de l'utilisateur
                     res.status(200).json({message:"Réservation supprimée"})
                 }
             }
@@ -227,7 +226,7 @@ router.delete("/delete",csrfProtection,auth,limiter, async (req,res)=>{
                 res.status(400).json({erreur: "Id Invalide"})
             }
              //calculer le prix et rembourser aussi   
-                const deletedBooking=await Booking.findByIdAndDelete({ _id: { $eq: idBooking } }) //suppression de l'utilisateur
+                const deletedBooking=await Booking.findByIdAndDelete(idBooking ) //suppression de l'utilisateur
                 console.log("Réservation supprimée")
                 res.status(200).json({message: "Réservation supprimée"})
             
