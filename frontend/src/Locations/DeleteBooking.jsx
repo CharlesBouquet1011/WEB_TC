@@ -8,6 +8,7 @@ import { useVar } from "../Contexts/VariablesGlobales";
 Modal.setAppElement("#root"); // Obligatoire pour l'accessibilité
 
 export default function DeleteBooking({idBooking}) {
+  console.log("idBooking :",idBooking)
     const { csrfToken } = useCSRF();
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function DeleteBooking({idBooking}) {
     return (
       <div>
         <button className="Booking-delete-button" onClick={openModal}>
-          Supprimer ma reservation
+          Supprimer ma réservation
         </button>
         <Modal
           isOpen={modalIsOpen}
@@ -80,3 +81,5 @@ function BookingDeletion(csrfToken,navigate,idBooking,domaine){
         }
         deletion();
     }
+
+

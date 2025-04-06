@@ -1,14 +1,19 @@
 import { useNavigate } from "react-router";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
-import "./deleteBooking.css"; 
+import "./DeleteBooking.css"; 
 
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
-import { handleChange,AnimationCarteCar } from "../security/registration";
-export default function ModifyBooking({idBooking}){
+import { handleChange,AnimationCarteCar } from "../Cars/Cars.jsx";
+export default function ModifyBooking(){
+    const {idBooking,ProtocoleEtDomaine}=useVar()
+    const {csrfToken}=useCSRF()
+    const navigate=useNavigate()
     const [Booking,setBooking]= useState({idBooking:idBooking,nvDateDebut:"",nvDateFin:"",idnvVoitureReservee:""})  
     const [voitures,setVoitures]=useState()
+
+    
     const changeVoiture = (car)=> {
         setBooking(etatPrec=>({
             ...etatPrec,
@@ -51,35 +56,39 @@ export default function ModifyBooking({idBooking}){
         }
         requete();
     }, []);
-
-    return(
-        <>
-        <form>
-            {// il faut avoir le calendrier pour avoir les dates et le display des voitures également
-                        }
-
-            {voitures.map((car, index) => (
-                            <div onClick={()=>changeVoiture(car)}>
-                              <AnimationCarteCar //nouvel objet qui anime la carte voiture (ça commençait à devenir trop compliqué)
-                                key={index}
-                                car={car}
-                                index={index}
-                                isInitiallyVisible={false}
-                                
-                              />
-                              </div>
-                            ))} 
-                                      
-            <button onClick={()=>modifyBooking(Booking)}> Modifier la réservation</button>
-        </form>
-
-        
-        </>
-    )
+    if (voitures){
+        return(
+            <>
+            <form>
+                {// il faut avoir le calendrier pour avoir les dates et le display des voitures également
+                            }
+    
+                {voitures.map((car, index) => (
+                                <div onClick={()=>changeVoiture(car)}>
+                                  <AnimationCarteCar //nouvel objet qui anime la carte voiture (ça commençait à devenir trop compliqué)
+                                    key={index}
+                                    car={car}
+                                    index={index}
+                                    isInitiallyVisible={false}
+                                    
+                                  />
+                                  </div>
+                                ))} 
+                                          
+                <button onClick={()=>modifyBooking(Booking,ProtocoleEtDomaine,csrfToken,navigate)}> Modifier la réservation</button>
+            </form>
+    
+            
+            </>
+        )
+    }
+    else{
+        return null
+    }
 }
 
 
-function modifyBooking(Booking){
+function modifyBooking(Booking,domaine,csrfToken,navigate){
 
     const modify= async () =>{
         try {
@@ -109,4 +118,13 @@ function modifyBooking(Booking){
         }
     }
     modify();
+}
+
+export function ModifyBookingButton({idBooking}){
+    const {setIdBooking}=useVar()
+    const navigate=useNavigate()
+    setIdBooking(idBooking)
+    return(
+    <button onClick={()=>navigate("/bookings/modify")}>modifier la réservation</button>
+    )
 }

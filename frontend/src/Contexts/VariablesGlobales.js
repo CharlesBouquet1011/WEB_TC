@@ -7,9 +7,12 @@ export function VarProvider({children}){
     const [voitureSelectionnee,setVoitureSelectionnee]=useState(null) //pour afficher et choisir la voiture à louer
     const [erreurLogin,setErreurLogin]=useState("")
     const [redirectAfterLogin,setRedirectAfterLogin]=useState("/user")
+    const [idBooking,setIdBooking]=useState(null)
         
         return(
-            <VarContext.Provider value={{ProtocoleEtDomaine,voitureSelectionnee,setVoitureSelectionnee,erreurLogin,setErreurLogin,redirectAfterLogin,setRedirectAfterLogin}}>
+            <VarContext.Provider value={{ProtocoleEtDomaine,voitureSelectionnee,setVoitureSelectionnee,erreurLogin,setErreurLogin,redirectAfterLogin,setRedirectAfterLogin,
+                idBooking,setIdBooking
+            }}>
                 {children}
             </VarContext.Provider>
         )

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
+import { ModifyBookingButton } from "./modifyBooking";
+import DeleteBooking from "./DeleteBooking";
 
 function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer, on a pas encore une 2e page qui nécessite d'être connecté pour être dessus
   //récupérer les jetons csrf etc
@@ -15,7 +17,6 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
       a="Réservations"
     }
     
-    
     return (
       <div className="Booking-list p-4 bg-gray-100 rounded-xl shadow-md">
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">{a}</h2>
@@ -25,6 +26,8 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
               <th className="px-4 py-2 border border-gray-200">Date de début</th>
               <th className="px-4 py-2 border border-gray-200">Date de fin</th>
               <th className="px-4 py-2 border border-gray-200">Voiture réservée</th>
+              <th className="px-4 py-2 border border-gray-200">Modifier la réservation</th>
+              <th className="px-4 py-2 border border-gray-200">Supprimer la réservation</th>
             </tr>
           </thead>
           <tbody>
@@ -34,6 +37,7 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
                 dateDebut={booking.dateDebut}
                 dateFin={booking.dateFin}
                 voitureReservee={booking.voitureReservee}
+                idBooking={booking._id}
               />
             ))}
           </tbody>
@@ -133,7 +137,7 @@ export function SeeUserBookings(){
 }
 
 //présentejuste les bookings 
-function Booking({ dateDebut, dateFin, voitureReservee }) {
+function Booking({ dateDebut, dateFin, voitureReservee,idBooking }) {
   const formatDate = (dateStr) => {
     const date = new Date(dateStr);
     const jour = String(date.getDate()).padStart(2, '0');
@@ -152,6 +156,13 @@ function Booking({ dateDebut, dateFin, voitureReservee }) {
       <td className="px-4 py-2 border border-gray-200">
         {voitureReservee.marque + " " + voitureReservee.modele}
       </td>
+      <td>
+      <ModifyBookingButton idBooking={idBooking} />
+      </td>
+      <td>
+      <DeleteBooking idBooking={idBooking} />
+      </td>
+
     </tr>
   );
 }
