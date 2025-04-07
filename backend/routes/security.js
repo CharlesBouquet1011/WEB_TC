@@ -169,7 +169,6 @@ router.post("/logout",csrfProtection,limiter, (req,res) => {
 // Rajouter auth
 router.get("/seeAll", csrfProtection, limiter, async (req, res)=>{
     try {
-        console.log("Fetch request received")
         const users = await User.find().select("-password")
         res.status(200).json({users: users})
         }
@@ -181,6 +180,7 @@ router.get("/seeAll", csrfProtection, limiter, async (req, res)=>{
 
 router.post("/edit", csrfProtection, limiter, auth, async (req, res) => {
     try {
+        console.log("Edit request received")
         const { _id, ...updatedFields } = req.body;
         console.log(req.body);
         const updatedClient = await Users.findByIdAndUpdate(_id, updatedFields);
@@ -226,6 +226,31 @@ router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
         res.status(500).json({erreur: "Erreur serveur"})
     }
 
+})
+
+//for admin
+router.delete("/deleteAcc/:id", csrfProtection, limiter, async (req, res) => {
+    //il faut supprimer toutes leurs réservations également
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try{
+    console.log("Essai de supprimer le compte")
+    const { id }=req.params
+    console.log("ID: ",id)
+    await Booking.deleteMany({user:id}) //suppression des réservations
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+        return res.status(404).json({message: "Client non trouvé"});
+    }
+    console.log("Client supprimé: ", deletedUser);
+    res.status(200).json({ message:"Client supprimé avec succès"});
+
+    } catch (err) {
+        console.error("Erreur: ", err);
+        res.status(500).json({erreur: "Erreur serveur"});
+    }
 })
 
 

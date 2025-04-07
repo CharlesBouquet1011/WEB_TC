@@ -3,11 +3,11 @@ import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
 import DeleteBooking from "./DeleteBooking";
 
-function SeeBookings({ bookings, a_moi }) {
+function SeeBookings({ bookings, a_moi,confirmation="" }) {
   if (!bookings || bookings.length === 0) {
     return (
       <div className="text-gray-500 text-lg">
-        {a_moi ? "Vous n'avez aucune réservation" : "Il n'y a aucune réservation"}
+        {a_moi ? "Vous n'avez aucune réservation" + confirmation : "Il n'y a aucune réservation"}
       </div>
     );
   }
@@ -172,7 +172,7 @@ export function SeeUnconfirmed(){
       },
       [loadBookings,setLoadBooking] 
   )
-    return (<SeeBookings bookings={bookings} a_moi={true}/>)
+    return (<SeeBookings bookings={bookings} a_moi={true} confirmation=" à confirmer"/>)
   }
 
 //présentejuste les bookings 

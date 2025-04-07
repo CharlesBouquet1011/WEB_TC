@@ -5,7 +5,7 @@ export function ClientRow({ id, name, number, email, password, admin, setEditCli
             <td>{number}</td>
             <td>{email}</td>
             <td>
-                <button className="btn btn-secondary btn-sm mx-1" onClick={() => {setEditClient({name, number, email, password, admin})}}>Modifier</button>
+                <button className="btn btn-secondary btn-sm mx-1" onClick={() => setEditClient(id)}>Modifier</button>
                 <button className="btn btn-danger btn-sm mx-1" onClick={() => handleDelete(id)}>Supprimer</button>
             </td>
         </tr>

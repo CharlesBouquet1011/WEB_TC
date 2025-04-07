@@ -38,7 +38,9 @@ export function EditClient({ client, setEditClient, setRefresh }) {
         setEditClient(false);
       }
     }
-  
+
+    console.log("YAHAHAHA")
+
     return (
       <div>
         <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>

@@ -6,6 +6,7 @@ const limiter = require("../config/rateLimiter.js");
 require('dotenv').config();
 
 const Cars=require("../models/CarModel.js")
+const Bookings=require("../models/BookingModel.js")
 
 router.get("/", csrfProtection, limiter, async (req,res)=>{
     try {
@@ -41,6 +42,10 @@ router.delete("/delete/:id", csrfProtection, limiter, async (req, res) => {
         if (!deletedCar) {
             return res.status(404).json({message: "Véhicule non trouvé"});
         }
+
+        const deletedBookings = await Bookings.deleteMany({ voitureReservee: id });
+        console.log(`Bookings supprimés: ${deletedBookings.deletedCount}`);
+
         console.log("Véhicule supprimé: ", deletedCar);
         res.status(200).json({ message:"Véhicule supprimé avec succès"});
 
@@ -65,5 +70,35 @@ router.post("/edit", csrfProtection, limiter, async (req, res) => {
         res.status(500).json({ message: "Erreur serveur", error });
     }
 });
+
+router.post("/filter",csrfProtection,limiter,async(req,res)=>{
+    try{
+        const {marque,nb_places,prixMax}=req.body
+        
+        filtre={}
+        if (marque && typeof(marque)==String){
+            filtre.marque=marque
+        }
+        
+        
+        if (nb_places && !isNaN(nb_places)){
+            filtre.nb_places=nb_places
+        }
+        if (prixMax && !isNaN(prixMax)) {
+            filtre.prix = { ...filtre.prix, $lte: prixMax }; 
+          }
+          
+          
+
+       
+        
+        console.log(filtre)
+        const resultat=await Cars.find(filtre)
+        res.status(200).json({voitures:resultat})
+    }catch (err){
+        console.log("Erreur lors du filtre et de l'affichage des voitures: ",err)
+        res.status(500).json({erreur:"Erreur serveur"})
+    }
+})
 
 module.exports=router

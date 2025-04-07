@@ -37,12 +37,13 @@ export function Location({}) {
         const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette location ?");
         if (confirmDelete) {
             try {
-                const response = await fetch(`${ProtocoleEtDomaine}api/bookings/delete/${id}`, {
+            const response = await fetch(`${ProtocoleEtDomaine}api/bookings/deleteAdmin/${id}`, {
                     method: "DELETE",
                     headers:{
                         'X-CSRF-Token': csrfToken,
                     }
                 });
+                console.log("Deletion attempt")
                 if (!response.ok) {
                     throw new Error("Erreur lors de la suppression de la location.");
                 }
@@ -70,7 +71,7 @@ export function Location({}) {
         return (
             <div className="container mt-4">
                 <button type="button" className="btn btn-secondary btn-lg mb-3" onClick={() => setAddLocationMode(true)}>Ajouter une location +</button>
-                    {locations && locations.length > 0 ? (
+                    {locations && locations.bookings && locations.bookings.length > 0 ? (
                         <table className="table table-striped">
                             <thead>
                                 <tr>
@@ -82,11 +83,12 @@ export function Location({}) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {locations.map((location, index) => (
+                                {locations.bookings.map((location, index) => (
                                     <LocationRow 
                                         key={location._id} 
+                                        id = {location._id}
                                         voiture={location.voitureReservee} 
-                                        userId={location.user} 
+                                        user={location.user} 
                                         startTime={location.dateDebut} 
                                         endTime={location.dateFin}
                                         setEditLoc={setEditLoc}

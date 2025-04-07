@@ -8,28 +8,28 @@ const clientList = [
     {
         "name": "Mathis",
         "phoneNumber": 1,
-        "email": "blabla@insa-lyon.fr",
+        "email": "blabl@insa-lyon.fr",
         "password": "JeSuisMathis",
         "admin": true,
     },
     {
         "name": "Charles",
         "phoneNumber": 2,
-        "email": "blibli@insa-lyon.fr",
+        "email": "blibl@insa-lyon.fr",
         "password": "JeSuisCharles",
         "admin": false,
     },
     {
         "name": "Anais",
         "phoneNumber": 3,
-        "email": "bloblo@insa-lyon.fr",
+        "email": "blobl@insa-lyon.fr",
         "password": "JeSuisAnais",
         "admin": false,
     },
     {
         "name": "Paul-Henri",
         "phoneNumber": 4,
-        "email": "blublu@insa-lyon.fr",
+        "email": "blubl@insa-lyon.fr",
         "password": "JeSuisPH",
         "admin": true,
     }
@@ -46,16 +46,13 @@ export function Client({}) {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        console.log("Fetching clients...")
         const response = await fetch(ProtocoleEtDomaine+"api/security/seeAll");
-        console.log(response);
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des clients");
         }
         const data = await response.json();
         setClients(data);
         setRefresh(false);
-        console.log("Fetching alright")
       } catch (error) {
         console.error("Erreur:", error);
       }
@@ -67,7 +64,7 @@ export function Client({}) {
     const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce client ?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`${ProtocoleEtDomaine}api/security/deleteAccount/${id}`, {
+        const response = await fetch(`${ProtocoleEtDomaine}api/security/deleteAcc/${id}`, {
           method: 'DELETE',
           headers:{
             'X-CSRF-Token': csrfToken,
@@ -78,7 +75,7 @@ export function Client({}) {
         }
         setRefresh(true);
       } catch (error) {
-        console.error("Erreur:", error);
+          console.error("Erreur:", error);
       }
     }
   }
@@ -104,34 +101,34 @@ export function Client({}) {
     } catch (error) {
       console.error("Erreur:", error);
     }
-    console.log("are there any clients?", clients.users);
   }
   
-  if (setEditClientMode === true) {
+  if (editClient === true) {
+    console.log("YOUHOU")
     return (
         <div>
-            <EditClient client={clients.email?.find(client => client._id === editClient)} setEditClient={setEditClientMode} setRefresh={setRefresh}/>
+            <EditClient client={clients.users?.find(client => client._id === editClient)} setEditClient={setEditClientMode} setRefresh={setRefresh}/>
         </div>
     )
   } else {
     return (
         <div className="container mt-4">
             <button type="button" className="btn btn-secondary btn-lg mb-3" onClick={() => handleAddClient()}>Ajouter un client +</button>
-                {clients && clients.length > 0 ? (
+                {clients && clients.users && clients.users.length > 0 ? (
                     <table className="table table-striped">
                         <thead>
                             <tr>
                                 <th>Nom</th>
                                 <th>Numero</th>
                                 <th>Email</th>
-                                <th>Fin</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {clients.users?.map((client, index) => (
+                            {clients.users.map((client, index) => (
                                 <ClientRow 
                                     key={client._id} 
+                                    id={client._id}
                                     name={client.name} 
                                     number={client.phoneNumber} 
                                     email={client.email} 
