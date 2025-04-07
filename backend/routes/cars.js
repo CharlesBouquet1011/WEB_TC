@@ -66,4 +66,34 @@ router.post("/edit", csrfProtection, limiter, async (req, res) => {
     }
 });
 
+router.post("/filter",csrfProtection,limiter,async(req,res)=>{
+    try{
+        const {marque,nb_places,prixMax}=req.body
+        
+        filtre={}
+        if (marque && typeof(marque)==String){
+            filtre.marque=marque
+        }
+        
+        
+        if (nb_places && !isNaN(nb_places)){
+            filtre.nb_places=nb_places
+        }
+        if (prixMax && !isNaN(prixMax)) {
+            filtre.prix = { ...filtre.prix, $lte: prixMax }; 
+          }
+          
+          
+
+       
+        
+        console.log(filtre)
+        const resultat=await Cars.find(filtre)
+        res.status(200).json({voitures:resultat})
+    }catch (err){
+        console.log("Erreur lors du filtre et de l'affichage des voitures: ",err)
+        res.status(500).json({erreur:"Erreur serveur"})
+    }
+})
+
 module.exports=router
