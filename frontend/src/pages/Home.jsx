@@ -1,4 +1,3 @@
-import Switch from '../utile/bouton_login.jsx';
 import {Fond,Menu} from '../utile/style_home.jsx';
 import { useVar } from '../Contexts/VariablesGlobales.js';
 import { useNavigate } from "react-router-dom";
@@ -18,7 +17,16 @@ export default function Home(){
          <source src={ProtocoleEtDomaine+"media/image/video.mp4"} type="video/mp4" />
             Votre navigateur ne supporte pas les vidéos HTML5.
         </video>
-        <Switch classe={"profil"} page={"/login"} texte={"connexion"} />
+        <button 
+        className="absolute top-4 right-5 z-10 shadow-md hover:scale-105 transition-transform"
+        onClick={() => navigate("/login")}
+        >
+        <img
+            src={ProtocoleEtDomaine + "media/image/profil.png"}
+            alt="Profil"
+            className="w-10 h-10"
+        />
+    </button>
         <div className="overlay">
             <h1>Driving Enhanced</h1>
         </div>

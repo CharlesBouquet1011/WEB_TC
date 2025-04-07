@@ -51,7 +51,7 @@ export function Menu() {
               <img
                 src={`${ProtocoleEtDomaine}media/image/menu.png`}
                 alt="menu"
-                className="w-10 h-10"
+                className="fixed top-3 left-6 z-10 w-10 h-10 hover:scale-105 transition-transform"
               />
             </button>
           </div>

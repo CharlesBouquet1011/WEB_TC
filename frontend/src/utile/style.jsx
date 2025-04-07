@@ -42,14 +42,14 @@ export function Menu() {
               <img
                 src={`${ProtocoleEtDomaine}media/image/menu2.png`}
                 alt="menu"
-                className="w-10 h-10"
+                className="absolute top-3 left-6 w-10 h-10 hover:scale-105 transition-transform"
               />
             </button>
   
             {/* Titre du site */}
             <button
                 onClick={() => navigate("/")}
-                className="text-2xl font-bold text-black hover:text-gray-700 transition cursor-pointer"
+                className="text-2xl font-bold text-black hover:text-gray-700 transition-transform"
                 style={{ all: "unset", fontWeight: "700", fontSize: "1.5rem", lineHeight: "1.75rem", cursor: "pointer" }}
             >
                 Driving Enhanced
