@@ -105,6 +105,17 @@ router.get("/infos",csrfProtection,async(req,res)=>{
 })
 
 
+router.get("/seeConfirmed",csrfProtection,auth,async(req,res)=>{
+    try{
+        const {userId}=req.user
+        const bookings= await Booking.find({user:userId,validated:true}).populate("voitureReservee")
+        res.status(200).json({bookings:bookings})
+    }catch(err){
+        console.log("Erreur lors du retrait des bookings: ",err)
+        res.status(500).json({erreur: "Erreur serveur"})
+    }
+})
+
 router.get("/see",csrfProtection,auth,limiter, async (req,res)=>{
     try {
         const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt

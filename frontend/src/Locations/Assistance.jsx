@@ -9,7 +9,7 @@ export default function Assistance(){
     const {csrfToken}=useCSRF()
     const[phoneNumber,setPhoneNumber]=useState("")
     const {ProtocoleEtDomaine}=useVar()
-    retrieveData(csrfToken,setMail,setPhoneNumber,ProtocoleEtDomaine)
+    retrieveAssistanceData(csrfToken,setMail,setPhoneNumber,ProtocoleEtDomaine)
 
     return(<Affichage mail={mail} phoneNumber={phoneNumber} />
         
@@ -38,9 +38,9 @@ function Affichage({mail,phoneNumber}){
         )
 }
 
-function retrieveData(csrfToken,setMail,setPhoneNumber,domaine){
+export function retrieveAssistanceData(csrfToken,setMail,setPhoneNumber,domaine){
     try {
-        console.log("RetrieveData: ", domaine)
+        console.log("retrieveAssistanceData: ", domaine)
     const req = async()=>{
         var request=await fetch(domaine + "api/bookings/infos", {
             method:"GET",
