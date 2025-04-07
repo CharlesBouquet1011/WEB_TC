@@ -15,14 +15,15 @@ const auth=require("../config/authenticator.js")
 //récupérer tous les bookings 
 router.get("/seeAll",csrfProtection, limiter, async (req,res)=>{ 
     try {
-        const bookings= await Booking.find().populate("voitureReservee")
+        const bookings= await Booking.find()
+            .populate("voitureReservee")
+            .populate("user")
         res.status(200).json({bookings: bookings})
         }
     catch (err){
         res.status(500)
         console.log("Erreur: ",err)
     }
-
 })
 
 //un utilisateur ajoute une résa
@@ -39,6 +40,26 @@ router.post("/add", csrfProtection,limiter, auth, async (req,res)=>{
         });
        await newBooking.save();
        console.log("Location ajoutée: ", newBooking )
+       res.status(200).json({message: "Location ajoutée"})
+
+    } catch (err) {
+        res.status(500).json({erreur: "Erreur serveur"})
+        console.log("Erreur: ",err)
+    }
+})
+
+//un admin ajoute une résa
+router.post("/addAdmin", csrfProtection,limiter, async (req,res)=>{
+    try {
+        const { voitureReservee, user, dateDebut, dateFin } = req.body;
+        const newBooking = new Booking({
+          dateDebut: new Date(dateDebut),
+          dateFin: new Date(dateFin),
+          user: user,
+          voitureReservee: voitureReservee,
+          validated: true,
+        });
+       await newBooking.save();
        res.status(200).json({message: "Location ajoutée"})
 
     } catch (err) {
@@ -171,6 +192,27 @@ router.delete("/delete",csrfProtection,auth,limiter, async (req,res)=>{
             console.log("Erreur: ", err)
         }
     
+})
+
+router.delete("/deleteAdmin/:id",csrfProtection,limiter, async (req,res) => {
+    try {
+        console.log("Tentative de suppression de la réservation");
+        const { id }=req.params;
+        console.log("Booking id:", id);
+
+        //calculer le prix et rembourser en plus, on n'a pas besoin de s'en occuper ici n'ayant pas de plateforme de paiement
+
+        const deletedBooking=await Booking.findByIdAndDelete(id);
+        if (!deletedBooking) {
+            return res.status(404).json({message: "Location non trouvée"});
+        }
+        console.log("Réservation supprimée:", deletedBooking);
+        res.status(200).json({message:"Réservation supprimée avec succès"});
+            
+    } catch (err){
+            res.status(500).json({erreur: "Erreur serveur"});
+            console.log("Erreur: ", err);
+        }  
 })
 
 module.exports=router

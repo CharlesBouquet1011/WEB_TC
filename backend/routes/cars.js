@@ -6,6 +6,7 @@ const limiter = require("../config/rateLimiter.js");
 require('dotenv').config();
 
 const Cars=require("../models/CarModel.js")
+const Bookings=require("../models/BookingModel.js")
 
 router.get("/", csrfProtection, limiter, async (req,res)=>{
     try {
@@ -41,6 +42,10 @@ router.delete("/delete/:id", csrfProtection, limiter, async (req, res) => {
         if (!deletedCar) {
             return res.status(404).json({message: "Véhicule non trouvé"});
         }
+
+        const deletedBookings = await Bookings.deleteMany({ voitureReservee: id });
+        console.log(`Bookings supprimés: ${deletedBookings.deletedCount}`);
+
         console.log("Véhicule supprimé: ", deletedCar);
         res.status(200).json({ message:"Véhicule supprimé avec succès"});
 

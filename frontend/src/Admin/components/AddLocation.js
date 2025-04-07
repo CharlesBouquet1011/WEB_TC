@@ -2,11 +2,13 @@ import { useState } from "react";
 import { useFetchCars } from './useFetchCars';
 import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
+import { useFetchUsers } from "./useFetchUsers.js";
 
 export function AddLocation({ setAddLocation, setRefresh }) {
   const{ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
-  const { cars, loading, error: carsError } = useFetchCars();
+  const { cars, loadingCars, error: carsError } = useFetchCars();
+  const { users, loadingUsers, error: usersError} = useFetchUsers();
 
   const [locationAdded, setLocationAdded] = useState({
     voitureReservee: "",
@@ -40,7 +42,7 @@ export function AddLocation({ setAddLocation, setRefresh }) {
 
     try {
       console.log("Sending data:", locationAdded)
-      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/add`, {
+      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/addAdmin`, {
         method: 'POST',
         headers:{
           "Content-Type": "application/json",
@@ -86,7 +88,7 @@ export function AddLocation({ setAddLocation, setRefresh }) {
       </nav>
 
       <div className="container mt-4">
-        {loading ? (
+        {loadingCars ? (
           <p>Chargement des véhicules...</p>
         ) : (
           <>
@@ -116,8 +118,29 @@ export function AddLocation({ setAddLocation, setRefresh }) {
               </select>
             </div>
             <div className="mb-3">
-              <label className="form-label">Nom de l'utilisateur</label>
-              <input type="text" className="form-control" name="user" value={locationAdded?.user || ""} placeholder="Entrez le nom d'utilisateur" onChange={handleInputChange} />
+              <label className="form-label">Utilisateur</label>
+              <select 
+                className="form-select" 
+                name="user"
+                value={locationAdded.user || ""}
+                onChange={(e) => {
+                  setLocationAdded((prev) => ({
+                    ...prev,
+                    user: e.target.value
+                  }));
+                }}
+              >
+                <option value="">Sélectionnez un utilisateur</option>
+                {users && users.length > 0 ? (
+                  users.map((user, index) => (
+                    <option key={user._id} value={user._id}>
+                      {user.name || ''} ({user.email || ''})
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>Aucun utilsateur disponible</option>
+                )}
+              </select>
             </div>
             <div className="mb-3">
               <label className="form-label">Date de début</label>
