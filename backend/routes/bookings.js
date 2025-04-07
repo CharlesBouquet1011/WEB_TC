@@ -73,11 +73,9 @@ router.post("/check-disponibilite", csrfProtection, async (req, res) => {
         const { dateDebut, dateFin, voitureReservee } = req.body;
         const bookings = await Booking.find({
             voitureReservee,
-            $or: [
-                { dateDebut: { $lt: new Date(dateFin) } },
-                { dateFin: { $gt: new Date(dateDebut) } }
-            ]
-        });
+                dateDebut: { $lt: new Date(dateFin) },
+                dateFin: { $gt: new Date(dateDebut) }
+            });
         if (bookings.length > 0) {
             return res.status(200).json({ disponible: false });
         }
@@ -91,6 +89,7 @@ router.post("/check-disponibilite", csrfProtection, async (req, res) => {
 router.post("/validate-user-bookings", auth, async (req, res) => {
     try {
       const userId = req.user._id;
+      const { options } = req.body; // Récupérer les options depuis la requête
   
       // Trouve les réservations non validées de cet utilisateur
       const bookings = await Booking.find({ utilisateur: userId, validated: false });
@@ -98,6 +97,9 @@ router.post("/validate-user-bookings", auth, async (req, res) => {
       for (const booking of bookings){
         modifiedCount=modifiedCount+1
         booking.validated=true
+        if (options && options.length > 0) {
+            booking.options = options;
+          }
         await booking.save()
       }
       
@@ -126,6 +128,17 @@ router.get("/infos",csrfProtection,async(req,res)=>{
 })
 
 
+router.get("/seeConfirmed",csrfProtection,auth,async(req,res)=>{
+    try{
+        const {userId}=req.user
+        const bookings= await Booking.find({user:userId,validated:true}).populate("voitureReservee")
+        res.status(200).json({bookings:bookings})
+    }catch(err){
+        console.log("Erreur lors du retrait des bookings: ",err)
+        res.status(500).json({erreur: "Erreur serveur"})
+    }
+})
+
 router.get("/see",csrfProtection,auth,limiter, async (req,res)=>{
     try {
         const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
@@ -138,6 +151,20 @@ router.get("/see",csrfProtection,auth,limiter, async (req,res)=>{
     }
 
 })
+
+router.get("/unconfirmed",csrfProtection,auth,limiter, async (req,res)=>{
+    try {
+        const {userId} = req.user //on peut prendre userId parce qu'on l'a mis dans le login avec jwt
+        const bookings= await Booking.find({user: userId, validated: false}).populate("voitureReservee")
+        res.status(200).json({bookings: bookings})
+        }
+    catch (err){
+        res.status(500)
+        console.log("Erreur: ",err)
+    }
+
+})
+
 //il faudrait rembourser mais pour l'instant on n'a pas de façon de payer
 function rembourse(){
 

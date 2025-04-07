@@ -3,9 +3,15 @@ import './style.css'; // Importer un fichier CSS personnalisé si nécessaire
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useVar } from '../Contexts/VariablesGlobales';
+import { retrieveAssistanceData } from '../Locations/Assistance';
+import { useCSRF } from '../Contexts/CsrfContext';
 
 export function Fond({ children }) {
-    
+    const [mail,setMail]=useState("")
+      const {csrfToken}=useCSRF()
+      const[phoneNumber,setPhoneNumber]=useState("")
+      const {ProtocoleEtDomaine}=useVar()
+      retrieveAssistanceData(csrfToken,setMail,setPhoneNumber,ProtocoleEtDomaine)
     return (
         <div className='container-fluid'>
             {/* Corps principal */}
@@ -17,6 +23,14 @@ export function Fond({ children }) {
             <footer className="bg-gray-900 text-white text-center p-5">
                 <div className="container mx-auto">
                 <p>&copy; Driving Enhanced. Tous droits réservés.</p>
+                <div className="flex justify-center gap-6 mt-2">
+                    <span>
+                        📧 <a href={`mailto:${mail}`} className="text-warning text-decoration-none">{mail}</a>
+                    </span>
+                    <span>
+                        📞 <a href={`tel:${phoneNumber}`} className="text-warning text-decoration-none">{phoneNumber}</a>
+                    </span>
+                </div>
                 </div>
             </footer>
         </div>

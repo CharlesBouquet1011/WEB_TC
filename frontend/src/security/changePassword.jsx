@@ -122,7 +122,7 @@ export function ChangePasswordButton(){
   const navigate=useNavigate()
 
   return(
-    <button onClick={()=>navigate("/user/changePassword")}>Changer le mot de passe</button>
+    <button className="bg-black text-white px-5 py-2 rounded-2xl text-sm font-medium hover:bg-gray-900 transition" onClick={()=>navigate("/user/changePassword")}>Changer le mot de passe</button>
   )
 }
 

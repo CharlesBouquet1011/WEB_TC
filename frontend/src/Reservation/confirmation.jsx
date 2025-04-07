@@ -2,7 +2,7 @@ import Fond from '../utile/style.jsx';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logged from "../Contexts/Authenticated.js";
-import {SeeUserBookings} from "../Locations/seeBookings.jsx";
+import {SeeUnconfirmed} from "../Locations/seeBookings.jsx";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
 
@@ -13,6 +13,12 @@ export default function Confirmation(){
     const navigate = useNavigate();
     const { ProtocoleEtDomaine } = useVar();
     const { csrfToken } = useCSRF();
+    const [options, setOptions] = useState({
+        gps: false,
+        siegeBebe: false,
+        assurance: false,
+    });
+    const selectedOptions = Object.keys(options).filter((opt) => options[opt]); //prend toutes les cles de options et filtre pour avoir les True
     const handleAction = async () => {
         try {
           const response = await fetch(ProtocoleEtDomaine + "api/bookings/validate-user-bookings", {
@@ -22,6 +28,9 @@ export default function Confirmation(){
               'X-CSRF-Token': csrfToken
             },
             credentials: "include",
+            body: JSON.stringify({
+                options: selectedOptions,
+              }),
           });
       
           if (!response.ok) {
@@ -34,11 +43,6 @@ export default function Confirmation(){
         setIsOpen(false); 
         navigate("/user");
       };
-    const [options, setOptions] = useState({
-        gps: false,
-        siegeBebe: false,
-        assurance: false,
-    });
   
     const handleOptionChange = (option) => {
       setOptions((prev) => ({ ...prev, [option]: !prev[option] }));
@@ -48,7 +52,7 @@ export default function Confirmation(){
         <Logged>
         <Fond>
           <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
-          <SeeUserBookings/>
+          <SeeUnconfirmed/>
             {/* Section Options */}
             <div className="mt-6 mb-6">
               <label className="block font-semibold text-lg">Options :</label>
