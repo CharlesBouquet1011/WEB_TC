@@ -2,7 +2,7 @@ import Fond from '../utile/style.jsx';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logged from "../Contexts/Authenticated.js";
-import SeeUserBookings from "./bookings.jsx";
+import {SeeUserBookings} from "../Locations/seeBookings.jsx";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
 

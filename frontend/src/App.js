@@ -2,7 +2,6 @@
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { CSRFProvider } from './Contexts/CsrfContext.js';
-import SeeBookings from "./Locations/seeBookings.jsx"
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import Home from "./pages/Home.jsx"
 import Login from './security/login.jsx';
