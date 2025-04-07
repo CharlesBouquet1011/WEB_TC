@@ -32,9 +32,6 @@ export default function User() {
 
             {/* Bloc réservations */}
             <div className="bg-white rounded-2xl shadow-md p-8">
-              <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-                Vos réservations
-              </h2>
               <div className="overflow-x-auto">
                 <SeeUserBookings />
               </div>
