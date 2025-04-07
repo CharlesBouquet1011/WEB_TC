@@ -16,7 +16,6 @@ import Reservation from './Reservation/reservation.jsx';
 import Services from './pages/Services.jsx';
 import { ChangePasswordForm } from './security/changePassword.jsx';
 import Confirmation from './Reservation/confirmation.jsx'
-import ModifyBooking from './Locations/modifyBooking.jsx';
 import DeleteBooking from './Locations/DeleteBooking.jsx';
 
 function App() {
@@ -38,7 +37,6 @@ function App() {
               <Route path="/contact" element={<Assistance />} />
               <Route path="/services" element={<Services />} />
               <Route path="/confirmation" element={<Confirmation />} />
-              <Route path="/bookings/modify" element={<ModifyBooking />} />
               <Route path="/bookings/delete" element={<DeleteBooking />} />
             </Routes>
           </Router>

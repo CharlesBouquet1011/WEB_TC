@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
-import { ModifyBookingButton } from "./modifyBooking";
 import DeleteBooking from "./DeleteBooking";
 
 function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer, on a pas encore une 2e page qui nécessite d'être connecté pour être dessus
@@ -25,7 +24,6 @@ function SeeBookings({bookings,a_moi}) { //à tester, je n'ai pas pu débugguer,
               <th className="px-4 py-2 border border-gray-200">Date de début</th>
               <th className="px-4 py-2 border border-gray-200">Date de fin</th>
               <th className="px-4 py-2 border border-gray-200">Voiture réservée</th>
-              <th className="px-4 py-2 border border-gray-200">Modifier la réservation</th>
               <th className="px-4 py-2 border border-gray-200">Supprimer la réservation</th>
             </tr>
           </thead>
@@ -163,9 +161,6 @@ function Booking({ dateDebut, dateFin, voitureReservee,idBooking }) {
       <td className="px-4 py-2 border border-gray-200">{formatDate(dateFin)}</td>
       <td className="px-4 py-2 border border-gray-200">
         {voitureReservee.marque + " " + voitureReservee.modele}
-      </td>
-      <td>
-      <ModifyBookingButton idBooking={idBooking} />
       </td>
       <td>
       <DeleteBooking idBooking={idBooking} />
