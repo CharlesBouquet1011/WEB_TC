@@ -68,6 +68,7 @@ router.post("/check-disponibilite", csrfProtection, async (req, res) => {
 router.post("/validate-user-bookings", auth, async (req, res) => {
     try {
       const userId = req.user._id;
+      const { options } = req.body; // Récupérer les options depuis la requête
   
       // Trouve les réservations non validées de cet utilisateur
       const bookings = await Booking.find({ utilisateur: userId, validated: false });
@@ -75,6 +76,9 @@ router.post("/validate-user-bookings", auth, async (req, res) => {
       for (const booking of bookings){
         modifiedCount=modifiedCount+1
         booking.validated=true
+        if (options && options.length > 0) {
+            booking.options = options;
+          }
         await booking.save()
       }
       
