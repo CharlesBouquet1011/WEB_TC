@@ -2,7 +2,7 @@ import Fond from '../utile/style.jsx';
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Logged from "../Contexts/Authenticated.js";
-import {SeeUserBookings} from "../Locations/seeBookings.jsx";
+import {SeeUnconfirmed} from "../Locations/seeBookings.jsx";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
 
@@ -48,7 +48,7 @@ export default function Confirmation(){
         <Logged>
         <Fond>
           <div className="max-w-2xl mx-auto mt-8 p-6 bg-white rounded-lg shadow-lg">
-          <SeeUserBookings/>
+          <SeeUnconfirmed/>
             {/* Section Options */}
             <div className="mt-6 mb-6">
               <label className="block font-semibold text-lg">Options :</label>

@@ -20,11 +20,13 @@ function SeeBookings({ bookings, a_moi }) {
       <div className="overflow-x-auto">
         <table className="min-w-[600px] table-auto w-full border border-gray-200 text-gray-700">
           <thead>
-            <tr className="bg-gray-100 text-left text-sm sm:text-base">
-              <th className="px-2 py-2 md:px-4 border">Début</th>
-              <th className="px-2 py-2 md:px-4 border">Fin</th>
-              <th className="px-2 py-2 md:px-4 border">Voiture</th>
-              <th className="px-2 py-2 md:px-4 border">Supprimer</th>
+            <tr className="bg-gray-50">
+              <th className="px-2 py-2 md:px-4 border">Date de début</th>
+              <th className="px-2 py-2 md:px-4 border">Date de fin</th>
+              <th className="px-2 py-2 md:px-4 border">Voiture réservée</th>
+              <th className="px-2 py-2 md:px-4 border">Prix total</th>
+
+              <th className="px-2 py-2 md:px-4 border">Supprimer la réservation</th>
             </tr>
           </thead>
           <tbody>
@@ -133,6 +135,46 @@ export function SeeUserBookings(){
   return (<SeeBookings bookings={bookings} a_moi={true}/>)
 }
 
+export function SeeUnconfirmed(){
+    const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
+    console.log("affiche User Booking")
+    const [bookings, setbookings] = useState([]);
+    const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
+    useEffect(() => {
+      if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
+        fetchCSRFToken();
+      }
+    }, [isLoaded, fetchCSRFToken]);
+    useEffect(()=>{ //on récupère les bookings
+      const fetchUncomfirmed= async () =>{
+          try {
+              const response = await fetch(ProtocoleEtDomaine+"api/bookings/unconfirmed", {
+                  method: "GET",
+                  headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
+                    "Content-Type": "application/json",
+                    'X-CSRF-Token': csrfToken,
+                  },
+                  credentials: 'include',
+                  
+                });
+              const temp=await response.json()
+              setbookings(temp.bookings)
+              setLoadBooking(false)
+  
+          } catch (err){
+              console.log("Erreur lors du chargement des locations :",err)
+  
+  
+          }
+      }
+        fetchUncomfirmed();
+      
+      },
+      [loadBookings,setLoadBooking] 
+  )
+    return (<SeeBookings bookings={bookings} a_moi={true}/>)
+  }
+
 //présentejuste les bookings 
 function Booking({ dateDebut, dateFin, voitureReservee, idBooking }) {
   const formatDate = (dateStr) => {
@@ -144,14 +186,26 @@ function Booking({ dateDebut, dateFin, voitureReservee, idBooking }) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `Le ${jour} ${mois.charAt(0).toUpperCase() + mois.slice(1)} ${annee} à ${heures}h${minutes}`;
   };
+  const calculerNbJours = (start, end) => {
+    const d1 = new Date(start);
+    const d2 = new Date(end);
+    const diffTime = Math.abs(d2 - d1);
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+  const nbJours = calculerNbJours(dateDebut, dateFin);
+  const prixParJour = voitureReservee.prix;
+  const total = nbJours * prixParJour
 
   return (
     <tr className="text-sm sm:text-base">
       <td className="px-2 py-2 md:px-4 border">{formatDate(dateDebut)}</td>
       <td className="px-2 py-2 md:px-4 border">{formatDate(dateFin)}</td>
-      <td className="px-2 py-2 md:px-4 border text-center">{voitureReservee.marque} {voitureReservee.modele}</td>
       <td className="px-2 py-2 md:px-4 border text-center">
-        <DeleteBooking idBooking={idBooking} />
+        {voitureReservee.marque + " " + voitureReservee.modele}
+      </td>
+      <td className="px-2 py-2 md:px-4 border text-center">{total} €</td>
+      <td className="px-2 py-2 md:px-4 border text-center">
+      <DeleteBooking idBooking={idBooking} />
       </td>
     </tr>
   );
