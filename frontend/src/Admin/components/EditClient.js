@@ -39,8 +39,6 @@ export function EditClient({ client, setEditClient, setRefresh }) {
       }
     }
 
-    console.log("YAHAHAHA")
-
     return (
       <div>
         <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
@@ -64,7 +62,6 @@ export function EditClient({ client, setEditClient, setRefresh }) {
           </div>
           <button className="btn btn-primary" onClick={handleConfirm}>Confirmer</button>
         </div>
-        <pre className="mt-3">{JSON.stringify(clientEdit, null, 2)}</pre>
       </div>
     )
   }

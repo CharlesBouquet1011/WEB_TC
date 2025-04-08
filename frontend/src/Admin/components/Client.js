@@ -103,8 +103,7 @@ export function Client({}) {
     }
   }
   
-  if (editClient === true) {
-    console.log("YOUHOU")
+  if (editClient !== false) {
     return (
         <div>
             <EditClient client={clients.users?.find(client => client._id === editClient)} setEditClient={setEditClientMode} setRefresh={setRefresh}/>
