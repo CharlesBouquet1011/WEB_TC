@@ -260,9 +260,19 @@ function submit(csrfToken, setErreurs, champs, navigate,ProtocoleEtDomaine,isErr
                     ...etatPrec,
                     PasswordErreur:"Votre mot de passe est incorrect",}
                   ))
+                  
+            } else{
+              navigate("/user")
             }
+
             
             return false;
+        }
+        else{
+          setErreurs(etatPrec=>({
+            ...etatPrec,
+            PasswordErreur:"Votre mot de passe est incorrect",}
+          ))
         }
         
         
