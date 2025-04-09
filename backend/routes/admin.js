@@ -4,7 +4,7 @@ const csrfProtection=require("../config/csrf.js");
 const limiter = require("../config/rateLimiter.js");
 require('dotenv').config();
 
-const session = require("express-session");
+// const session = require("express-session");
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "1234"; // Mot de passe d'accès
 router.post("/login", csrfProtection, limiter, async (req,res)=>{
