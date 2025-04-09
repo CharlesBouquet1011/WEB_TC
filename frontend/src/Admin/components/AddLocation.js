@@ -41,7 +41,6 @@ export function AddLocation({ setAddLocation, setRefresh }) {
     }
 
     try {
-      console.log("Sending data:", locationAdded)
       const response = await fetch(`${ProtocoleEtDomaine}api/bookings/addAdmin`, {
         method: 'POST',
         headers:{
@@ -56,7 +55,6 @@ export function AddLocation({ setAddLocation, setRefresh }) {
       if (!response.ok) {
         throw new Error(`Erreur serveur: ${response.status} - ${responseData.message || "Aucune réponse"}`);
       }
-      console.log("Success:", responseData);
       setAddLocation(false);
       setRefresh(true);
     } catch (error) {

@@ -83,7 +83,6 @@ export function Client({}) {
   const handleAddClient = async () => {
     try {
       const randomClient =  clientList[Math.floor(Math.random()*clientList.length)];
-      console.log(randomClient);
       const response = await fetch(`${ProtocoleEtDomaine}api/security/registration`, {
         method: 'POST',
         headers: {
@@ -96,7 +95,6 @@ export function Client({}) {
       if (!response.ok) {
         throw new Error("Erreur lors de l'ajout du client.");
       }
-      console.log("refresh")
       setRefresh(true);
     } catch (error) {
       console.error("Erreur:", error);
