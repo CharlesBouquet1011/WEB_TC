@@ -27,15 +27,19 @@ FROM node:23-alpine3.20 AS react
 WORKDIR /app
 COPY ./frontend/package.json /app/
 EXPOSE 3000
-#prod
-#RUN npm run build
-#en dev y a pas build
-RUN adduser -S react
 
+RUN adduser -S react
+#prod
+#COPY ./frontend /app
+#fin prod
 RUN chown -R react /app && chmod -R 755 /app
 USER react
 RUN npm install
 
+RUN 
+#prod
+#RUN npm run build
+#en dev y a pas build
 #prod
 #CMD ["npx", "serve", "build", "-p", "3000"] 
 #dev
