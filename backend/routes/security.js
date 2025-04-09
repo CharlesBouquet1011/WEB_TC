@@ -178,12 +178,10 @@ router.get("/seeAll", csrfProtection, limiter, async (req, res)=>{
     }
 })
 
-router.post("/edit", csrfProtection, limiter, auth, async (req, res) => {
+router.post("/edit", csrfProtection, limiter, async (req, res) => {
     try {
-        console.log("Edit request received")
         const { _id, ...updatedFields } = req.body;
-        console.log(req.body);
-        const updatedClient = await Users.findByIdAndUpdate(_id, updatedFields);
+        const updatedClient = await User.findByIdAndUpdate(_id, updatedFields);
 
         if (!updatedClient) {
             return res.status(404).json({ message: "Client non trouvé" });

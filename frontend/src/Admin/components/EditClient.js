@@ -23,7 +23,7 @@ export function EditClient({ client, setEditClient, setRefresh }) {
             body: JSON.stringify(clientEdit),
           });
           if (!response.ok) {
-            throw new Error("Erreur lors de la mise à jour du véhicule.");
+            throw new Error("Erreur lors de la mise à jour du client.");
           }
           setEditClient(false);
           setRefresh(true);
@@ -41,26 +41,32 @@ export function EditClient({ client, setEditClient, setRefresh }) {
 
     return (
       <div>
-        <button type="button" className="btn-close" aria-label="Close" onClick={handleClose}></button>
-        <div className="container mt-3">
-          <h3>Modifier un client</h3>
-          <div className="mb-2">
-            <label>Nom :</label>
-            <input type="text" className="form-control" name = "name" value={clientEdit.name} placeholder="Entrez le nom d'utilisateur" onChange={handleInputChange}/>
+        <nav className="navbar navbar-light bg-light">
+          <div className="container">
+            <span className="navbar-brand">Modifier un client</span>
+            <button className="btn btn-outline-danger" onClick={handleClose}>Retour</button>
           </div>
-          <div className="mb-2">
-            <label>Numéro de téléphone :</label>
-            <input type="text" className="form-control" name = "phoneNumber" value={clientEdit.phoneNumber} placeholder="Entrez le numéro de téléphone" onChange={handleInputChange}/>
-          </div>
-          <div className="mb-2">
-            <label>Addresse email :</label>
-            <input type="text" className="form-control" name = "email" value={clientEdit.email} placeholder="Entrez l'adresse email" onChange={handleInputChange}/>
-          </div>
-          <div className="mb-2">
-            <label>Mot de passe :</label>
-            <input type="text" className="form-control" name = "password" value={clientEdit.password} placeholder="Entrez le mot de passe" onChange={handleInputChange}/>
-          </div>
-          <button className="btn btn-primary" onClick={handleConfirm}>Confirmer</button>
+        </nav>
+      
+      
+      <div className="container mt-4">
+        <div className="mb-3">
+          <label className="form-label">Nom</label>
+          <input type="text" className="form-control" name = "name" value={clientEdit.name} placeholder="Entrez le nom d'utilisateur" onChange={handleInputChange}/>
+        </div>
+        <div className="mb-3">
+        <label className="form-label">Numéro de téléphone</label>
+          <input type="text" className="form-control" name = "phoneNumber" value={clientEdit.phoneNumber} placeholder="Entrez le numéro de téléphone" onChange={handleInputChange}/>
+        </div>
+        <div className="mb-3">
+        <label className="form-label">Adresse email</label>
+          <input type="text" className="form-control" name = "email" value={clientEdit.email} placeholder="Entrez l'adresse email" onChange={handleInputChange}/>
+        </div>
+        <div className="mb-3">
+        <label className="form-label">Mot de passe</label>
+          <input type="text" className="form-control" name = "password" value={clientEdit.password} placeholder="Entrez le mot de passe" onChange={handleInputChange}/>
+        </div>
+          <button className="btn btn-primary" onClick={handleConfirm}>Valider</button>
         </div>
       </div>
     )
