@@ -62,6 +62,7 @@ services:
       - backend-node
     volumes:
      - ./nginx/media:/app/media
+     - react_build:/app/build
     networks:
       - nginx-backend
       - nginx-frontend
