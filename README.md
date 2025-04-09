@@ -30,7 +30,6 @@ Ce projet est un site web qui permet de louer des voitures de luxe
 - [`express`](https://www.npmjs.com/package/express) — Framework web minimaliste
 - [`express-rate-limit`](https://www.npmjs.com/package/express-rate-limit) — Limitation du nombre de requêtes
 - [`jsonwebtoken`](https://www.npmjs.com/package/jsonwebtoken) — Authentification par JWT
-- [`mathjs`](https://www.npmjs.com/package/mathjs) — Bibliothèque mathématique complète
 - [`mongoose`](https://www.npmjs.com/package/mongoose) — ODM pour MongoDB
 
 **Développement :**

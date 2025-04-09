@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const csrfProtection=require("../config/csrf.js");
-var Math = require('mathjs');
 
 const User = require("../models/UserModel.js");
 const limiter = require("../config/rateLimiter.js");
