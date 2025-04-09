@@ -38,15 +38,18 @@ export function ChangePasswordForm(){
     return (
         
           <>
+          <Fond>
             
               
     
               {/* Registration Form Section */}
-              <div className="col-md-6 d-flex align-items-center justify-content-center">
-                <div className="w-75">
-                  <h2 className="mb-4">Changez votre mot de passe</h2>
-                  <p className="text-muted mb-4"></p>
-    
+              <div className="d-flex align-items-center justify-content-center"> {/*mettre col-md-6 + une image si vous voulez en utiliser une */}
+              <div className="w-75 position-relative">
+                
+
+                <h2 className="mb-3 fw-bold fs-2">Changer votre mot de passe</h2>
+                <p className="text-muted mb-4">Veuillez saisir votre ancien mot de passe et définir un nouveau mot de passe.</p>
+
                   {/* Large Error Message */}
                   {erreurs.grosseErreur && (
                     <div className="alert alert-danger mb-4" role="alert">
@@ -77,7 +80,7 @@ export function ChangePasswordForm(){
                     </div>
     
                     <div className="mb-3">
-                      <label htmlFor="Newpassword" className="form-label">Nouveau mot e passe</label>
+                      <label htmlFor="Newpassword" className="form-label">Nouveau mot de passe</label>
                       <input 
                         type="password" 
                         className="form-control" 
@@ -89,7 +92,7 @@ export function ChangePasswordForm(){
                       {erreurs.NewPasswordErreur && <small className="text-danger">{erreurs.NewPasswordErreur}</small>}
                     </div>
                     <div className="mb-3">
-                      <label htmlFor="CNewPassword" className="form-label">Nouveau mot e passe</label>
+                      <label htmlFor="CNewPassword" className="form-label">Nouveau mot de passe</label>
                       <input 
                         type="password" 
                         className="form-control" 
@@ -106,7 +109,16 @@ export function ChangePasswordForm(){
                       className="btn btn-dark w-100 mt-3"
                       onClick={() => submit(csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,ProtocoleEtDomaine,isErreur,setIsErreur)}
                     >
-                      S'inscrire
+                      Changer le mot de passe
+                    </button>
+                    {/* Bouton Annuler */}
+                    <br />
+                    <button 
+                      type="button" 
+                      className="btn w-100 mt-3 btn-danger"
+                      onClick={() => navigate("/user")} // ou un navigate("/profil") par exemple
+                    >
+                      Annuler
                     </button>
                   </form>
                 </div>
@@ -114,11 +126,18 @@ export function ChangePasswordForm(){
             
           
           <br />
+          </Fond>
           </>
         )
 }
 
+export function ChangePasswordButton(){
+  const navigate=useNavigate()
 
+  return(
+    <button className="bg-black text-white px-5 py-2 rounded-2xl text-sm font-medium hover:bg-gray-900 transition" onClick={()=>navigate("/user/changePassword")}>Changer le mot de passe</button>
+  )
+}
 
 //renvoie vrai s'il y a une erreur
 function checkErreursSubmit(Password,NewPassword,CNewPassword,ProtocoleEtDomaine,csrfToken,setErreurs,setIsErreur){

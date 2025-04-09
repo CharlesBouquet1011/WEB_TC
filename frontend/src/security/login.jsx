@@ -9,12 +9,20 @@ import { useVar } from "../Contexts/VariablesGlobales.js";
 function Login() {
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-  const {ProtocoleEtDomaine}=useVar()
+  const {ProtocoleEtDomaine,erreurLogin,setErreurLogin,redirectAfterLogin}=useVar()
   const navigate=useNavigate()
- const {triedLogging,setTriedLogging}=useAuth()
-  const handleEnterKey = (event,csrfToken,navigate,triedLogging,setTriedLogging) =>{
+ const {triedLogging,setTriedLogging,logged}=useAuth()
+  useEffect(()=>{
+    if (logged){
+      navigate(redirectAfterLogin)
+    }
+  },[logged])
+  
+
+  const handleEnterKey = (event,csrfToken,navigate,triedLogging,setTriedLogging,setErreurLogin) =>{
+    
     if (event.key==="Enter"){
-      submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine)
+      submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin,redirectAfterLogin)
     }
   }
   useEffect(() => {
@@ -31,6 +39,11 @@ function Login() {
       {/* Login Form Section */}
       <div className="col-md-6 d-flex align-items-center justify-content-center">
         <div className="w-75">
+        {erreurLogin && (
+  <div className="alert alert-danger mb-4" role="alert">
+    {erreurLogin}
+  </div>
+)}
           <h2 className="mb-4">Connexion à votre compte</h2>
           <p className="text-muted mb-4">Accédez à votre espace personnel</p>
 
@@ -54,7 +67,8 @@ function Login() {
                   csrfToken, 
                   navigate, 
                   triedLogging, 
-                  setTriedLogging
+                  setTriedLogging,
+                  setErreurLogin
                 )}
               />
             </div>
@@ -71,7 +85,8 @@ function Login() {
                   csrfToken, 
                   navigate, 
                   triedLogging, 
-                  setTriedLogging
+                  setTriedLogging,
+                  setErreurLogin
                 )}
               />
             </div>
@@ -85,13 +100,17 @@ function Login() {
             <button 
               type="button" 
               className="btn btn-dark w-100 mt-3"
-              onClick={() => submitr(
+              onClick={() => {
+                
+                submitr(
                 csrfToken, 
                 navigate, 
                 triedLogging, 
                 setTriedLogging,
-                ProtocoleEtDomaine
-              )}
+                ProtocoleEtDomaine,
+                setErreurLogin,
+                redirectAfterLogin
+              )}}
             >
               Se connecter
             </button>
@@ -128,8 +147,8 @@ function Login() {
 }
 
 
-async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine){
-    
+async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin,redirectAfterLogin){
+    setErreurLogin("")
     var email,password
     email=document.getElementById("login-email").value
     password=document.getElementById("login-password").value
@@ -157,7 +176,7 @@ async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,Protocole
 
         console.log("connecté")
         setTriedLogging(true)
-        navigate("/user")
+        navigate(redirectAfterLogin)
         
 
     } catch (error){

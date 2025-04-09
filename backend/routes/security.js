@@ -22,19 +22,21 @@ router.get("/csrf-token",csrfProtection, async (req,res) => {
 //inscription des utilisateurs
 router.post("/registration", csrfProtection, limiter, async (req,res)=>{
     try {
-        const { Name, FirstName, email, PhoneNumber, Password } = req.body;
+        const { name, phoneNumber, email, password } = req.body;
+        console.log("Received:",req.body);
+
         
         const existe= await User.exists().where("email").equals(email) //on vérifie qu'il n'y a pas de doublon de mail
         if (existe){
+            console.log("Pb d'email")
             res.status(500).json({error: "adresse mail déjà utilisée"}) //au cas où quelqu'un arrive à donner un mail non autorisé
             return ;
         } 
-
-        const hashedPassword=await hashString(Password)
+        const hashedPassword=await hashString(password)
         
         const newUser = new User({
-            name: Name + FirstName,
-            phoneNumber: PhoneNumber,
+            name: name,
+            phoneNumber: phoneNumber,
             email: email,
             password: hashedPassword, // Pense à hasher le mot de passe en prod
         });
@@ -50,6 +52,7 @@ router.post("/registration", csrfProtection, limiter, async (req,res)=>{
 
     }
 })
+
 //renvoie un hash du string en sortie
 async function hashString(string){
     try{
@@ -162,6 +165,35 @@ router.post("/logout",csrfProtection,limiter, (req,res) => {
 
 })
 
+//Pour admin
+// Rajouter auth
+router.get("/seeAll", csrfProtection, limiter, async (req, res)=>{
+    try {
+        const users = await User.find().select("-password")
+        res.status(200).json({users: users})
+        }
+    catch (err) {
+        res.status(500).json({erreur: "Erreur serveur"})
+        console.log("Erreur:", err)
+    }
+})
+
+router.post("/edit", csrfProtection, limiter, async (req, res) => {
+    try {
+        const { _id, ...updatedFields } = req.body;
+        const updatedClient = await User.findByIdAndUpdate(_id, updatedFields);
+
+        if (!updatedClient) {
+            return res.status(404).json({ message: "Client non trouvé" });
+        }
+        console.log("Base de données de clients mise à jour.")
+        res.status(200).json({message: "Client mis à jour avec succès"});
+
+    } catch (error) {
+        res.status(500).json({ message: "Erreur serveur", error });
+    }
+});
+
 router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
     //il faut supprimer toutes leurs réservations également
     const session = await mongoose.startSession();
@@ -192,6 +224,31 @@ router.delete("/deleteAccount",csrfProtection,limiter,auth, async(req,res)=>{
         res.status(500).json({erreur: "Erreur serveur"})
     }
 
+})
+
+//for admin
+router.delete("/deleteAcc/:id", csrfProtection, limiter, async (req, res) => {
+    //il faut supprimer toutes leurs réservations également
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try{
+    console.log("Essai de supprimer le compte")
+    const { id }=req.params
+    console.log("ID: ",id)
+    await Booking.deleteMany({user:id}) //suppression des réservations
+
+    const deletedUser = await User.findByIdAndDelete(id);
+
+    if (!deletedUser) {
+        return res.status(404).json({message: "Client non trouvé"});
+    }
+    console.log("Client supprimé: ", deletedUser);
+    res.status(200).json({ message:"Client supprimé avec succès"});
+
+    } catch (err) {
+        console.error("Erreur: ", err);
+        res.status(500).json({erreur: "Erreur serveur"});
+    }
 })
 
 

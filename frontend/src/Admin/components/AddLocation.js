@@ -1,43 +1,74 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFetchCars } from './useFetchCars';
+import { useVar } from '../../Contexts/VariablesGlobales.js';
+import { useCSRF } from '../../Contexts/CsrfContext.js';
+import { useFetchUsers } from "./useFetchUsers.js";
 
-export function AddLocation({ onAdd, onCancel }) {
-  const { cars, loading, error: carsError } = useFetchCars();
-  const [voitureReservee, setSelectedPlate] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
-  const [user, setUserId] = useState("");
-  const [dateDebut, setStartTime] = useState("");
-  const [dateFin, setEndTime] = useState("");
-  const [error, setError] = useState(null);
+export function AddLocation({ setAddLocation, setRefresh }) {
+  const{ProtocoleEtDomaine}=useVar();
+  const {csrfToken}=useCSRF();
+  const { cars, loadingCars, error: carsError } = useFetchCars();
+  const { users, loadingUsers, error: usersError} = useFetchUsers();
 
-  useEffect(() => {
-    console.log("Cars in AddLocation:", cars);
-  }, [cars]);
+  const [locationAdded, setLocationAdded] = useState({
+    voitureReservee: "",
+    user: "",
+    dateDebut: "",
+    dateFin: "",
+  });
 
-  const handleSubmit = () => {
-    if (!dateDebut || !dateFin || !user || !voitureReservee) {
+  const handleInputChange = (e) => {
+    setLocationAdded((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (!locationAdded.dateDebut || !locationAdded.dateFin || !locationAdded.user || !locationAdded.voitureReservee) {
       alert("Veuillez remplir tous les champs");
       return;
     }
-    if (new Date(dateFin) <= new Date(dateDebut)) {
-      setError("La date de fin doit être postérieure à la date de début.");
+    if (new Date(locationAdded.dateDebut) < today) {
+      alert("Date de début invalide.");
+      return;
+    } 
+    if (new Date(locationAdded.dateFin) <= new Date(locationAdded.dateDebut)) {
+      alert("La date de fin doit être postérieure à la date de début.");
       return;
     }
 
-    if (typeof onAdd !== "function") {
-      console.error("onAdd is not a function!", onAdd);
-      return;
+    try {
+      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/addAdmin`, {
+        method: 'POST',
+        headers:{
+          "Content-Type": "application/json",
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify(locationAdded),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`Erreur serveur: ${response.status} - ${responseData.message || "Aucune réponse"}`);
+      }
+      setAddLocation(false);
+      setRefresh(true);
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert(`Erreur: ${error.message}`);
     }
+  }
 
-    const newLocation = {
-      dateDebut,
-      dateFin,
-      user,
-      voitureReservee: voitureReservee
-    };
-
-    onAdd(newLocation);
-  };
+  const handleClose = () => {
+    const confirmDelete = window.confirm("Les modifications ne sont pas enregistrées");
+    if (confirmDelete) {
+      setAddLocation(false);
+    }
+  }
 
   return (
     <div>
@@ -46,10 +77,7 @@ export function AddLocation({ onAdd, onCancel }) {
           <span className="navbar-brand">Ajouter une Location</span>
           <button 
             className="btn btn-outline-danger" 
-            onClick={() => {
-              console.log("Cancel button clicked");
-              onCancel();
-            }} 
+            onClick={handleClose} 
             type="button"
           >
             Retour
@@ -57,21 +85,8 @@ export function AddLocation({ onAdd, onCancel }) {
         </div>
       </nav>
 
-      {error && (
-        <div className="alert alert-danger container mt-2">
-          {error}
-        </div>
-      )}
-
-      {carsError && (
-        <div className="alert alert-warning container mt-2">
-          Erreur lors du chargement des véhicules: {carsError}
-        </div>
-      )}
-
-      {/* Form for Adding a Location */}
       <div className="container mt-4">
-        {loading ? (
+        {loadingCars ? (
           <p>Chargement des véhicules...</p>
         ) : (
           <>
@@ -79,19 +94,19 @@ export function AddLocation({ onAdd, onCancel }) {
               <label className="form-label">Véhicule</label>
               <select 
                 className="form-select" 
-                value={voitureReservee}
+                name="voitureReservee"
+                value={locationAdded.voitureReservee || ""}
                 onChange={(e) => {
-                  const selectedCar = cars.find(car => car._id === e.target.value);
-                  console.log("Selected car:", selectedCar);
-                  if (selectedCar) {
-                    setSelectedPlate(selectedCar._id);
-                  }
+                  setLocationAdded((prev) => ({
+                    ...prev,
+                    voitureReservee: e.target.value
+                  }));
                 }}
               >
                 <option value="">Sélectionnez un véhicule</option>
                 {cars && cars.length > 0 ? (
                   cars.map((car, index) => (
-                    <option key={index} value={car._id}>
+                    <option key={car._id} value={car._id}>
                       {car.marque || ''} {car.modele || 'Modèle inconnu'} ({car.plaque || 'Plaque inconnue'})
                     </option>
                   ))
@@ -101,16 +116,37 @@ export function AddLocation({ onAdd, onCancel }) {
               </select>
             </div>
             <div className="mb-3">
-              <label className="form-label">Nom de l'utilisateur</label>
-              <input type="text" className="form-control" value={user} onChange={(e) => setUserId(e.target.value)} />
+              <label className="form-label">Utilisateur</label>
+              <select 
+                className="form-select" 
+                name="user"
+                value={locationAdded.user || ""}
+                onChange={(e) => {
+                  setLocationAdded((prev) => ({
+                    ...prev,
+                    user: e.target.value
+                  }));
+                }}
+              >
+                <option value="">Sélectionnez un utilisateur</option>
+                {users && users.length > 0 ? (
+                  users.map((user, index) => (
+                    <option key={user._id} value={user._id}>
+                      {user.name || ''} ({user.email || ''})
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>Aucun utilsateur disponible</option>
+                )}
+              </select>
             </div>
             <div className="mb-3">
               <label className="form-label">Date de début</label>
-              <input type="date" className="form-control" value={dateDebut} onChange={(e) => setStartTime(e.target.value)} />
+              <input type="date" className="form-control" name="dateDebut" value={locationAdded.dateDebut || ""} onChange={handleInputChange} />
             </div>
             <div className="mb-3">
               <label className="form-label">Date de fin</label>
-              <input type="date" className="form-control" value={dateFin} onChange={(e) => setEndTime(e.target.value)} />
+              <input type="date" className="form-control" name="dateFin" value={locationAdded.dateFin || ""} onChange={handleInputChange} />
             </div>
             <button className="btn btn-primary" onClick={handleSubmit}>Valider</button>
           </>

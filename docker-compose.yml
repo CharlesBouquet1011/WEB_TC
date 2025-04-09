@@ -62,6 +62,7 @@ services:
       - backend-node
     volumes:
      - ./nginx/media:/app/media
+     - react_build:/app/build
     networks:
       - nginx-backend
       - nginx-frontend
@@ -83,7 +84,7 @@ networks:
 
   nginx-backend:
     driver: bridge
-    name : nginx-bd
+    name : nginx-backend
     ipam:
       config:
         - subnet: 192.168.1.8/29

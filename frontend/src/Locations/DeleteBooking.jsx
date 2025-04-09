@@ -1,9 +1,7 @@
-
-
 import { useNavigate } from "react-router";
 import Modal from "react-modal";
 import { useState, useEffect } from "react";
-import "./deleteBooking.css"; 
+import "./DeleteBooking.css"; 
 
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useVar } from "../Contexts/VariablesGlobales";
@@ -13,19 +11,20 @@ export default function DeleteBooking({idBooking}) {
     const { csrfToken } = useCSRF();
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const {ProtocoleEtDomaine} =useVar()
+    const {ProtocoleEtDomaine,setLoadBooking} =useVar()
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
   
     const confirmDeletion = () => {
       BookingDeletion(csrfToken, navigate,idBooking,ProtocoleEtDomaine);
+      setLoadBooking(true)
       closeModal();
     };
   
     return (
       <div>
         <button className="Booking-delete-button" onClick={openModal}>
-          Supprimer mon compte
+          Supprimer ma réservation
         </button>
         <Modal
           isOpen={modalIsOpen}
@@ -36,7 +35,7 @@ export default function DeleteBooking({idBooking}) {
         >
           <h2 className="Booking-delete-modal-title">Confirmation</h2>
           <p className="Booking-delete-modal-message">
-            Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.
+            Êtes-vous sûr de vouloir supprimer cette réservation ? Cette action est irréversible mais vous serez remboursé.
           </p>
           <div className="Booking-delete-modal-actions">
             <button className="Booking-delete-cancel-button" onClick={closeModal}>
@@ -66,7 +65,8 @@ function BookingDeletion(csrfToken,navigate,idBooking,domaine){
                     
                   });
                 if (response.ok){
-                    navigate("/")
+                    console.log("réservation supprimée")
+
                     
                     return null;
                 }
@@ -82,3 +82,5 @@ function BookingDeletion(csrfToken,navigate,idBooking,domaine){
         }
         deletion();
     }
+
+

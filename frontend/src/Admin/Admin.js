@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { Header } from "./components/Header.js"
 import { Vehicule } from './components/Vehicule.js';
+<<<<<<< HEAD
 import { LocationRow } from './components/LocationRow.js';
 import { EditLocation } from './components/EditLocation.js';
 import { AddLocation } from './components/AddLocation.js';
@@ -33,12 +34,24 @@ export function Admin() {
     return (
       <div>
         <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
+=======
+import { Location } from './components/Location.js';
+import { Client } from './components/Client.js';
+
+export function Admin() {
+  const [activeTab, setActiveTab] = useState(0);
+  
+  return (
+    <div>
+      <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
+>>>>>>> 69e611eca73475c5be1d035283d74094d9083c55
 
         {/* Vehicles Management */}
         {activeTab===0 && (
           <Vehicule/>
         )}
 
+<<<<<<< HEAD
         {/* Location Management */}
         {activeTab === 1 && !editLoc && !addLocationMode && (
           <div className="container mt-4">
@@ -89,3 +102,17 @@ export function Admin() {
     )
   }
 }
+=======
+      {/* Locations Management */}
+      {activeTab===1 && (
+        <Location/>
+      )}
+
+      {/* Clients Management */}
+      {activeTab===2 && (
+        <Client/>
+      )}
+    </div>
+  );
+}
+>>>>>>> 69e611eca73475c5be1d035283d74094d9083c55

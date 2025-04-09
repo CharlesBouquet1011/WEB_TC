@@ -1,125 +1,122 @@
-import { useState, useEffect } from "react";
+import { useState } from 'react';
+import { useFetchCars } from './useFetchCars.js';
+import { useVar } from '../../Contexts/VariablesGlobales.js';
+import { useCSRF } from '../../Contexts/CsrfContext.js';
+import { useFetchUsers } from './useFetchUsers.js';
 
-export function EditLocation({ setEditLoc, selectedLocation, locations, setLocations }) {
-  const [selectedPlate, setSelectedPlate] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
-  const [userId, setUserId] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [error, setError] = useState("");
+export function EditLocation({ location, setEditLoc, setRefresh }) {
+  const {ProtocoleEtDomaine}=useVar();
+  const {csrfToken}=useCSRF();
+  const { cars, loading_cars, error: carsError } = useFetchCars();
+  const { users, loading_users, error: usersError } = useFetchUsers();
 
-  const cars = [
-    { plate: "FW-245-MD", model: "Bugatti Chiron" },
-    { plate: "QR-982-ZX", model: "Lamborghini Aventador SVJ" },
-    { plate: "YL-318-WG", model: "Porsche 911 Turbo S" },
-    { plate: "PJ-728-RM", model: "Mercedes-AMG GT Black Series" }
-  ];
+  const [locationEdit, setLocEdit] = useState(location);
 
-  // Load the current location data into the form fields when the component mounts
-  useEffect(() => {
-    if (selectedLocation) {
-      setSelectedPlate(selectedLocation.plate);
-      setSelectedModel(selectedLocation.model);
-      setUserId(selectedLocation.userId);
-      setStartTime(selectedLocation.startTime);
-      setEndTime(selectedLocation.endTime);
+  const handleUpdate = (e) => {
+    const { name, value } = e.target;
+  
+    if (name === "voitureReservee") {
+      const selectedCar = cars.find((car) => car._id === value);
+      setLocEdit((prev) => ({ ...prev, voitureReservee: selectedCar || null }));
+    } else if (name === "user") {
+      const selectedUser = users.find((u) => u._id === value);
+      setLocEdit((prev) => ({ ...prev, user: selectedUser || null }));
+    } else {
+      setLocEdit((prev) => ({ ...prev, [name]: value }));
     }
-  }, [selectedLocation]);
-
-  const handleUpdate = () => {
-    setError(""); // Clear any previous error
-
-    if (!selectedPlate || !userId || !startTime || !endTime) {
-      setError("Veuillez remplir tous les champs.");
-      return;
-    }
-
-    if (new Date(endTime) <= new Date(startTime)) {
-      setError("La date de fin doit être postérieure à la date de début.");
-      return;
-    }
-
-    const updatedLocations = locations.map((loc) =>
-      loc.plate === selectedLocation.plate && loc.userId === selectedLocation.userId
-        ? { plate: selectedPlate, model: selectedModel, startTime, endTime, userId }
-        : loc
-    );
-
-    setLocations(updatedLocations);
-    setEditLoc(false); // Close the edit form
   };
+
+  const handleSubmit  = async () => {
+    try {
+      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/modify`, {
+        method: 'POST',
+        headers:{
+          "Content-Type": "application/json",
+          'X-CSRF-Token': csrfToken,
+        },
+        body: JSON.stringify(locationEdit),
+      });
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour de la location.");
+      }
+      setEditLoc(false);
+      setRefresh(true);
+    } catch (error) {
+      console.error("Erreur:", error);
+    }
+  }
+
+  const handleClose = () => {
+    const confirmDelete = window.confirm("Les modifications ne sont pas enregistrées");
+    if (confirmDelete) {
+      setEditLoc(false);
+    }
+  }
 
   return (
     <div>
-      {/* Navbar */}
       <nav className="navbar navbar-light bg-light">
         <div className="container">
           <span className="navbar-brand">Modifier une Location</span>
-          <button className="btn btn-outline-danger" onClick={() => setEditLoc(false)}>Retour</button>
+          <button className="btn btn-outline-danger" onClick={handleClose}>Retour</button>
         </div>
       </nav>
 
-      {/* Form */}
       <div className="container mt-4">
-        {error && <div className="alert alert-danger">{error}</div>}
-
-        {/* Vehicle Selection */}
         <div className="mb-3">
           <label className="form-label">Véhicule</label>
           <select
             className="form-select"
-            value={selectedPlate}
-            onChange={(e) => {
-              const selectedCar = cars.find(car => car.plate === e.target.value);
-              setSelectedPlate(selectedCar.plate);
-              setSelectedModel(selectedCar.model);
-            }}
+            name="voitureReservee"
+            value={locationEdit.voitureReservee._id || ""}
+            onChange={handleUpdate}
           >
-            {cars.map((car, index) => (
-              <option key={index} value={car.plate}>
-                {car.model} ({car.plate})
+            <option value="">Sélectionnez un véhicule</option>
+            {cars.map((car) => (
+              <option key={car._id} value={car._id}>
+                {car.marque || ''} {car.modele || 'Modèle inconnu'} ({car.plaque || 'Plaque inconnue'})
               </option>
             ))}
           </select>
         </div>
-
-        {/* User Name */}
         <div className="mb-3">
-          <label className="form-label">Nom de l'utilisateur</label>
-          <input
-            type="text"
-            className="form-control"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
+          <label className="form-label">Utilisateur</label>
+          <select 
+            className="form-select" 
+            name="user"
+            value={locationEdit.user._id || ""}
+            onChange={handleUpdate}
+          >
+            <option value="">Sélectionnez un utilisateur</option>
+            {users.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.name || ''} ({user.email || ''})
+              </option>
+            ))}
+          </select>
         </div>
-
-        {/* Start Date */}
         <div className="mb-3">
           <label className="form-label">Date de début</label>
           <input
             type="date"
             className="form-control"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
+            name="dateDebut"
+            value={locationEdit.dateDebut?.slice(0, 10)}
+            onChange={handleUpdate}
           />
         </div>
-
-        {/* End Date */}
         <div className="mb-3">
           <label className="form-label">Date de fin</label>
           <input
             type="date"
             className="form-control"
-            value={endTime}
-            onChange={(e) => setEndTime(e.target.value)}
+            name="dateFin"
+            value={locationEdit.dateFin?.slice(0, 10)}
+            onChange={handleUpdate}
           />
         </div>
 
-        {/* Validate Button */}
-        <button className="btn btn-primary" onClick={handleUpdate}>
-          Valider
-        </button>
+        <button className="btn btn-primary" onClick={handleSubmit}>Valider</button>
       </div>
     </div>
   );

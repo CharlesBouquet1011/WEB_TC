@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
-export function useFetchCars() {
+export function useFetchUsers() {
   const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
-  const [cars, setCars] = useState([]);
+  const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchCars = async () => {
+    const fetchUsers = async () => {
       try {
-        const response = await fetch(ProtocoleEtDomaine+"api/cars");
+        const response = await fetch(ProtocoleEtDomaine+"api/security/seeAll");
         
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des véhicules");
@@ -21,31 +21,31 @@ export function useFetchCars() {
         const data = await response.json();
         
         if (Array.isArray(data)) {
-          setCars(data);
+          setUsers(data);
         } else if (data && typeof data === 'object') {
           const possibleArrayProps = Object.entries(data)
             .find(([key, value]) => Array.isArray(value));
           
           if (possibleArrayProps) {
             const [key, arrayData] = possibleArrayProps;
-            setCars(arrayData);
+            setUsers(arrayData);
           } else {
-            setCars([data]);
+            setUsers([data]);
           }
         } else {
           console.error("Unexpected data format:", data);
-          setCars([]);
+          setUsers([]);
         }
       } catch (error) {
-        console.error("Error fetching cars:", error);
+        console.error("Error fetching users:", error);
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
     
-    fetchCars();
+    fetchUsers();
   }, []);
 
-  return { cars, loading, error };
+  return { users, loading, error };
 }
