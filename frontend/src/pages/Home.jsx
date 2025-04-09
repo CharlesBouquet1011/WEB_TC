@@ -5,8 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Home(){
-    const {ProtocoleEtDomaine}=useVar()
+    const {ProtocoleEtDomaine,setRedirectAfterLogin}=useVar()
     const navigate = useNavigate();
+    const redirect= ()=>{
+      setRedirectAfterLogin("/user")
+      navigate("/login")
+    }
     return(
         <div>
         <Menu/>
@@ -19,7 +23,7 @@ export default function Home(){
         </video>
         <button 
         className="absolute top-4 right-5 z-10 shadow-md hover:scale-105 transition-transform"
-        onClick={() => navigate("/login")}
+        onClick={() => redirect()}
         >
         <img
             src={ProtocoleEtDomaine + "media/image/profil.png"}
