@@ -229,8 +229,7 @@ async function submit(csrfToken,setErreurs,champs,navigate,proto){
 
         
 
-        const data={"Name": name, "FirstName": fname , "email": mail, "PhoneNumber":phone,"Password":password }
-
+        const data={"name": name, "firstName": fname , "email": mail, "phoneNumber":phone,"password":password }
         const response = await fetch(proto+"api/security/registration", {
           method: "POST",
           headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)

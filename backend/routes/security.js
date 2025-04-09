@@ -22,10 +22,16 @@ router.get("/csrf-token",csrfProtection, async (req,res) => {
 //inscription des utilisateurs
 router.post("/registration", csrfProtection, limiter, async (req,res)=>{
     try {
-        const { name, phoneNumber, email, password } = req.body;
-        console.log("Received:",req.body);
+        const { name, firstname, phoneNumber, email, password } = req.body;
 
-        
+
+        var Name=""
+        if (firstname){
+            Name=name + " "+ firstname
+        }else{
+            Name=name //pour Paul Henri
+        }
+
         const existe= await User.exists().where("email").equals(email) //on vérifie qu'il n'y a pas de doublon de mail
         if (existe){
             console.log("Pb d'email")
@@ -35,7 +41,7 @@ router.post("/registration", csrfProtection, limiter, async (req,res)=>{
         const hashedPassword=await hashString(password)
         
         const newUser = new User({
-            name: name,
+            name: Name,
             phoneNumber: phoneNumber,
             email: email,
             password: hashedPassword, // Pense à hasher le mot de passe en prod

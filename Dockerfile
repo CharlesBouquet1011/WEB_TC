@@ -39,7 +39,6 @@ RUN chown -R react /app && chmod -R 755 /app
 USER react
 RUN npm install
 
-RUN 
 #prod
 #RUN npm run build
 #en dev y a pas build
