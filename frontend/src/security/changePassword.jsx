@@ -38,15 +38,18 @@ export function ChangePasswordForm(){
     return (
         
           <>
+          <Fond>
             
               
     
               {/* Registration Form Section */}
-              <div className="col-md-6 d-flex align-items-center justify-content-center">
-                <div className="w-75">
-                  <h2 className="mb-4">Changez votre mot de passe</h2>
-                  <p className="text-muted mb-4"></p>
-    
+              <div className="d-flex align-items-center justify-content-center"> {/*mettre col-md-6 + une image si vous voulez en utiliser une */}
+              <div className="w-75 position-relative">
+                
+
+                <h2 className="mb-3 fw-bold fs-2">Changer votre mot de passe</h2>
+                <p className="text-muted mb-4">Veuillez saisir votre ancien mot de passe et définir un nouveau mot de passe.</p>
+
                   {/* Large Error Message */}
                   {erreurs.grosseErreur && (
                     <div className="alert alert-danger mb-4" role="alert">
@@ -108,12 +111,22 @@ export function ChangePasswordForm(){
                     >
                       Changer le mot de passe
                     </button>
+                    {/* Bouton Annuler */}
+                    <br />
+                    <button 
+                      type="button" 
+                      className="btn w-100 mt-3 btn-danger"
+                      onClick={() => navigate("/user")} // ou un navigate("/profil") par exemple
+                    >
+                      Annuler
+                    </button>
                   </form>
                 </div>
               </div>
             
           
           <br />
+          </Fond>
           </>
         )
 }
