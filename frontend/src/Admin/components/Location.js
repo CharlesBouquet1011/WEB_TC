@@ -60,10 +60,10 @@ export function Location({}) {
                 <AddLocation setAddLocation={setAddLocationMode} setRefresh={setRefresh}/>
             </div>
         )
-    } else if (editLocMode === true) {
+    } else if (editLocMode !== false) {
         return(
             <div>
-                <EditLocation location={locations.find(location => location._id === editLocMode)} setEditLoc={setEditLoc} setRefresh={setRefresh}/>
+                <EditLocation location={locations.bookings.find(location => location._id === editLocMode)} setEditLoc={setEditLoc} setRefresh={setRefresh}/>
             </div>
         )
 

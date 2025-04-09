@@ -68,6 +68,22 @@ router.post("/addAdmin", csrfProtection,limiter, async (req,res)=>{
     }
 })
 
+router.post("/modify", csrfProtection, limiter, async (req, res) => {
+    try {
+        const { _id, ...updatedFields } = req.body;
+        const updatedBooking = await Booking.findByIdAndUpdate(_id,updatedFields);
+
+        if (!updatedBooking) {
+            return res.status(404).json({ message: "Location non trouvée" });
+        }
+        console.log("Base de données des locations mise à jour")
+        res.status(200).json({message: "Location mise à jour avec succès"});
+
+    } catch (error) {
+        res.status(500).json({ message: "Erreur serveur", error });
+    }
+});
+
 router.post("/check-disponibilite", csrfProtection, async (req, res) => {
     try {
         const { dateDebut, dateFin, voitureReservee } = req.body;
@@ -204,7 +220,7 @@ router.delete("/delete",csrfProtection,auth,limiter, async (req,res)=>{
                 }
             }
 
-        }else {
+        } else {
             if (typeof idBooking !=="string"){
                 res.status(400).json({erreur: "Id Invalide"})
             }

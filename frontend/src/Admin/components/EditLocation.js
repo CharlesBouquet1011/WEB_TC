@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useFetchCars } from './useFetchCars.js';
 import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
+import { useFetchUsers } from './useFetchUsers.js';
 
 export function EditLocation({ location, setEditLoc, setRefresh }) {
   const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
-  const { cars, loading, error: carsError } = useFetchCars();
+  const { cars, loading_cars, error: carsError } = useFetchCars();
+  const { users, loading_users, error: usersError } = useFetchUsers();
 
   const [locationEdit, setLocEdit] = useState(location);
 
@@ -55,12 +57,13 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
           <label className="form-label">Véhicule</label>
           <select
             className="form-select"
-            name="vehiculeReserve"
-            value={locationEdit.vehiculeReserve}
+            name="voitureReservee"
+            value={locationEdit.voitureReservee._id || ""}
             aria-placeholder="Veuillez sélectionner un véhicule"
             onChange={handleUpdate}
           >
-            {cars.map((car, index) => (
+            <option value="">Sélectionnez un véhicule</option>
+            {cars.map((car) => (
               <option key={car._id} value={car._id}>
                 {car.marque || ''} {car.modele || 'Modèle inconnu'} ({car.plaque || 'Plaque inconnue'})
               </option>
@@ -68,14 +71,25 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-label">Nom de l'utilisateur</label>
-          <input
-            type="text"
-            className="form-control"
+          <label className="form-label">Utilisateur</label>
+          <select 
+            className="form-select" 
             name="user"
-            value={locationEdit.user}
-            onChange={handleUpdate}
-          />
+            value={locationEdit.user._id || ""}
+            onChange={(e) => {
+              setLocEdit((prev) => ({
+                ...prev,
+                user: e.target.value
+              }));
+            }}
+          >
+            <option value="">Sélectionnez un utilisateur</option>
+            {users.map((user) => (
+              <option key={user._id} value={user._id}>
+                {user.name || ''} ({user.email || ''})
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-3">
           <label className="form-label">Date de début</label>
@@ -83,19 +97,17 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
             type="date"
             className="form-control"
             name="dateDebut"
-            value={locationEdit.dateDebut}
+            value={locationEdit.dateDebut?.slice(0, 10)}
             onChange={handleUpdate}
           />
         </div>
-
-        {/* End Date */}
         <div className="mb-3">
           <label className="form-label">Date de fin</label>
           <input
             type="date"
             className="form-control"
             name="dateFin"
-            value={locationEdit.dateFin}
+            value={locationEdit.dateFin?.slice(0, 10)}
             onChange={handleUpdate}
           />
         </div>

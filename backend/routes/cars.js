@@ -44,9 +44,7 @@ router.delete("/delete/:id", csrfProtection, limiter, async (req, res) => {
         }
 
         const deletedBookings = await Bookings.deleteMany({ voitureReservee: id });
-        console.log(`Bookings supprimés: ${deletedBookings.deletedCount}`);
-
-        console.log("Véhicule supprimé: ", deletedCar);
+        
         res.status(200).json({ message:"Véhicule supprimé avec succès"});
 
     } catch (err) {
@@ -76,19 +74,18 @@ router.post("/filter",csrfProtection,limiter,async(req,res)=>{
         const {marque,prixMax}=req.body
         
         filtre={}
-        if (marque && typeof(marque)==String){
-            filtre.marque=marque
+        if (marque && isNaN(marque)){
+            
+            filtre.marque = { $regex: marque, $options: 'i' }; //recherche avec correspondance partielle, i = insensible à la casse
         }
         
         if (prixMax && !isNaN(prixMax)) {
             filtre.prix = { ...filtre.prix, $lte: prixMax }; 
           }
           
-          
 
        
         
-        console.log(filtre)
         const resultat=await Cars.find(filtre)
         res.status(200).json({voitures:resultat})
     }catch (err){
