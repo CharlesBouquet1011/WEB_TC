@@ -8,7 +8,10 @@ RUN adduser -S backend_node
 
 RUN chown -R backend_node /app
 USER backend_node
+#prod
 CMD ["npm","start"]
+#dev
+#CMD ["npm","run","dev"]
 
 FROM nginx:1.27.4-alpine-slim AS web_nginx
 WORKDIR /app/nginx
