@@ -76,7 +76,6 @@ router.post("/modify", csrfProtection, limiter, async (req, res) => {
         if (!updatedBooking) {
             return res.status(404).json({ message: "Location non trouvée" });
         }
-        console.log("Base de données des locations mise à jour")
         res.status(200).json({message: "Location mise à jour avec succès"});
 
     } catch (error) {

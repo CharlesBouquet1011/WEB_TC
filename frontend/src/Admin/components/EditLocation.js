@@ -13,8 +13,18 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
   const [locationEdit, setLocEdit] = useState(location);
 
   const handleUpdate = (e) => {
-    setLocEdit({...locationEdit, [e.target.name]: e.target.value});
-  }
+    const { name, value } = e.target;
+  
+    if (name === "voitureReservee") {
+      const selectedCar = cars.find((car) => car._id === value);
+      setLocEdit((prev) => ({ ...prev, voitureReservee: selectedCar || null }));
+    } else if (name === "user") {
+      const selectedUser = users.find((u) => u._id === value);
+      setLocEdit((prev) => ({ ...prev, user: selectedUser || null }));
+    } else {
+      setLocEdit((prev) => ({ ...prev, [name]: value }));
+    }
+  };
 
   const handleSubmit  = async () => {
     try {
@@ -59,7 +69,6 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
             className="form-select"
             name="voitureReservee"
             value={locationEdit.voitureReservee._id || ""}
-            aria-placeholder="Veuillez sélectionner un véhicule"
             onChange={handleUpdate}
           >
             <option value="">Sélectionnez un véhicule</option>
@@ -76,12 +85,7 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
             className="form-select" 
             name="user"
             value={locationEdit.user._id || ""}
-            onChange={(e) => {
-              setLocEdit((prev) => ({
-                ...prev,
-                user: e.target.value
-              }));
-            }}
+            onChange={handleUpdate}
           >
             <option value="">Sélectionnez un utilisateur</option>
             {users.map((user) => (

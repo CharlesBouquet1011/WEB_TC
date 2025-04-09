@@ -43,7 +43,6 @@ export function Location({}) {
                         'X-CSRF-Token': csrfToken,
                     }
                 });
-                console.log("Deletion attempt")
                 if (!response.ok) {
                     throw new Error("Erreur lors de la suppression de la location.");
                 }
