@@ -5,6 +5,7 @@ import { Vehicule } from './components/Vehicule.js';
 import { LocationRow } from './components/LocationRow.js';
 import { EditLocation } from './components/EditLocation.js';
 import { AddLocation } from './components/AddLocation.js';
+import { Login } from './components/Login.js';
 
 const initialLocations = [
   { plate: "FW-245-MD", model: "Bugatti Chiron", startTime: "2025-03-26", endTime: "2025-05-11", userId: "mathis"},
@@ -19,6 +20,8 @@ export function Admin() {
   const [addLocationMode, setAddLocationMode] = useState(false);
   const [locations, setLocations] = useState(initialLocations);
 
+  const [login, setLogin] = useState(true);
+
   const handleDelete = (plate) => {
     const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette location ?");
     if (confirmDelete) {
@@ -26,57 +29,63 @@ export function Admin() {
     }
   };
 
-  return (
-    <div>
-      <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
+  if (login) {
+    return (
+      <div>
+        <Header activeTab={activeTab} setActiveTab={setActiveTab}/>
 
-      {/* Vehicles Management */}
-      {activeTab===0 && (
-        <Vehicule/>
-      )}
+        {/* Vehicles Management */}
+        {activeTab===0 && (
+          <Vehicule/>
+        )}
 
-      {/* Location Management */}
-      {activeTab === 1 && !editLoc && !addLocationMode && (
-        <div className="container mt-4">
-          <button type="button" className="btn btn-secondary btn-lg mb-3" onClick={() => setAddLocationMode(true)}>Ajouter une location +</button>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th>Plaque</th>
-                <th>Modèle</th>
-                <th>Utilisateur</th>
-                <th>Début</th>
-                <th>Fin</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {locations.map((location, index) => (
-                <LocationRow key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditLoc={setEditLoc} handleDelete={handleDelete}/>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+        {/* Location Management */}
+        {activeTab === 1 && !editLoc && !addLocationMode && (
+          <div className="container mt-4">
+            <button type="button" className="btn btn-secondary btn-lg mb-3" onClick={() => setAddLocationMode(true)}>Ajouter une location +</button>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Plaque</th>
+                  <th>Modèle</th>
+                  <th>Utilisateur</th>
+                  <th>Début</th>
+                  <th>Fin</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {locations.map((location, index) => (
+                  <LocationRow key={index} plate={location.plate} model={location.model} startTime={location.startTime} endTime={location.endTime} userId={location.userId} setEditLoc={setEditLoc} handleDelete={handleDelete}/>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-      {/* Add Location Page */}
-      {activeTab === 1 && addLocationMode && (
-        <AddLocation
-          setAddLocationMode={setAddLocationMode}
-          locations={locations}
-          setLocations={setLocations}
-        />
-      )}
+        {/* Add Location Page */}
+        {activeTab === 1 && addLocationMode && (
+          <AddLocation
+            setAddLocationMode={setAddLocationMode}
+            locations={locations}
+            setLocations={setLocations}
+          />
+        )}
 
-      {/* Edit Location Page*/}
-      {activeTab === 1 && editLoc && (
-        <EditLocation 
-          setEditLoc={setEditLoc} 
-          selectedLocation={editLoc}
-          locations={locations}
-          setLocations={setLocations}
-        />
-      )}
-    </div>
-  );
+        {/* Edit Location Page*/}
+        {activeTab === 1 && editLoc && (
+          <EditLocation 
+            setEditLoc={setEditLoc} 
+            selectedLocation={editLoc}
+            locations={locations}
+            setLocations={setLocations}
+          />
+        )}
+      </div>
+    );
+  } else {
+    return(
+      <Login/>
+    )
+  }
 }

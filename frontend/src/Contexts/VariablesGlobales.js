@@ -3,8 +3,8 @@ import React, { createContext, useState, useContext } from 'react';
 const VarContext = createContext();
 
 export function VarProvider({children}){
-    const [ProtocoleEtDomaine, setProtocoleEtDomaine] = useState("http://localhost/")
-    const [voitureSelectionnee,setVoitureSelectionnee]=useState(null) //pour afficher et choisir la voiture à louer
+    const [ProtocoleEtDomaine, setProtocoleEtDomaine] = useState("http://localhost/") // à modifier (nom de domaine)
+    const [voitureSelectionnee,setVoitureSelectionnee]=useState(null) // pour afficher et choisir la voiture à louer
     
         
         

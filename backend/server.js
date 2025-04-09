@@ -17,12 +17,14 @@ const PORT = 80;
 const securityRoute= require("./routes/security.js");
 const bookingsRoute = require("./routes/bookings.js")
 const carRoute= require("./routes/cars.js")
+const adminRoute= require("./routes/admin.js")
 //autoriser les proxies pour pouvoir bien suivre et appliquer le rate-limiter:
 app.set('trust proxy',1)
 //utilisation des routes
 app.use("/security",securityRoute);
 app.use("/bookings",bookingsRoute);
 app.use("/cars",carRoute);
+app.use("/admin",adminRoute);
 const rate_limiter= require("./config/rateLimiter.js")
 
 // Définition d'un modèle simple
