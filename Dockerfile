@@ -10,7 +10,7 @@ RUN chown -R backend_node /app
 USER backend_node
 CMD ["npm","start"]
 
-FROM nginx:1.27.4-alpine AS web_nginx
+FROM nginx:1.27.4-alpine-slim AS web_nginx
 WORKDIR /app/nginx
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 #donner les permissions à l'utilisateur du conteneur (sinon erreur de permissions au démarrage et pour le fonctionnement)

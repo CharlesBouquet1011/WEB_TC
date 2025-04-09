@@ -97,7 +97,6 @@ export default function SeeAllBookings(){
 //affiche les bookings confirmés seulement
 export function SeeUserBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-  console.log("affiche User Booking")
   const [bookings, setbookings] = useState([]);
   const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
   useEffect(() => {
@@ -137,7 +136,6 @@ export function SeeUserBookings(){
 
 export function SeeUnconfirmed(){
     const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-    console.log("affiche User Booking")
     const [bookings, setbookings] = useState([]);
     const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
     useEffect(() => {
