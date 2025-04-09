@@ -73,17 +73,13 @@ router.post("/edit", csrfProtection, limiter, async (req, res) => {
 
 router.post("/filter",csrfProtection,limiter,async(req,res)=>{
     try{
-        const {marque,nb_places,prixMax}=req.body
+        const {marque,prixMax}=req.body
         
         filtre={}
         if (marque && typeof(marque)==String){
             filtre.marque=marque
         }
         
-        
-        if (nb_places && !isNaN(nb_places)){
-            filtre.nb_places=nb_places
-        }
         if (prixMax && !isNaN(prixMax)) {
             filtre.prix = { ...filtre.prix, $lte: prixMax }; 
           }

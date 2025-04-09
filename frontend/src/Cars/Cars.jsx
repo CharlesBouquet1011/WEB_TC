@@ -85,14 +85,6 @@ export default function Cars() {
           />
           <input
             type="number"
-            name="nb_places"
-            placeholder="Nombre de places"
-            value={filters.nb_places}
-            onChange={handleChange}
-            className="p-2 border rounded"
-          />
-          <input
-            type="number"
             name="prixMax"
             placeholder="Prix Max"
             value={filters.prixMax}
