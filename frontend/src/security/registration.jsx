@@ -85,15 +85,15 @@ function Registration() {
   //mettre un peu de pour ce forms, c'est moche pour l'instant: utiliser la classe du div
   return (
     <Fond>
-      <div className="container-fluid min-h-screen flex flex-col">
-        <div className="row flex-grow">
+      <div className="container-fluid min-h-screen d-flex flex-column">
+        <div className="row flex-grow flex-nowrap">
           {/* Image Section */}
           <div className="col-md-6 p-0 d-none d-md-block position-relative">
             <img 
-              src="/image/voit1.jpg" 
+              src="/media/image/vroom2.jpg" 
               alt="Registration background" 
-              className="img-fluid w-80 h-80 position-absolute"
-              style={{objectFit: 'cover', opacity: 0.7}}
+              className="w-100 h-100 position-absolute top-0 start-0 rounded-start-4"
+              style={{ objectFit: 'cover', opacity: 0.7 ,transform: 'scaleX(-1)'}}
             />
           </div>
 
