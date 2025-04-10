@@ -10,7 +10,7 @@ Ce projet est un site web qui permet de louer des voitures de luxe
 
 
 # lancer le projet:
-
+- mettre des valeurs pour les variables dans le .env
 - installer Docker
 - faire `docker compose up -d`
 - allez sur localhost 
