@@ -17,3 +17,5 @@ spec:
                 image: {{ .Values.services.react.image }} 
                 ports: 
                     - containerPort: {{ .Values.services.app.port }}
+                resources:
+                    {{- toYaml .Values.services.react.resources | nindent 6 }}

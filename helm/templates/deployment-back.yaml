@@ -1,0 +1,21 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+    name: {{.Release.Name}}--back
+spec:
+    replicas: {{ .Values.services.back.replicas }}
+    selector:
+        matchLabels:
+            app: back
+    template:
+        metadata:
+            labels:
+                app: back
+        spec:
+            containers:
+                - name: back
+                image: {{ .Values.services.back.image }} 
+                ports: 
+                    - containerPort: {{ .Values.services.app.port }}
+                resources:
+                    {{- toYaml .Values.services.back.resources | nindent 6 }}

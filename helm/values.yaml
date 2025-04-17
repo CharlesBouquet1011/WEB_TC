@@ -4,19 +4,48 @@ services:
     port: 80
     targetPort: 80
     replicas: 1
+    resources:
+      limits:
+        cpu: "500m" #1 demi coeur max
+        memory: "500Mi"
+      requests:
+        cpu: "250m"
+        memory: "128Mi"
+
   back:
     image: backend-node:latest
     port: 80
     targetPort: 80
     replicas: 1
+    resources:
+      limits: 
+        cpu: "1" #un coeur max
+        memory: "500 Mi"
+      requests:
+        cpu: "500m"
+        memory: "256Mi"
     
   react:
     image: react:latest
     port: 3000
     targetPort: 3000
     replicas: 1
+    resources:
+      limits:
+        cpu: "500m" #1 demi coeur max
+        memory: "500Mi"
+      requests:
+        cpu: "250m"
+        memory: "128Mi"
   bd_mongo:
     image: mongo:latest
     port: 27017
     targetPort: 27017
     replicas: 1
+    resources:
+      limits: 
+        cpu: "1" #un coeur max
+        memory: "500 Mi"
+      requests:
+        cpu: "500m"
+        memory: "256Mi"

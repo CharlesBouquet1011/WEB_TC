@@ -1,0 +1,21 @@
+apiVersion: app/v1
+kind: Deployment
+metadata:
+    name: {{.Release.Name}}--bd_mongo
+spec:
+    replicas: {{ .Values.services.bd_mongo.replicas }}
+    selector:
+        matchLabels:
+            app: bd_mongo
+    template:
+        metadata:
+            labels:
+                app: bd_mongo
+        spec:
+            containers:
+                - name: bd_mongo
+                image: {{ .Values.services.bd_mongo.image }} 
+                ports: 
+                    - containerPort: {{ .Values.services.app.port }}
+                resources:
+                    {{- toYaml .Values.services.bd_mongo.resources | nindent 6 }}
