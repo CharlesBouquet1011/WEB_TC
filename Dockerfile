@@ -16,6 +16,8 @@ CMD ["npm","start"]
 FROM nginx:1.27.4-alpine-slim AS web_nginx
 WORKDIR /app/nginx
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+#prod
+#COPY nginx.default_prod.conf /etc/nginx/conf.d/default.conf
 #donner les permissions à l'utilisateur du conteneur (sinon erreur de permissions au démarrage et pour le fonctionnement)
 RUN chown -R nginx:nginx /app/nginx && \
     chown -R nginx:nginx /etc/nginx && \

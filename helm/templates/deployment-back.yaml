@@ -1,7 +1,8 @@
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: {{.Release.Name}}--back
+    namespace: DE
 spec:
     replicas: {{ .Values.services.back.replicas }}
     selector:
@@ -10,12 +11,13 @@ spec:
     template:
         metadata:
             labels:
-                app: back
+                app: {{ include "monchart.name" . }}
+                component: back
         spec:
             containers:
                 - name: back
                 image: {{ .Values.services.back.image }} 
                 ports: 
-                    - containerPort: {{ .Values.services.app.port }}
+                    - containerPort: {{ .Values.services.back.port }}
                 resources:
                     {{- toYaml .Values.services.back.resources | nindent 6 }}

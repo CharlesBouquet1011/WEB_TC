@@ -1,19 +1,20 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: {{ include  "monchart.fullname" . }}--react
+    name: {{ include  "monchart.fullname" . }}--frontend
+    namespace: DE
     labels:
         app: {{ include "monchart.name" . }}
         chart: {{ include "monchart.chart" . }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
-        type: {{ .Values.react.service.type }}
+        type: {{ .Values.services.frontend.type }}
         ports: 
-            - port: {{ .Values.react.service.port }}
-            targetPort: {{ .Values.react.service.targetPort }}
+            - port: {{ .Values.services.frontend.port }}
+            targetPort: {{ .Values.services.frontend.targetPort }}
             protocol: TCP
             name: http
         selector:
             app: {{ include "monchart.name" . }}
-            component: react
+            component: frontend

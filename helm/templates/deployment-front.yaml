@@ -1,21 +1,38 @@
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{.Release.Name}}--react
+  name: {{ include "monchart.fullname" . }}-frontend
+  namespace: DE
 spec:
-    replicas: {{ .Values.services.react.replicas }}
-    selector:
-        matchLabels:
-            app: react
-    template:
-        metadata:
-            labels:
-                app: react
-        spec:
-            containers:
-                - name: react
-                image: {{ .Values.services.react.image }} 
-                ports: 
-                    - containerPort: {{ .Values.services.app.port }}
-                resources:
-                    {{- toYaml .Values.services.react.resources | nindent 6 }}
+  replicas: {{ .Values.services.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "monchart.name" . }}
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: {{ include "monchart.name" . }}
+        component: frontend
+    spec:
+      volumes:
+        - name: react-static
+          emptyDir: {} # ou pvc si tu veux persister
+      containers:
+        - name: react-builder
+          image: {{ .Values.services.frontend.reactImage }}
+          command: ["/bin/sh", "-c"] #on lance sh et on lui passe une commande en argument (-c)
+          args:
+            - |
+              npm install && npm run build && sleep 3600
+          workingDir: /app
+          volumeMounts:
+            - name: react-static
+              mountPath: {{ .Values.services.frontend.sharedVolume.mountPath }}
+        - name: nginx
+          image: {{ .Values.services.frontend.nginxImage }}
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: react-static
+              mountPath: {{ .Values.services.frontend.sharedVolume.mountPath }}

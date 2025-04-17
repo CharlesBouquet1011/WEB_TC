@@ -1,9 +1,13 @@
 services:
-  nginx:
-    image: nginx:latest #à vérifier le nom des images build
+  frontend:
+    reactImage: react:latest
+    nginxImage: nginx-DE:latest
+    replicas: 1
+    type: ClusterIP
+    sharedVolume:
+      mountPath: /app/build
     port: 80
     targetPort: 80
-    replicas: 1
     resources:
       limits:
         cpu: "500m" #1 demi coeur max
@@ -17,38 +21,29 @@ services:
     port: 80
     targetPort: 80
     replicas: 1
+    type: ClusterIP
     resources:
       limits: 
         cpu: "1" #un coeur max
-        memory: "500 Mi"
+        memory: "500Mi"
       requests:
         cpu: "500m"
         memory: "256Mi"
     
-  react:
-    image: react:latest
-    port: 3000
-    targetPort: 3000
-    replicas: 1
-    resources:
-      limits:
-        cpu: "500m" #1 demi coeur max
-        memory: "500Mi"
-      requests:
-        cpu: "250m"
-        memory: "128Mi"
+  
   bd_mongo:
     image: mongo:latest
     port: 27017
     targetPort: 27017
     replicas: 1
+    type: ClusterIP
     storage:
       enabled: true
       size: 1Gi
     resources:
       limits: 
         cpu: "1" #un coeur max
-        memory: "500 Mi"
+        memory: "500Mi"
       requests:
         cpu: "500m"
         memory: "256Mi"

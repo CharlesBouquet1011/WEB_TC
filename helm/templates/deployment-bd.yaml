@@ -1,7 +1,8 @@
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: {{.Release.Name}}--bd_mongo
+    namespace: DE
 spec:
     replicas: {{ .Values.services.bd_mongo.replicas }}
     selector:
@@ -10,13 +11,15 @@ spec:
     template:
         metadata:
             labels:
-                app: bd_mongo
+                app: {{ include "monchart.name" . }}
+                component: bd_mongo
+                
         spec:
             containers:
                 - name: bd_mongo
                 image: {{ .Values.services.bd_mongo.image }} 
                 ports: 
-                    - containerPort: {{ .Values.services.app.port }}
+                    - containerPort: {{ .Values.services.bd_mongo.port }}
                 resources:
                     {{- toYaml .Values.services.bd_mongo.resources | nindent 6 }}
                 volumeMounts:
@@ -24,5 +27,5 @@ spec:
                     mountPath: /data/db
             volumes:
                 - name: mongo-data
-                persistenceVolumeClaim:
+                persistentVolumeClaim:
                     claimName: {{ include "monchart.fullname" . }}-mongo-pvc
