@@ -1,0 +1,22 @@
+services:
+  nginx:
+    image: nginx:latest #à vérifier le nom des images build
+    port: 80
+    targetPort: 80
+    replicas: 1
+  back:
+    image: backend-node:latest
+    port: 80
+    targetPort: 80
+    replicas: 1
+    
+  react:
+    image: react:latest
+    port: 3000
+    targetPort: 3000
+    replicas: 1
+  bd_mongo:
+    image: mongo:latest
+    port: 27017
+    targetPort: 27017
+    replicas: 1

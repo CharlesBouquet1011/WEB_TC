@@ -4,6 +4,7 @@ services:
     build:
       context: .
       target: backend_node
+    image: backend-node:latest
     expose:
     - "80"
     restart: on-failure
@@ -23,6 +24,7 @@ services:
     build:
       context: .
       target: react
+    image: react:latest
     expose:
       - "3000"
     depends_on:
@@ -55,6 +57,7 @@ services:
     build:
       context: .
       target: web_nginx
+    image: nginx:latest
     ports:
       - "80:80"
       - "3000:80" #pour le hot reloading de react qui est sur le port 3000

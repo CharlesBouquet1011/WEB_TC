@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: {{ include  "monchart.fullname" . }}--react
+    labels:
+        app: {{ include "monchart.name" . }}
+        chart: {{ include "monchart.chart" . }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+        type: {{ .Values.react.service.type }}
+        ports: 
+            - port: {{ .Values.react.service.port }}
+            targetPort: {{ .Values.react.service.targetPort }}
+            protocol: TCP
+            name: http
+        selector:
+            app: {{ include "monchart.name" . }}
+            component: react
