@@ -19,3 +19,10 @@ spec:
                     - containerPort: {{ .Values.services.app.port }}
                 resources:
                     {{- toYaml .Values.services.bd_mongo.resources | nindent 6 }}
+                volumeMounts:
+                    - name: mongo-data
+                    mountPath: /data/db
+            volumes:
+                - name: mongo-data
+                persistenceVolumeClaim:
+                    claimName: {{ include "monchart.fullname" . }}-mongo-pvc

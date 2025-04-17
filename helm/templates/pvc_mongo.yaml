@@ -1,0 +1,12 @@
+{{- if .Values.services.bd_mongo.storage.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "monchart.fullname" . }}-mongo-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.services.bd_mongo.storage.size }}
+{{- end }}
