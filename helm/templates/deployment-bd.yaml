@@ -23,7 +23,7 @@ spec:
                 resources:
                     {{- toYaml .Values.services.bd_mongo.resources | nindent 16 }}
                 volumeMounts:
-                    - name: mongo-data
+                -   name: mongo-data
                     mountPath: /data/db
             volumes:
             -   name: mongo-data
