@@ -7,7 +7,8 @@ spec:
     replicas: {{ .Values.services.bd_mongo.replicas }}
     selector:
         matchLabels:
-            app: bd-mongo
+            app: {{ include "monchart.name" . }}
+            component: bd-mongo
     template:
         metadata:
             labels:
