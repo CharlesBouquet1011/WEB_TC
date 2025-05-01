@@ -16,10 +16,10 @@ spec:
                 
         spec:
             containers:
-            - name: bd_mongo
+            -   name: bd_mongo
                 image: {{ .Values.services.bd_mongo.image }} 
                 ports: 
-                    - containerPort: {{ .Values.services.bd_mongo.port }}
+                -   containerPort: {{ .Values.services.bd_mongo.port }}
                 resources:
                     {{- toYaml .Values.services.bd_mongo.resources | nindent 16 }}
                 volumeMounts:
