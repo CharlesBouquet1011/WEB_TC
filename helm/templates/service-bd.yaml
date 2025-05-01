@@ -11,7 +11,7 @@ metadata:
     spec:
         type: {{ .Values.services.bd_mongo.type }}
         ports: 
-            - port: {{ .Values.services.bd_mongo.port }}
+        -   port: {{ .Values.services.bd_mongo.port }}
             targetPort: {{ .Values.services.bd_mongo.targetPort }}
             protocol: TCP
             name: http

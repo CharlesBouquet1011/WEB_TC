@@ -11,7 +11,7 @@ metadata:
     spec:
         type: {{ .Values.services.back.type }}
         ports: 
-            - port: {{ .Values.services.back.port }}
+        -   port: {{ .Values.services.back.port }}
             targetPort: {{ .Values.services.back.targetPort }}
             protocol: TCP
             name: http
