@@ -7,16 +7,16 @@ spec:
     replicas: {{ .Values.services.bd_mongo.replicas }}
     selector:
         matchLabels:
-            app: bd_mongo
+            app: bd-mongo
     template:
         metadata:
             labels:
                 app: {{ include "monchart.name" . }}
-                component: bd_mongo
+                component: bd-mongo
                 
         spec:
             containers:
-            -   name: bd_mongo
+            -   name: bd-mongo
                 image: {{ .Values.services.bd_mongo.image }} 
                 ports: 
                 -   containerPort: {{ .Values.services.bd_mongo.port }}

@@ -8,13 +8,13 @@ metadata:
         chart: {{ include "monchart.chart" . }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
-    spec:
-        type: {{ .Values.services.bd_mongo.type }}
-        ports: 
-        -   port: {{ .Values.services.bd_mongo.port }}
-            targetPort: {{ .Values.services.bd_mongo.targetPort }}
-            protocol: TCP
-            name: http
-        selector:
-            app: {{ include "monchart.name" . }}
-            component: bd_mongo
+spec:
+    type: {{ .Values.services.bd_mongo.type }}
+    ports: 
+    -   port: {{ .Values.services.bd_mongo.port }}
+        targetPort: {{ .Values.services.bd_mongo.targetPort }}
+        protocol: TCP
+        name: http
+    selector:
+        app: {{ include "monchart.name" . }}
+        component: bd_mongo

@@ -8,13 +8,13 @@ metadata:
         chart: {{ include "monchart.chart" . }}
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
-    spec:
-        type: {{ .Values.services.back.type }}
-        ports: 
-        -   port: {{ .Values.services.back.port }}
-            targetPort: {{ .Values.services.back.targetPort }}
-            protocol: TCP
-            name: http
-        selector:
-            app: {{ include "monchart.name" . }}
-            component: back
+spec:
+    type: {{ .Values.services.back.type }}
+    ports: 
+    -   port: {{ .Values.services.back.port }}
+        targetPort: {{ .Values.services.back.targetPort }}
+        protocol: TCP
+        name: http
+    selector:
+        app: {{ include "monchart.name" . }}
+        component: back
