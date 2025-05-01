@@ -26,6 +26,6 @@ spec:
                     - name: mongo-data
                     mountPath: /data/db
             volumes:
-            - name: mongo-data
+            -   name: mongo-data
                 persistentVolumeClaim:
                     claimName: {{ include "monchart.fullname" . }}-mongo-pvc
