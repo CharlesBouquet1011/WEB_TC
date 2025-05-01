@@ -2,12 +2,10 @@ import { useState, useEffect } from 'react';
 import { LocationRow } from './LocationRow.js';
 import { AddLocation } from './AddLocation.js';
 import { EditLocation } from './EditLocation.js';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 
 export function Location({}) {
-    const {ProtocoleEtDomaine}=useVar();
     const {csrfToken}=useCSRF();
 
     const [locations, setLocations] = useState([]);
@@ -18,7 +16,7 @@ export function Location({}) {
     useEffect(() => {
         const fetchLocations = async () => {
           try {
-            const response = await fetch(ProtocoleEtDomaine+"api/bookings/seeAll");
+            const response = await fetch("/api/bookings/seeAll");
             if (!response.ok) {
                 throw new Error(`Erreur lors de la récupération des locations: ${response.status}`);
             }
@@ -37,7 +35,7 @@ export function Location({}) {
         const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer cette location ?");
         if (confirmDelete) {
             try {
-            const response = await fetch(`${ProtocoleEtDomaine}api/bookings/deleteAdmin/${id}`, {
+            const response = await fetch(`/api/bookings/deleteAdmin/${id}`, {
                     method: "DELETE",
                     headers:{
                         'X-CSRF-Token': csrfToken,

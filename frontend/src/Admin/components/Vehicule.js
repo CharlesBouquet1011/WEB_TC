@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Tile } from './Tile.js';
 import { EditCar } from './EditCar.js';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 // import ferrariImage from "../public/ferrari.png"; 
@@ -166,7 +165,6 @@ const carList = [
 ];
 
 export function Vehicule({}) {
-  const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
 
   const [cars, setCars] = useState([]);
@@ -176,7 +174,7 @@ export function Vehicule({}) {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await fetch(ProtocoleEtDomaine+"api/cars");
+        const response = await fetch("/api/cars");
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des véhicules");
         }
@@ -194,7 +192,7 @@ export function Vehicule({}) {
     const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce véhicule ?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`${ProtocoleEtDomaine}api/cars/delete/${id}`, {
+        const response = await fetch(`/api/cars/delete/${id}`, {
           method: 'DELETE',
           headers:{
             'X-CSRF-Token': csrfToken,
@@ -213,7 +211,7 @@ export function Vehicule({}) {
   const handleAddCar = async () => {
     try {
       const randomCar =  carList[Math.floor(Math.random()*carList.length)];
-      const response = await fetch(`${ProtocoleEtDomaine}api/cars/add`, {
+      const response = await fetch(`/api/cars/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

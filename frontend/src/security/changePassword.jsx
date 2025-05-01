@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import Fond from '../utile/style.jsx';
 import { useNavigate } from "react-router";
-import { useVar } from "../Contexts/VariablesGlobales.js";
 import { handleChange,verifMotDePasse,contientPasMajetMin } from "./registration.jsx";
 
 export function ChangePasswordForm(){
@@ -12,19 +11,18 @@ export function ChangePasswordForm(){
     const [Password,setPassword]=useState('')
     const [NewPassword,setNewPassword]=useState("")
     const [CNewPassword,setCNewPassword]=useState("") //confirmation du nouveau mot de passe
-    const {ProtocoleEtDomaine}=useVar()
     const [erreurs,setErreurs]=useState({grosseErreur:"",CNewPasswordErreur:"",PasswordErreur:"",NewPasswordErreur:""})
     const [isErreur,setIsErreur]=useState(false) //sert à définir s'il y a eu une erreur
-    const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate,ProtocoleEtDomaine,isErreur,setIsErreur) =>{
+    const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate,isErreur,setIsErreur) =>{
         if (event.key==="Enter"){
           event.preventDefault()
           console.log(champs)
-          submit(csrfToken, setErreurs,champs, navigate,ProtocoleEtDomaine,isErreur,setIsErreur)
+          submit(csrfToken, setErreurs,champs, navigate,isErreur,setIsErreur)
         }
       }
     
     useEffect(()=>{
-        checkErreurs(Password,NewPassword,CNewPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setIsErreur)
+        checkErreurs(Password,NewPassword,CNewPassword,setErreurs,csrfToken,setIsErreur)
         setIsErreur(false)
 
     },[Password,NewPassword,CNewPassword])
@@ -73,7 +71,7 @@ export function ChangePasswordForm(){
                         className="form-control" 
                         id="oldPassword"
                         onChange={(event) => handleChange(event, setPassword)} 
-                        onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,ProtocoleEtDomaine,isErreur,setIsErreur)}
+                        onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,isErreur,setIsErreur)}
     
                       />
                       {erreurs.PasswordErreur && <small className="text-danger">{erreurs.PasswordErreur}</small>}
@@ -86,7 +84,7 @@ export function ChangePasswordForm(){
                         className="form-control" 
                         id="Newpassword"
                         onChange={(event) => handleChange(event, setNewPassword)}
-                        onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,ProtocoleEtDomaine,isErreur,setIsErreur)}
+                        onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,isErreur,setIsErreur)}
     
                       />
                       {erreurs.NewPasswordErreur && <small className="text-danger">{erreurs.NewPasswordErreur}</small>}
@@ -98,7 +96,7 @@ export function ChangePasswordForm(){
                         className="form-control" 
                         id="CNewPassword"
                         onChange={(event) => handleChange(event, setCNewPassword)}
-                        onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,ProtocoleEtDomaine,isErreur,setIsErreur)}
+                        onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,isErreur,setIsErreur)}
     
                       />
                       {erreurs.CNewPasswordErreur && <small className="text-danger">{erreurs.CNewPasswordErreur}</small>}
@@ -107,7 +105,7 @@ export function ChangePasswordForm(){
                     <button 
                       type="button" 
                       className="btn btn-dark w-100 mt-3"
-                      onClick={() => submit(csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,ProtocoleEtDomaine,isErreur,setIsErreur)}
+                      onClick={() => submit(csrfToken, setErreurs, [ Password, NewPassword,CNewPassword], navigate,isErreur,setIsErreur)}
                     >
                       Changer le mot de passe
                     </button>
@@ -140,10 +138,10 @@ export function ChangePasswordButton(){
 }
 
 //renvoie vrai s'il y a une erreur
-function checkErreursSubmit(Password,NewPassword,CNewPassword,ProtocoleEtDomaine,csrfToken,setErreurs,setIsErreur){
+function checkErreursSubmit(Password,NewPassword,CNewPassword,csrfToken,setErreurs,setIsErreur){
     
     if (Password.length>0 && NewPassword.length>0 && CNewPassword.length>0){
-        checkErreurs(Password,NewPassword,CNewPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setIsErreur)
+        checkErreurs(Password,NewPassword,CNewPassword,setErreurs,csrfToken,setIsErreur)
         checkPassword(Password,setErreurs,setIsErreur)
     }
     
@@ -156,7 +154,7 @@ function checkErreursSubmit(Password,NewPassword,CNewPassword,ProtocoleEtDomaine
     }
     
 }
-function checkErreurs(Password,NewPassword,CNewPassword,setErreurs,ProtocoleEtDomaine,csrfToken,setIsErreur){
+function checkErreurs(Password,NewPassword,CNewPassword,setErreurs,csrfToken,setIsErreur){
     
     if (Password==NewPassword   && Password.length>0 && NewPassword.length>0){
         setErreurs(etatPrec=>({
@@ -238,12 +236,12 @@ export default function ButtonChangePassword(){
     
 }
 
-function submit(csrfToken, setErreurs, champs, navigate,ProtocoleEtDomaine,isErreur,setIsErreur){
+function submit(csrfToken, setErreurs, champs, navigate,isErreur,setIsErreur){
   const [Password,NewPassword,CNewPassword]=champs
-  checkErreursSubmit(Password,NewPassword,CNewPassword,ProtocoleEtDomaine,csrfToken,setErreurs,setIsErreur)
+  checkErreursSubmit(Password,NewPassword,CNewPassword,csrfToken,setErreurs,setIsErreur)
   const request= async () =>{
     try {
-        const response = await fetch(ProtocoleEtDomaine+"api/security/changePassword", {
+        const response = await fetch("/api/security/changePassword", {
             method: "POST",
             headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
               "Content-Type": "application/json",

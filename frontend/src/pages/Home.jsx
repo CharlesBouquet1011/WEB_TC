@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function Home(){
-    const {ProtocoleEtDomaine,setRedirectAfterLogin}=useVar()
+    const {setRedirectAfterLogin}=useVar()
     const navigate = useNavigate();
     const redirect= ()=>{
       setRedirectAfterLogin("/user")
@@ -18,7 +18,7 @@ export default function Home(){
         <div className="App">
         <div className="video-container">
         <video autoPlay loop muted playsInline className="background-video">
-         <source src={ProtocoleEtDomaine+"media/image/video.mp4"} type="video/mp4" />
+         <source src={"/media/image/video.mp4"} type="video/mp4" />
             Votre navigateur ne supporte pas les vidéos HTML5.
         </video>
         <button 
@@ -26,7 +26,7 @@ export default function Home(){
         onClick={() => redirect()}
         >
         <img
-            src={ProtocoleEtDomaine + "media/image/profil.png"}
+            src={"/media/image/profil.png"}
             alt="Profil"
             className="w-10 h-10"
         />
@@ -41,7 +41,7 @@ export default function Home(){
             className="relative w-80 h-60 rounded-xl overflow-hidden group"
             >
             <img
-                src={ProtocoleEtDomaine + "media/image/icone1.jpg"}
+                src={ "/media/image/icone1.jpg"}
                 alt="Nos Voitures"
                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-35 transition"
             />
@@ -54,7 +54,7 @@ export default function Home(){
             className="relative w-80 h-60 rounded-xl overflow-hidden group"
             >
             <img
-                src={ProtocoleEtDomaine + "media/image/icone4.jpg"}
+                src={"/media/image/icone4.jpg"}
                 alt="Nos Services"
                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-35 transition"
             />
@@ -67,7 +67,7 @@ export default function Home(){
             className="relative w-80 h-60 rounded-xl overflow-hidden group"
             >
             <img
-                src={ProtocoleEtDomaine + "media/image/icone3.jpg"}
+                src={ "/media/image/icone3.jpg"}
                 alt="Nous Contacter"
                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-35 transition"
             />

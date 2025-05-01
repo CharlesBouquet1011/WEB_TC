@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useCSRF } from "../Contexts/CsrfContext";
 import Fond from '../utile/style.jsx';
 import { useNavigate } from "react-router";
-import { useVar } from "../Contexts/VariablesGlobales.js";
 
 
 function Registration() {
@@ -17,12 +16,11 @@ function Registration() {
   const [name,setName]=useState("")
   const [fname, setFName]=useState("")
   const [phoneNumber,setPhoneNumber]=useState("")
-  const {ProtocoleEtDomaine}=useVar()
 
-  const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate,ProtocoleEtDomaine) =>{
+  const handleEnterKey = (event,csrfToken,setErreurs,champs,navigate) =>{
     if (event.key==="Enter"){
       event.preventDefault()
-      submit(csrfToken, setErreurs, champs, navigate,ProtocoleEtDomaine)
+      submit(csrfToken, setErreurs, champs, navigate)
     }
   }
 
@@ -53,7 +51,7 @@ function Registration() {
   useEffect(()=>{
 
     const  effect3= async()=>{
-      if (! (await mailChecker(mail,csrfToken,ProtocoleEtDomaine)) &&
+      if (! (await mailChecker(mail,csrfToken)) &&
     mail &&
     mail.length>0
   
@@ -118,7 +116,7 @@ function Registration() {
                     className="form-control" 
                     id="Name"
                     onChange={(event) => handleChange(event, setName)} 
-                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
                   />
                   {erreurs.name && <small className="text-danger">{erreurs.name}</small>}
                 </div>
@@ -130,7 +128,7 @@ function Registration() {
                     className="form-control" 
                     id="FirstName"
                     onChange={(event) => handleChange(event, setFName)} 
-                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
 
                   />
                   {erreurs.fname && <small className="text-danger">{erreurs.fname}</small>}
@@ -143,7 +141,7 @@ function Registration() {
                     className="form-control" 
                     id="email"
                     onChange={(event) => handleChange(event, setMail)} 
-                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
 
                   />
                   {erreurs.mail && <small className="text-danger">{erreurs.mail}</small>}
@@ -156,7 +154,7 @@ function Registration() {
                     className="form-control" 
                     id="Phone"
                     onChange={(event) => handleChange(event, setPhoneNumber)}
-                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
 
                   />
                   {erreurs.phoneNumber && <small className="text-danger">{erreurs.phoneNumber}</small>}
@@ -169,7 +167,7 @@ function Registration() {
                     className="form-control" 
                     id="password"
                     onChange={(event) => handleChange(event, setPassword)} 
-                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
 
                   />
                   {erreurs.password1 && <small className="text-danger">{erreurs.password1}</small>}
@@ -182,7 +180,7 @@ function Registration() {
                     className="form-control" 
                     id="cpassword"
                     onChange={(event) => handleChange(event, setCPassword)}
-                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                    onKeyDown={(event)=>handleEnterKey(event,csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
 
                   />
                   {erreurs.password && <small className="text-danger">{erreurs.password}</small>}
@@ -191,7 +189,7 @@ function Registration() {
                 <button 
                   type="button" 
                   className="btn btn-dark w-100 mt-3"
-                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate,ProtocoleEtDomaine)}
+                  onClick={() => submit(csrfToken, setErreurs, [name, fname, mail, phoneNumber, Password, Cpassword], navigate)}
                 >
                   S'inscrire
                 </button>
@@ -205,7 +203,7 @@ function Registration() {
   );
 }
 
-async function submit(csrfToken,setErreurs,champs,navigate,proto){
+async function submit(csrfToken,setErreurs,champs,navigate){
     try {
               //récupérer les données du forms
 
@@ -215,7 +213,7 @@ async function submit(csrfToken,setErreurs,champs,navigate,proto){
         //il y a des erreurs
         return ;
       }
-      if (!(await mailChecker(mail,csrfToken,proto))){
+      if (!(await mailChecker(mail,csrfToken))){
         setErreurs(etatPrec=>({
           ...etatPrec,
           grosseErreur:"Votre email est incorrect",}
@@ -230,7 +228,7 @@ async function submit(csrfToken,setErreurs,champs,navigate,proto){
         
 
         const data={"name": name, "firstName": fname , "email": mail, "phoneNumber":phone,"password":password }
-        const response = await fetch(proto+"api/security/registration", {
+        const response = await fetch("/api/security/registration", {
           method: "POST",
           headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
             "Content-Type": "application/json",
@@ -477,9 +475,9 @@ export function verifMotDePasse(motdePasse){
   return retour1 && retour2
 }
 
-async function mailChecker(mail,csrfToken,proto){
+async function mailChecker(mail,csrfToken){
   try{
-    var checkmail = fetch(proto+"api/security/mail-check", {
+    var checkmail = fetch("/api/security/mail-check", {
       method: "POST",
       headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
         "Content-Type": "application/json",

@@ -2,7 +2,6 @@ import React from 'react';
 import './style.css'; // Importer un fichier CSS personnalisé si nécessaire
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useVar } from '../Contexts/VariablesGlobales';
 import { retrieveAssistanceData } from '../Locations/Assistance';
 import { useCSRF } from '../Contexts/CsrfContext';
 
@@ -10,8 +9,7 @@ export function Fond({ children }) {
     const [mail,setMail]=useState("")
       const {csrfToken}=useCSRF()
       const[phoneNumber,setPhoneNumber]=useState("")
-      const {ProtocoleEtDomaine}=useVar()
-      retrieveAssistanceData(csrfToken,setMail,setPhoneNumber,ProtocoleEtDomaine)
+      retrieveAssistanceData(csrfToken,setMail,setPhoneNumber)
     return (
         <div className='container-fluid'>
             {/* Corps principal */}
@@ -39,7 +37,6 @@ export function Fond({ children }) {
 
 export function Menu() {
     const [isOpen, setIsOpen] = useState(false);
-    const { ProtocoleEtDomaine } = useVar();
   
     return (
       <>
@@ -49,7 +46,7 @@ export function Menu() {
             {/* Logo/Menu hamburger à gauche */}
             <button onClick={() => setIsOpen(true)} className="focus:outline-none">
               <img
-                src={`${ProtocoleEtDomaine}media/image/menu.png`}
+                src={`/media/image/menu.png`}
                 alt="menu"
                 className="fixed top-3 left-6 z-10 w-10 h-10 hover:scale-105 transition-transform"
               />

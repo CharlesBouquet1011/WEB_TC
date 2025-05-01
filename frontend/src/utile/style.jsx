@@ -2,7 +2,6 @@ import React from 'react';
 import './style.css';
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { useVar } from '../Contexts/VariablesGlobales';
 import { useNavigate } from "react-router-dom";
 
 
@@ -29,7 +28,6 @@ function Fond({ children }) {
 
 export function Menu() {
     const [isOpen, setIsOpen] = useState(false);
-    const { ProtocoleEtDomaine } = useVar();
     const navigate = useNavigate();
   
     return (
@@ -40,7 +38,7 @@ export function Menu() {
             {/* Logo/Menu hamburger à gauche */}
             <button onClick={() => setIsOpen(true)} className="focus:outline-none ml-0">
               <img
-                src={`${ProtocoleEtDomaine}media/image/menu2.png`}
+                src={`/media/image/menu2.png`}
                 alt="menu"
                 className="absolute top-3 left-6 w-10 h-10 hover:scale-105 transition-transform"
               />

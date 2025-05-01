@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 export function useFetchUsers() {
-  const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +10,7 @@ export function useFetchUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(ProtocoleEtDomaine+"api/security/seeAll");
+        const response = await fetch("/api/security/seeAll");
         
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des véhicules");

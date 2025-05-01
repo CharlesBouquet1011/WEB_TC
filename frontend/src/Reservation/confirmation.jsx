@@ -4,14 +4,12 @@ import { useNavigate } from "react-router-dom";
 import Logged from "../Contexts/Authenticated.js";
 import {SeeUnconfirmed} from "../Locations/seeBookings.jsx";
 import { useCSRF } from "../Contexts/CsrfContext";
-import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
 
 
 
 export default function Confirmation(){
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
-    const { ProtocoleEtDomaine } = useVar();
     const { csrfToken } = useCSRF();
     const [options, setOptions] = useState({
         gps: false,
@@ -21,7 +19,7 @@ export default function Confirmation(){
     const selectedOptions = Object.keys(options).filter((opt) => options[opt]); //prend toutes les cles de options et filtre pour avoir les True
     const handleAction = async () => {
         try {
-          const response = await fetch(ProtocoleEtDomaine + "api/bookings/validate-user-bookings", {
+          const response = await fetch("/api/bookings/validate-user-bookings", {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',

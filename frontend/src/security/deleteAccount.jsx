@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import "./deleteAccount.css"; 
 
 import { useCSRF } from "../Contexts/CsrfContext";
-import { useVar } from "../Contexts/VariablesGlobales";
 import { useAuth } from "../Contexts/Authenticated";
 Modal.setAppElement("#root"); // Obligatoire pour l'accessibilité
 
@@ -15,10 +14,9 @@ export default function DeleteAccount() {
   
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
-    const {ProtocoleEtDomaine}=useVar()
     const {setTriedLogging,triedLogging}=useAuth()
     const confirmDeletion = () => {
-      accountDeletion(csrfToken, navigate,ProtocoleEtDomaine,setTriedLogging,triedLogging);
+      accountDeletion(csrfToken, navigate,setTriedLogging,triedLogging);
       closeModal();
     };
   
@@ -60,12 +58,12 @@ export default function DeleteAccount() {
     );
   }
 
-function accountDeletion(csrfToken,navigate,ProtocoleEtDomaine,setTriedLogging,triedLogging){
+function accountDeletion(csrfToken,navigate,setTriedLogging,triedLogging){
     //on se déconnecte
     
     const deletion= async () =>{
             try {
-                const response = await fetch(ProtocoleEtDomaine+"api/security/deleteAccount", {
+                const response = await fetch("/api/security/deleteAccount", {
                     method: "DELETE",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",

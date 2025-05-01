@@ -9,7 +9,7 @@ import { useVar } from "../Contexts/VariablesGlobales.js";
 function Login() {
   //récupérer les jetons csrf etc
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-  const {ProtocoleEtDomaine,erreurLogin,setErreurLogin,redirectAfterLogin}=useVar()
+  const {erreurLogin,setErreurLogin,redirectAfterLogin}=useVar()
   const navigate=useNavigate()
  const {triedLogging,setTriedLogging,logged}=useAuth()
   useEffect(()=>{
@@ -22,7 +22,7 @@ function Login() {
   const handleEnterKey = (event,csrfToken,navigate,triedLogging,setTriedLogging,setErreurLogin) =>{
     
     if (event.key==="Enter"){
-      submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin,redirectAfterLogin)
+      submitr(csrfToken,navigate,triedLogging,setTriedLogging,setErreurLogin,redirectAfterLogin)
     }
   }
   useEffect(() => {
@@ -107,7 +107,6 @@ function Login() {
                 navigate, 
                 triedLogging, 
                 setTriedLogging,
-                ProtocoleEtDomaine,
                 setErreurLogin,
                 redirectAfterLogin
               )}}
@@ -147,14 +146,14 @@ function Login() {
 }
 
 
-async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,ProtocoleEtDomaine,setErreurLogin,redirectAfterLogin){
+async function submitr(csrfToken,navigate,triedLogging,setTriedLogging,setErreurLogin,redirectAfterLogin){
     setErreurLogin("")
     var email,password
     email=document.getElementById("login-email").value
     password=document.getElementById("login-password").value
     
     try{
-        var authentification=await fetch(ProtocoleEtDomaine+"api/security/login", {
+        var authentification=await fetch("/api/security/login", {
             method:"POST",
             headers:{
                 "Content-type":"application/json",

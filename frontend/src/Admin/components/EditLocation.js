@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { useFetchCars } from './useFetchCars.js';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 import { useFetchUsers } from './useFetchUsers.js';
 
 export function EditLocation({ location, setEditLoc, setRefresh }) {
-  const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
   const { cars, loading_cars, error: carsError } = useFetchCars();
   const { users, loading_users, error: usersError } = useFetchUsers();
@@ -28,7 +26,7 @@ export function EditLocation({ location, setEditLoc, setRefresh }) {
 
   const handleSubmit  = async () => {
     try {
-      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/modify`, {
+      const response = await fetch(`/api/bookings/modify`, {
         method: 'POST',
         headers:{
           "Content-Type": "application/json",

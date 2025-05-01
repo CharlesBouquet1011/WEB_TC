@@ -51,7 +51,7 @@ function SeeBookings({ bookings, a_moi,confirmation="" }) {
   
 export default function SeeAllBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
-  const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
+  const {loadBookings,setLoadBooking}=useVar()
   const [bookings, setbookings] = useState([]);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function SeeAllBookings(){
   useEffect(()=>{ //on récupère les bookings
     const fetchBookings= async () =>{
         try {
-            const response = await fetch(ProtocoleEtDomaine+"api/bookings/seeAll", {
+            const response = await fetch("/api/bookings/seeAll", {
                 method: "GET",
                 headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                   "Content-Type": "application/json",
@@ -98,7 +98,7 @@ export default function SeeAllBookings(){
 export function SeeUserBookings(){
   const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
   const [bookings, setbookings] = useState([]);
-  const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
+  const {loadBookings,setLoadBooking}=useVar()
   useEffect(() => {
     if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
       fetchCSRFToken();
@@ -107,7 +107,7 @@ export function SeeUserBookings(){
   useEffect(()=>{ //on récupère les bookings
     const fetchBookings= async () =>{
         try {
-            const response = await fetch(ProtocoleEtDomaine+"api/bookings/seeConfirmed", {
+            const response = await fetch("/api/bookings/seeConfirmed", {
                 method: "GET",
                 headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                   "Content-Type": "application/json",
@@ -137,7 +137,7 @@ export function SeeUserBookings(){
 export function SeeUnconfirmed(){
     const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
     const [bookings, setbookings] = useState([]);
-    const {ProtocoleEtDomaine,loadBookings,setLoadBooking}=useVar()
+    const {loadBookings,setLoadBooking}=useVar()
     useEffect(() => {
       if (!isLoaded) { //si on n'a pas le jeton csrf, on le reprend (c'est du bidouillage, on devrait toujours l'avoir)
         fetchCSRFToken();
@@ -146,7 +146,7 @@ export function SeeUnconfirmed(){
     useEffect(()=>{ //on récupère les bookings
       const fetchUncomfirmed= async () =>{
           try {
-              const response = await fetch(ProtocoleEtDomaine+"api/bookings/unconfirmed", {
+              const response = await fetch("/api/bookings/unconfirmed", {
                   method: "GET",
                   headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                     "Content-Type": "application/json",

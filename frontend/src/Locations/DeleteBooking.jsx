@@ -11,12 +11,12 @@ export default function DeleteBooking({idBooking}) {
     const { csrfToken } = useCSRF();
     const navigate = useNavigate();
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const {ProtocoleEtDomaine,setLoadBooking} =useVar()
+    const {setLoadBooking} =useVar()
     const openModal = () => setModalIsOpen(true);
     const closeModal = () => setModalIsOpen(false);
   
     const confirmDeletion = () => {
-      BookingDeletion(csrfToken, navigate,idBooking,ProtocoleEtDomaine);
+      BookingDeletion(csrfToken, navigate,idBooking);
       setLoadBooking(true)
       closeModal();
     };
@@ -50,11 +50,11 @@ export default function DeleteBooking({idBooking}) {
     );
   }
 
-function BookingDeletion(csrfToken,navigate,idBooking,domaine){
+function BookingDeletion(csrfToken,navigate,idBooking){
     //on se déconnecte
     const deletion= async () =>{
             try {
-                const response = await fetch(domaine + "api/bookings/delete", {
+                const response = await fetch( "/api/bookings/delete", {
                     method: "DELETE",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",

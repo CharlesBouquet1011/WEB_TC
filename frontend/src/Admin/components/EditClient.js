@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 export function EditClient({ client, setEditClient, setRefresh }) {
-    const {ProtocoleEtDomaine}=useVar();
     const {csrfToken}=useCSRF();
   
     const [clientEdit, setClientEdit] = useState(client);
@@ -14,7 +12,7 @@ export function EditClient({ client, setEditClient, setRefresh }) {
   
     const handleConfirm  = async () => {
         try {
-          const response = await fetch(`${ProtocoleEtDomaine}api/security/edit`, {
+          const response = await fetch(`/api/security/edit`, {
             method: 'POST',
             headers:{
               "Content-Type": "application/json",

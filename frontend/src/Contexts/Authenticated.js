@@ -8,7 +8,6 @@ export function AuthProvider({children}){
     const {csrfToken, setcrsfToken ,fetchCSRFToken, isLoaded}= useCSRF();
     const [logged, setlogged] = useState(false)
     const [triedLogging,setTriedLogging] = useState(false)
-    const {ProtocoleEtDomaine}=useVar()
     const [loading,setLoading]=useState(true)
     
     useEffect(() => {
@@ -21,7 +20,7 @@ export function AuthProvider({children}){
         const isLogged= async () =>{
             try {
                 setLoading(true)
-                const response = await fetch(ProtocoleEtDomaine+"api/security/logged", {
+                const response = await fetch("/api/security/logged", {
                     method: "GET",
                     headers: { //pour partager le csrf entre les composants, j'ai choisi d'utiliser un contexte (le passer en argument de chaque élément devient vite ingérable)
                       "Content-Type": "application/json",

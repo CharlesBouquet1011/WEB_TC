@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useFetchCars } from './useFetchCars';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 import { useFetchUsers } from "./useFetchUsers.js";
 
 export function AddLocation({ setAddLocation, setRefresh }) {
-  const{ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
   const { cars, loadingCars, error: carsError } = useFetchCars();
   const { users, loadingUsers, error: usersError} = useFetchUsers();
@@ -41,7 +39,7 @@ export function AddLocation({ setAddLocation, setRefresh }) {
     }
 
     try {
-      const response = await fetch(`${ProtocoleEtDomaine}api/bookings/addAdmin`, {
+      const response = await fetch(`/api/bookings/addAdmin`, {
         method: 'POST',
         headers:{
           "Content-Type": "application/json",

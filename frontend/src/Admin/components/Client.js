@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ClientRow } from './ClientRow.js';
 import { EditClient } from './EditClient.js';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 const clientList = [
@@ -36,7 +35,6 @@ const clientList = [
 ];
 
 export function Client({}) {
-  const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
 
   const [clients, setClients] = useState([]);
@@ -46,7 +44,7 @@ export function Client({}) {
   useEffect(() => {
     const fetchClients = async () => {
       try {
-        const response = await fetch(ProtocoleEtDomaine+"api/security/seeAll");
+        const response = await fetch("/api/security/seeAll");
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des clients");
         }
@@ -64,7 +62,7 @@ export function Client({}) {
     const confirmDelete = window.confirm("Êtes-vous sûr de vouloir supprimer ce client ?");
     if (confirmDelete) {
       try {
-        const response = await fetch(`${ProtocoleEtDomaine}api/security/deleteAcc/${id}`, {
+        const response = await fetch(`/api/security/deleteAcc/${id}`, {
           method: 'DELETE',
           headers:{
             'X-CSRF-Token': csrfToken,
@@ -83,7 +81,7 @@ export function Client({}) {
   const handleAddClient = async () => {
     try {
       const randomClient =  clientList[Math.floor(Math.random()*clientList.length)];
-      const response = await fetch(`${ProtocoleEtDomaine}api/security/registration`, {
+      const response = await fetch(`/api/security/registration`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

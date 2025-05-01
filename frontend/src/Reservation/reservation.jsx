@@ -1,5 +1,5 @@
 import Fond from '../utile/style.jsx';
-import { useVar, ProtocoleEtDomaine } from '../Contexts/VariablesGlobales.js';
+import { useVar} from '../Contexts/VariablesGlobales.js';
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ function Reservation(){
   const [paiement, setPaiement] = useState(null);
   const [dateError, setDateError] = useState("");
   const navigate = useNavigate();
-  const {ProtocoleEtDomaine,setLoadBooking} =useVar();
+  const {setLoadBooking} =useVar();
   const { csrfToken } = useCSRF();
   const {setRedirectAfterLogin}=useVar()
   setRedirectAfterLogin("/cars/location")
@@ -104,7 +104,7 @@ function Reservation(){
                     return;
                 }
                   setDateError("");
-                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate,setLoadBooking);
+                  checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,setError,setPaiement,setIsOpen,navigate,setLoadBooking);
               }} 
               className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg text-lg hover:bg-black transition"
             >
@@ -152,11 +152,11 @@ function Reservation(){
 
 export default Reservation;
 
-function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,navigate,domaine,setError){
+function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,navigate,setError){
     setError(null);
     const ajout= async () =>{
             try {
-                const response = await fetch(domaine + "api/bookings/add", {
+                const response = await fetch( "/api/bookings/add", {
                     method: "POST",
                     headers: { 
                       'X-CSRF-Token': csrfToken,
@@ -183,12 +183,12 @@ function AddBooking(startDate,endDate,csrfToken,voitureSelectionnee,navigate,dom
 }
 
 
-function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,ProtocoleEtDomaine,setError,setPaiement,setIsOpen,navigate,
+function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,setError,setPaiement,setIsOpen,navigate,
   setLoadBooking
 ) {
   const checkDisponibiliteAPI = async () => {
         try {
-            const response = await fetch(ProtocoleEtDomaine + "api/bookings/check-disponibilite", {
+            const response = await fetch("/api/bookings/check-disponibilite", {
                 method: "POST",
                 headers: {
                     'X-CSRF-Token': csrfToken,
@@ -205,7 +205,7 @@ function checkDisponibilite(csrfToken,startDate,endDate,voitureSelectionnee,Prot
             if (response.ok) {
                 const data = await response.json();
                 if (data.disponible) {
-                    AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, navigate, ProtocoleEtDomaine, setError);
+                    AddBooking(startDate, endDate, csrfToken, voitureSelectionnee, navigate, setError);
                     setPaiement("en cours");
                     setLoadBooking=true
                 } else {

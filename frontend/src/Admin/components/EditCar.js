@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 export function EditCar({ car, setEditTab, setRefresh }) {
-  const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
 
   const [carEdit, setCarEdit] = useState(car);
@@ -14,7 +12,7 @@ export function EditCar({ car, setEditTab, setRefresh }) {
 
   const handleConfirm  = async () => {
       try {
-        const response = await fetch(`${ProtocoleEtDomaine}api/cars/edit`, {
+        const response = await fetch(`/api/cars/edit`, {
           method: 'POST',
           headers:{
             "Content-Type": "application/json",

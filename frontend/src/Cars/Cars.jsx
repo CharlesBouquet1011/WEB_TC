@@ -3,14 +3,12 @@ import "./Cars.css";
 import { useCSRF } from "../Contexts/CsrfContext";
 import { useState, useEffect } from "react";
 import Fond from "../utile/style.jsx";
-import { useVar } from "../Contexts/VariablesGlobales.js";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 
 export default function Cars() {
   const { csrfToken } = useCSRF();
   const [Voitures, setVoitures] = useState([]);
-  const { ProtocoleEtDomaine } = useVar();
   const [isLoaded, setIsLoaded] = useState(false);
   const [filters, setFilters] = useState({
     marque: "",
@@ -39,7 +37,7 @@ export default function Cars() {
     const requete = async () => {
       try {
         const response = await fetch(
-          ProtocoleEtDomaine + "api/cars/filter",
+          "/api/cars/filter",
           {
             method: "POST",
             headers: {

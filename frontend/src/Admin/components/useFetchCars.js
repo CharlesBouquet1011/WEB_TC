@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
-import { useVar } from '../../Contexts/VariablesGlobales.js';
 import { useCSRF } from '../../Contexts/CsrfContext.js';
 
 export function useFetchCars() {
-  const {ProtocoleEtDomaine}=useVar();
   const {csrfToken}=useCSRF();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,7 +10,7 @@ export function useFetchCars() {
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const response = await fetch(ProtocoleEtDomaine+"api/cars");
+        const response = await fetch("/api/cars");
         
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des véhicules");

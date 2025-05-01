@@ -1,7 +1,6 @@
 //c'est quasi que de l'HTML là
 import {useState,useEffect} from "react"
 import { useCSRF } from "../Contexts/CsrfContext"
-import { useVar,ProtocoleEtDomaine } from "../Contexts/VariablesGlobales"
 import Fond from "../utile/style.jsx";
 import {useAuth} from "../Contexts/Authenticated.js";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 export default function Assistance(){
     const { logged } = useAuth(); // récupère l'état de la connexion
     const navigate = useNavigate();
-    const { ProtocoleEtDomaine } = useVar();
     const { csrfToken } = useCSRF();
     const [isOpen, setIsOpen] = useState(false); // Pour contrôler l'ouverture du pop-up
     const closePopup = () => setIsOpen(false);
@@ -32,8 +30,8 @@ export default function Assistance(){
         try {
             console.log(formData);
             const endpoint = formData.email
-                ? ProtocoleEtDomaine + "api/assistance/submit-assistance/public"
-                : ProtocoleEtDomaine + "api/assistance/submit-assistance/connecte";
+                ?  + "/api/assistance/submit-assistance/public"
+                :  "/api/assistance/submit-assistance/connecte";
             const response = await fetch(endpoint, {
               method: "POST",
               headers: {
@@ -157,8 +155,7 @@ function Assi(){
     const [mail,setMail]=useState("")
     const {csrfToken}=useCSRF()
     const[phoneNumber,setPhoneNumber]=useState("")
-    const {ProtocoleEtDomaine}=useVar()
-    retrieveAssistanceData(csrfToken,setMail,setPhoneNumber,ProtocoleEtDomaine)
+    retrieveAssistanceData(csrfToken,setMail,setPhoneNumber)
 
     return(<Affichage mail={mail} phoneNumber={phoneNumber} />)
 }
@@ -185,10 +182,10 @@ function Affichage({mail,phoneNumber}){
         )
 }
 
-export function retrieveAssistanceData(csrfToken,setMail,setPhoneNumber,domaine){
+export function retrieveAssistanceData(csrfToken,setMail,setPhoneNumber){
     try {
     const req = async()=>{
-        var request=await fetch(domaine + "api/bookings/infos", {
+        var request=await fetch("/api/bookings/infos", {
             method:"GET",
             headers:{
                 "Content-type":"application/json",
