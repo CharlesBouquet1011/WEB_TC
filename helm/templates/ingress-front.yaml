@@ -8,7 +8,7 @@ metadata:
     #traefik.ingress.kubernetes.io/router.middlewares: default@kubernetescrd pour mettre un middleware
 spec:
   rules:
-    - host: {{ .Values.frontend.domain }}
+    - host: {{ .Values.services.frontend.domain }}
       http:
         paths:
           - path: /

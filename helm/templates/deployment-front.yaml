@@ -18,6 +18,9 @@ spec:
       volumes:
         - name: react-static
           emptyDir: {} # ou pvc si tu veux persister
+        - name: nginx-config
+          configMap:
+            name: {{ .Release.Name }}-nginx-config
       containers:
         - name: react-builder
           image: {{ .Values.services.frontend.reactImage }}
@@ -36,3 +39,6 @@ spec:
           volumeMounts:
             - name: react-static
               mountPath: {{ .Values.services.frontend.sharedVolume.mountPath }}
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
