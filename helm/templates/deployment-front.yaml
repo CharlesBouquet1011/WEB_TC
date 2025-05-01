@@ -22,7 +22,7 @@ spec:
           configMap:
             name: {{ .Release.Name }}-nginx-config
       containers:
-        - name: react-builder
+      - name: react-builder
           image: {{ .Values.services.frontend.reactImage }}
           command: ["/bin/sh", "-c"] #on lance sh et on lui passe une commande en argument (-c)
           args:
@@ -32,13 +32,13 @@ spec:
           volumeMounts:
             - name: react-static
               mountPath: {{ .Values.services.frontend.sharedVolume.mountPath }}
-        - name: nginx
+      - name: nginx
           image: {{ .Values.services.frontend.nginxImage }}
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: react-static
+          - name: react-static
               mountPath: {{ .Values.services.frontend.sharedVolume.mountPath }}
-            - name: nginx-config
+          - name: nginx-config
               mountPath: /etc/nginx/conf.d/default.conf
               subPath: default.conf
