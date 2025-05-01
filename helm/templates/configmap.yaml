@@ -5,4 +5,4 @@ metadata:
   namespace: {{ .Release.Namespace }}
 data:
   default.conf: |
-    {{ .Files.Get "files/default.conf" | indent 4 }} 
+{{ tpl (.Files.Get "files/default.conf") . | indent 4 }}
