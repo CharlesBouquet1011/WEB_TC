@@ -16,8 +16,8 @@ spec:
         spec:
             containers:
             - name: back
-                image: {{ .Values.services.back.image }} 
-                ports: 
-                    - containerPort: {{ .Values.services.back.port }}
-                resources:
-                    {{- toYaml .Values.services.back.resources | nindent 16 }}
+            image: {{ .Values.services.back.image }} 
+            ports: 
+            - containerPort: {{ .Values.services.back.port }}
+            resources:
+                {{- toYaml .Values.services.back.resources | nindent 10 }}
