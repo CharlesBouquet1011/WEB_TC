@@ -17,4 +17,4 @@ spec:
         name: http
     selector:
         app: {{ include "monchart.name" . }}
-        component: bd_mongo
+        component: bd-mongo

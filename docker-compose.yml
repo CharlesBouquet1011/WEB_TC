@@ -15,7 +15,7 @@ services:
       - ./backend:/app
       - backend_modules:/app/node_modules #pour pas écraser les résultats du npm install du dockerfile quand je monte le volume /app
     depends_on:
-      - bd_mongo
+      - bd-mongo
     networks:
       - nginx-backend
       - backend-bd
@@ -40,8 +40,8 @@ services:
       - react_build:/app/build
     networks:
       - nginx-frontend
-  bd_mongo:
-    container_name: bd_mongo
+  bd-mongo:
+    container_name: bd-mongo
     image: mongo:latest
     expose: 
       - "27017"
@@ -70,7 +70,7 @@ services:
       - nginx-backend
       - nginx-frontend
 volumes:
-  mongo: #lire explication dans volume bd_mongo, ici c'est pour que docker gère tout seul le volume
+  mongo: #lire explication dans volume bd-mongo, ici c'est pour que docker gère tout seul le volume
   react_build:
   backend_modules:
 

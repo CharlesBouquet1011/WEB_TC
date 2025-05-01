@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{.Release.Name}}-bd_mongo
+    name: {{.Release.Name}}-bd-mongo
     namespace: {{ .Release.Namespace }}
 spec:
     replicas: {{ .Values.services.bd_mongo.replicas }}
