@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "monchart.fullname" . }}-frontend
-  namespace: DE
+  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.services.frontend.replicas }}
   selector:

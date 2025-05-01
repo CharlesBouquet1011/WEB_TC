@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: {{ include  "monchart.fullname" . }}--back
-    namespace: DE
+    name: {{ include  "monchart.fullname" . }}-back
+    namespace: {{ .Release.Namespace }}
     labels:
         app: {{ include "monchart.name" . }}
         chart: {{ include "monchart.chart" . }}

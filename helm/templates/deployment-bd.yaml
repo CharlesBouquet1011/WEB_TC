@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{.Release.Name}}--bd_mongo
-    namespace: DE
+    name: {{.Release.Name}}-bd_mongo
+    namespace: {{ .Release.Namespace }}
 spec:
     replicas: {{ .Values.services.bd_mongo.replicas }}
     selector:

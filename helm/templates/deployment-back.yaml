@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: {{.Release.Name}}--back
-    namespace: DE
+    name: {{.Release.Name}}-back
+    namespace: {{ .Release.Namespace }} #helm install monchart . --namespace DE pour spécifier le namespace et .Release.Name=monchart ici
 spec:
     replicas: {{ .Values.services.back.replicas }}
     selector:

@@ -1,5 +1,6 @@
 services:
   frontend:
+    domain: de-test.duckdns.org
     reactImage: react:latest
     nginxImage: nginx-de:latest
     replicas: 1
