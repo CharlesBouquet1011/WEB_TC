@@ -1,5 +1,5 @@
 apiVersion: v2
-name: Driving-Enhanced
+name: driving-enhanced
 description: Un site internet de location de voitures
 version: 0.1.0
 appVersion: "1.0"
