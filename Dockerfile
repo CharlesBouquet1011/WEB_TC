@@ -2,6 +2,8 @@ FROM node:23-alpine3.20 AS backend_node
 WORKDIR /app
 
 COPY /backend/package*.json ./ 
+#prod
+#COPY /backend/ /app/
 RUN npm install
 EXPOSE 80
 RUN adduser -S backend_node
