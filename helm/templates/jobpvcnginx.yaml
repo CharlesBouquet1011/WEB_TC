@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: media-init
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      volumes:
+      - name: media-volume
+        persistentVolumeClaim:
+          claimName: media-pvc
+      containers:
+      - name: media-init
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          mkdir -p /mnt/media/image
+          # Ici, vous pouvez soit copier les fichiers depuis une image existante,
+          # soit les télécharger depuis un serveur, soit les inclure dans cette image
+          echo "Initialisation des fichiers media..."
+          # Pour les besoins de test, créons un fichier de test
+          echo "Test file" > /mnt/media/image/test.txt
+          echo "Files initialized successfully"
+        volumeMounts:
+        - name: media-volume
+          mountPath: /mnt/media
+      restartPolicy: Never
+  backoffLimit: 4
