@@ -10,6 +10,9 @@ spec:
       - name: media-volume
         persistentVolumeClaim:
           claimName: media-pvc
+      - name: nginx-media-volume
+        hostPath:
+          path: /nginx/media
       containers:
       - name: media-init
         image: alpine:latest
@@ -17,14 +20,26 @@ spec:
         args:
         - |
           mkdir -p /mnt/media/image
-          # Ici, vous pouvez soit copier les fichiers depuis une image existante,
-          # soit les télécharger depuis un serveur, soit les inclure dans cette image
           echo "Initialisation des fichiers media..."
-          # Pour les besoins de test, créons un fichier de test
-          echo "Test file" > /mnt/media/image/test.txt
+          
+          # Copie des fichiers depuis /nginx/media vers le volume persistant
+          if [ -d "/src/nginx/media" ]; then
+            echo "Copie des fichiers depuis /src/nginx/media..."
+            cp -r /src/nginx/media/* /mnt/media/
+          else
+            echo "Le répertoire source /src/nginx/media n'existe pas"
+          fi
+          
+          # Vérification des fichiers copiés
+          echo "Contenu du répertoire destination:"
+          ls -la /mnt/media/
+          
           echo "Files initialized successfully"
         volumeMounts:
         - name: media-volume
           mountPath: /mnt/media
+        - name: nginx-media-volume
+          mountPath: /src/nginx/media
+          readOnly: true
       restartPolicy: Never
   backoffLimit: 4
