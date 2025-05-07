@@ -15,6 +15,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "monchart.fullname" . }}--frontend
+                name: {{ include "monchart.fullname" . }}-frontend
                 port:
                   number: {{ .Values.services.frontend.port }}
