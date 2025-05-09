@@ -4,7 +4,7 @@ metadata:
   name: {{ include "monchart.fullname" . }}-backend
   namespace: {{ .Release.Namespace }}
   annotations:
-    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-cors@kubernetescrd,{{ .Release.Namespace }}-stripprefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-cors@kubernetescrd,strip-api@kubernetescrd
 
 
     traefik.ingress.kubernetes.io/router.entrypoints: web

@@ -30,7 +30,8 @@ RUN chown -R nginx:nginx /app/nginx && \
     chown -R nginx:nginx /var/log/nginx && \
     chown -R nginx:nginx /var/run && \
     chmod 777 /var/run
-
+RUN chmod 755 -R /app/media
+RUN chown -R nginx:nginx /app/media
 CMD ["nginx", "-g", "daemon off;"]
 
 FROM node:23-alpine3.20 AS react
