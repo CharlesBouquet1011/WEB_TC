@@ -4,6 +4,7 @@ WORKDIR /app
 COPY /backend/package*.json ./ 
 #prod
 #COPY ./backend/ /app/
+#COPY .env /app/.env
 RUN npm install
 EXPOSE 80
 RUN adduser -S backend_node

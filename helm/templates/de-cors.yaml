@@ -1,0 +1,23 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{.Release.Name}}-cors
+  namespace: {{ .Release.Namespace }}
+spec:
+  headers:
+    accessControlAllowOriginList:
+      - "http://{{ .Values.services.frontend.domain | default "localhost" }}"
+    accessControlAllowMethods:
+      - "GET"
+      - "POST"
+      - "PUT"
+      - "DELETE"
+      - "OPTIONS"
+    accessControlAllowHeaders:
+      - "Origin"
+      - "Content-Type"
+      - "Accept"
+      - "Authorization"
+      - "X-CSRF-Token"
+    accessControlAllowCredentials: true
+    accessControlMaxAge: 100

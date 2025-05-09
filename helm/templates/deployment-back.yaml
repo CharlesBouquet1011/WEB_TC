@@ -15,6 +15,10 @@ spec:
         app: {{ include "monchart.name" . }}
         component: back
     spec:
+      initContainers:
+      - name: wait-for-mongo
+        image: busybox:latest
+        command: ['sh', '-c', 'until nc -zv de-driving-enhanced-mongo 27017; do echo "waiting for mongo"; sleep 2; done']
       containers:
       - name: back
         image: {{ .Values.services.back.image }} 

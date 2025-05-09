@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "monchart.fullname" . }}-backend
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: {{ .Release.Namespace }}-cors@kubernetescrd,{{ .Release.Namespace }}-stripprefix@kubernetescrd
+
+
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  -   host: {{ .Values.services.frontend.domain }}
+      http:
+        paths:
+        -   path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "monchart.fullname" . }}-back
+                port:
+                  number: {{ .Values.services.back.port }}

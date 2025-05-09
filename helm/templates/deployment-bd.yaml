@@ -21,6 +21,9 @@ spec:
                 image: {{ .Values.services.bd_mongo.image }} 
                 ports: 
                 -   containerPort: {{ .Values.services.bd_mongo.port }}
+                envFrom:
+                -   secretRef:
+                        name: mongo-secret
                 resources:
                     {{- toYaml .Values.services.bd_mongo.resources | nindent 16 }}
                 volumeMounts:
