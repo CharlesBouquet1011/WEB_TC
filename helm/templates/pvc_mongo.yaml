@@ -6,6 +6,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn-retain
+
   resources:
     requests:
       storage: {{ .Values.services.bd_mongo.storage.size }}
